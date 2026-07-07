@@ -1,8 +1,8 @@
 import { createStore, get, set, del, keys, clear } from 'idb-keyval';
 
 // Create custom stores to keep AppState and heavy Blobs isolated
-const stateStore = createStore('pdi-db', 'app-state');
-const blobStore = createStore('pdi-db', 'image-blobs');
+const stateStore = createStore('pdi-db-v2', 'app-state');
+const blobStore = createStore('pdi-db-v2', 'image-blobs');
 
 export interface VehicleInfo {
   make: string;
