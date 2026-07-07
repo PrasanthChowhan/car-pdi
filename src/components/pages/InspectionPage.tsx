@@ -1,15 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useInspectionStore } from '../../store/useInspectionStore';
-import { CATEGORIES, CHECKLIST_TEMPLATES } from '../../lib/checklistData';
-import type { ChecklistItem } from '../../lib/storage';
-import { loadImageBlob, saveImageBlob, deleteImageBlob } from '../../lib/storage';
-import { compressAndResizeImage, generateUUID } from '../../lib/imageUtils';
+import { CATEGORIES } from '../../lib/checklistData';
+import LoadingSpinner from '../common/LoadingSpinner';
+import ChecklistItemRow from '../inspection/ChecklistItemRow';
 import { 
   AlertTriangle, 
-  Check, 
-  Camera, 
-  Trash2, 
   ArrowRight, 
   ArrowLeft, 
   ChevronRight, 
@@ -18,218 +14,6 @@ import {
   CheckCircle2,
   HelpCircle
 } from 'lucide-react';
-
-interface ChecklistItemRowProps {
-  item: ChecklistItem;
-  updateStatus: (id: string, status: ChecklistItem['status']) => void;
-  updateNote: (id: string, note: string) => void;
-  updatePhoto: (id: string, photoId: string | undefined) => void;
-}
-
-function ChecklistItemRow({ item, updateStatus, updateNote, updatePhoto }: ChecklistItemRowProps) {
-  const [photoUrl, setPhotoUrl] = useState<string | null>(null);
-  const [loadingImage, setLoadingImage] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  // Load preview URL if photoId exists
-  useEffect(() => {
-    let active = true;
-    let url: string | null = null;
-
-    const loadPhoto = async () => {
-      if (item.photoId) {
-        setLoadingImage(true);
-        const blob = await loadImageBlob(item.photoId);
-        if (blob && active) {
-          url = URL.createObjectURL(blob);
-          setPhotoUrl(url);
-        }
-        setLoadingImage(false);
-      } else {
-        setPhotoUrl(null);
-      }
-    };
-
-    loadPhoto();
-
-    return () => {
-      active = false;
-      if (url) {
-        URL.revokeObjectURL(url);
-      }
-    };
-  }, [item.photoId]);
-
-  const handleCapture = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    setLoadingImage(true);
-    try {
-      const compressedBlob = await compressAndResizeImage(file);
-      const newPhotoId = generateUUID();
-      await saveImageBlob(newPhotoId, compressedBlob);
-
-      if (item.photoId) {
-        await deleteImageBlob(item.photoId);
-      }
-
-      updatePhoto(item.id, newPhotoId);
-    } catch (error) {
-      console.error('Photo capture failed:', error);
-      alert('Photo capture failed. Please try again.');
-    } finally {
-      setLoadingImage(false);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
-    }
-  };
-
-  const handleDeletePhoto = async () => {
-    if (item.photoId) {
-      setLoadingImage(true);
-      await deleteImageBlob(item.photoId);
-      updatePhoto(item.id, undefined);
-      setLoadingImage(false);
-    }
-  };
-
-  const isFlagged = item.status === 'flagged';
-  const isPassed = item.status === 'pass';
-
-  const template = CHECKLIST_TEMPLATES.find(t => t.id === item.id);
-  const description = template?.description;
-
-  return (
-    <div className="checklist-row">
-      <div className="checklist-row-header">
-        {/* Circular Checkbox (Pass Toggler) */}
-        <button
-          type="button"
-          onClick={() => updateStatus(item.id, isPassed ? 'pending' : 'pass')}
-          className={`circular-checkbox ${isPassed ? 'passed' : ''}`}
-          aria-label={isPassed ? "Mark as pending" : "Mark as passed"}
-        >
-          <Check size={14} strokeWidth={3} />
-        </button>
-
-        {/* Item label & Description container */}
-        <div style={{ display: 'flex', flexDirection: 'column', flex: 1, gap: '4px', textAlign: 'left' }}>
-          <span 
-            style={{ 
-              color: isPassed ? 'var(--color-muted)' : 'var(--color-ink)', 
-              fontSize: '15px',
-              lineHeight: 1.5,
-              fontWeight: 500,
-              textDecoration: isPassed ? 'line-through' : 'none',
-              opacity: isPassed ? 0.75 : 1,
-              transition: 'all 0.2s ease',
-            }}
-          >
-            {item.label}
-          </span>
-          {description && !isPassed && (
-            <span style={{ fontSize: '12.5px', color: 'var(--color-body)', opacity: 0.85, fontWeight: 400, lineHeight: 1.4 }}>
-              {description}
-            </span>
-          )}
-        </div>
-
-        {/* Warning Icon (Flag Toggler) */}
-        <button
-          type="button"
-          onClick={() => updateStatus(item.id, isFlagged ? 'pending' : 'flagged')}
-          className={`row-flag-btn ${isFlagged ? 'flagged' : ''}`}
-          aria-label={isFlagged ? "Remove flag" : "Flag item"}
-          title="Flag as defect"
-        >
-          <AlertTriangle size={18} />
-        </button>
-      </div>
-
-      {isFlagged && (
-        <div className="note-container" style={{ paddingLeft: '40px', display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)', marginTop: '12px' }}>
-          <label htmlFor={`note-${item.id}`} className="caption-uppercase" style={{ color: 'var(--color-muted)', fontSize: '10px' }}>
-            Flagged Defect Note
-          </label>
-          <textarea
-            id={`note-${item.id}`}
-            rows={2}
-            value={item.note || ''}
-            onChange={(e) => updateNote(item.id, e.target.value)}
-            placeholder="Please detail the paint scratch, dent, loose wire, or document error..."
-            style={{ width: '100%', resize: 'vertical' }}
-          />
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
-            <span className="caption-uppercase" style={{ color: 'var(--color-muted)', fontSize: '10px' }}>
-              Evidence Photo
-            </span>
-            
-            {loadingImage ? (
-              <div style={{ padding: '12px 0', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--color-muted)' }}>
-                <RefreshCw size={14} className="animate-spin" />
-                <span className="body-sm">Syncing photo...</span>
-              </div>
-            ) : photoUrl ? (
-              <div style={{ position: 'relative', width: 'fit-content', borderRadius: 'var(--rounded-md)', overflow: 'hidden', border: '1px solid var(--color-hairline-strong)', marginTop: '4px' }}>
-                <img 
-                  src={photoUrl} 
-                  alt="Inspection Evidence" 
-                  style={{ maxWidth: '100%', maxHeight: '200px', display: 'block', objectFit: 'contain' }} 
-                />
-                <button
-                  type="button"
-                  onClick={handleDeletePhoto}
-                  className="button-secondary"
-                  style={{ 
-                    position: 'absolute', 
-                    top: '8px', 
-                    right: '8px', 
-                    height: '36px', 
-                    minHeight: '36px',
-                    width: '36px', 
-                    borderRadius: 'var(--rounded-md)',
-                    padding: 0,
-                    backgroundColor: 'rgba(255,255,255,0.9)',
-                    color: 'var(--color-semantic-error)',
-                    borderColor: 'var(--color-hairline)'
-                  }}
-                  title="Remove photo"
-                >
-                  <Trash2 size={16} />
-                </button>
-              </div>
-            ) : (
-              <div>
-                <input
-                  type="file"
-                  accept="image/*"
-                  capture="environment"
-                  ref={fileInputRef}
-                  onChange={handleCapture}
-                  style={{ display: 'none' }}
-                />
-                <div 
-                  onClick={() => fileInputRef.current?.click()}
-                  className="upload-btn"
-                  style={{ marginTop: '4px' }}
-                >
-                  <Camera size={18} />
-                  <div>
-                    <span className="body-sm" style={{ fontWeight: 500, display: 'block' }}>Add Photo Evidence</span>
-                    <span className="caption-uppercase" style={{ fontSize: '9px', color: 'var(--color-muted)', marginTop: '2px', display: 'block' }}>Mobile Camera</span>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
 
 export default function InspectionPage() {
   const navigate = useNavigate();
@@ -260,12 +44,7 @@ export default function InspectionPage() {
   }, [selectedCategory]);
 
   if (!isHydrated) {
-    return (
-      <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', gap: 'var(--spacing-md)' }}>
-        <RefreshCw size={24} className="animate-spin" style={{ color: 'var(--color-primary)' }} />
-        <p className="body-md" style={{ color: 'var(--color-muted)' }}>Loading application state...</p>
-      </div>
-    );
+    return <LoadingSpinner message="Loading application state..." />;
   }
 
   if (!vehicle) {

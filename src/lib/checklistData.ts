@@ -461,3 +461,121 @@ export const CHECKLIST_TEMPLATES: ChecklistItemTemplate[] = [
     description: 'Verify both key fobs are programmed. Lost keys are extremely expensive to program and replace later.'
   },
 ];
+
+export const CATEGORY_DEFECT_SUGGESTIONS: Record<string, string[]> = {
+  documents: [
+    'Spelling error on invoice/insurance name',
+    'Base ex-showroom price is higher than online MSRP',
+    'Forced/illegal handling or logistics fees included',
+    'Insurance details incorrect (wrong variant/IDV/zero-dep)',
+    'VIN or engine number mismatch on paperwork',
+    'Missing manual, service book, or component warranty card',
+  ],
+  identity: [
+    'Odometer mileage is too high (> 100 km)',
+    'Worn pedals, scuffed floor, or interior signs of use',
+    'Variant/trim is incorrect (different specs/wheels)',
+    'VIN stamp on windshield/chassis differs from invoice',
+  ],
+  exterior: [
+    'Paint scratch or paint chip found',
+    'Body panel dent or dimple',
+    'Uneven/wide panel gaps',
+    'Door, hood, or boot squeaking/rubbing',
+    'Rubber window/door beading loose or torn',
+    'Color mismatch between bumper and body panels',
+  ],
+  tyres: [
+    'Scratch/curb rash on alloy wheel rim',
+    'Tyre manufacturing week is too old (> 6 months)',
+    'Tyre sidewall cut, bulge, or nail puncture',
+    'Tyre pressure is way too high (> 40 PSI)',
+    'Missing spare wheel, jack, spanner, or towing hook',
+  ],
+  glass_lights: [
+    'Windshield/sunroof glass chip or deep scratch',
+    'Water condensation/fogging inside headlight casing',
+    'Inoperative headlight, indicator, tail, or reverse light',
+    'Roof rails or mirror caps loose/rattling',
+  ],
+  engine: [
+    'Engine oil or coolant level below minimum limit',
+    'Engine oil is dark/dirty (suspect test unit)',
+    'Active fluid leak/drips under engine bay',
+    'Rodent bite marks or cut insulation under hood',
+    'Abnormal ticking, knocking, or heavy idle vibration',
+  ],
+  ev: [
+    'Battery State of Health (SoH) report not provided',
+    'Charging port flap sticky or pins bent/dirty',
+    'Charging cable/adapter missing or damaged',
+    'Range estimate on dash inconsistent with SoC %',
+    'Regenerative braking feels jerky or non-functional',
+  ],
+  interior: [
+    'Stain, scratch, or loose stitching on seat/headliner',
+    'Rattle-prone or loose trim panel on door/dashboard',
+    'Seat slide/recline controls stiff or inoperative',
+    'Seatbelt retractors slow/jammed',
+    'Glovebox latch sticky or broken',
+  ],
+  electronics: [
+    'AC is not cooling or AC blower makes a high-pitched whine',
+    'Infotainment touchscreen lags, freezes, or fails to boot',
+    'USB/Type-C ports or wireless charging pad dead',
+    'Speakers crackle or audio balance is uneven',
+    'Reverse camera screen is blurry or static',
+  ],
+  road_test: [
+    'Vehicle pulls to left/right at highway speeds',
+    'Brake pedal vibrates or squeals under moderate stopping',
+    'Clunking or metal-on-metal thuds from suspension over bumps',
+    'Gearbox changes feel clunky or hesitate',
+  ],
+  accessories: [
+    'Missing second key fob/smart key remote',
+    'Missing floor mats or mud flaps (paid add-on)',
+    'First aid kit or safety warning triangle missing',
+  ]
+};
+
+export const ITEM_DEFECT_SUGGESTIONS: Record<string, string[]> = {
+  'doc-spelling': [
+    'Owner name spelled incorrectly on invoice',
+    'Residential address typo on registration documents',
+    'VIN digit typed wrong in insurance certificate',
+  ],
+  'id-odo': [
+    'Odometer mileage is excessively high',
+    'Trip meter or dashboard buttons not functioning',
+  ],
+  'ext-paint-flaws': [
+    'Swirl marks or buffer trails visible in daylight',
+    'Deep scratch exposing primer on door panel',
+    'Paint chip from transit damage on bumper edge',
+    'Mismatched paint color shade on repainted fender',
+  ],
+  'tyre-mfg-date': [
+    'Tyre manufacturing code shows date is over 6 months old',
+    'Tyres show different manufacturing weeks (mismatched set)',
+  ],
+  'glass-cracks': [
+    'Tiny crack/stone chip in front windscreen',
+    'Scratch marks on sunroof glass',
+    'Rear windshield heater elements scratched/cut',
+  ],
+  'lights-fogging': [
+    'Severe condensation inside left headlamp casing',
+    'Water droplets visible inside fog lamp housing',
+  ],
+  'eng-wiring-check': [
+    'Rodent chew marks on battery ground wire',
+    'Non-OEM electrical tape wrap on engine wiring harness',
+  ],
+  'electronics-ac': [
+    'AC blower works but only blows ambient air',
+    'Musty/foul odor from AC vents when turned on',
+    'AC blower fan clicks loudly at high speeds',
+  ]
+};
+
