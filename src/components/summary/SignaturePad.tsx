@@ -20,35 +20,50 @@ export default function SignaturePad({ label, value, onChange, onClear }: Signat
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const rect = canvas.getBoundingClientRect();
-    const width = rect.width || 340;
-    const height = rect.height || 150;
+    const handleResize = () => {
+      if (!canvas) return;
+      const innerCtx = canvas.getContext('2d');
+      if (!innerCtx) return;
 
-    // Scale canvas pixels for High-DPI screens
-    const ratio = window.devicePixelRatio || 1;
-    canvas.width = width * ratio;
-    canvas.height = height * ratio;
-    ctx.scale(ratio, ratio);
+      const rect = canvas.getBoundingClientRect();
+      const width = rect.width || 340;
+      const height = rect.height || 150;
 
-    // Style the pen strokes
-    ctx.strokeStyle = '#26251e'; // Ink color matching design tokens
-    ctx.lineWidth = 2.5;
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
+      // Scale canvas pixels for High-DPI screens
+      const ratio = window.devicePixelRatio || 1;
+      canvas.width = width * ratio;
+      canvas.height = height * ratio;
+      innerCtx.scale(ratio, ratio);
 
-    // If an existing signature is stored, draw it
-    if (value) {
-      const img = new Image();
-      img.onload = () => {
-        ctx.clearRect(0, 0, width, height);
-        ctx.drawImage(img, 0, 0, width, height);
-        setIsEmpty(false);
-      };
-      img.src = value;
-    } else {
-      ctx.clearRect(0, 0, width, height);
-      setIsEmpty(true);
-    }
+      // Style the pen strokes
+      innerCtx.strokeStyle = '#26251e'; // Ink color matching design tokens
+      innerCtx.lineWidth = 2.5;
+      innerCtx.lineCap = 'round';
+      innerCtx.lineJoin = 'round';
+
+      // If an existing signature is stored, draw it
+      if (value) {
+        const img = new Image();
+        img.onload = () => {
+          innerCtx.clearRect(0, 0, width, height);
+          innerCtx.drawImage(img, 0, 0, width, height);
+          setIsEmpty(false);
+        };
+        img.src = value;
+      } else {
+        innerCtx.clearRect(0, 0, width, height);
+        setIsEmpty(true);
+      }
+    };
+
+    // Run on initial load
+    handleResize();
+
+    // Listen to resize events (covers orientation change on mobile)
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
   }, [value]);
 
   const getCoordinates = (e: React.MouseEvent | React.TouchEvent | TouchEvent | MouseEvent) => {

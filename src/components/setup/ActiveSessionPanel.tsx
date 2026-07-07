@@ -14,7 +14,7 @@ export default function ActiveSessionPanel({ vehicle, items, onResume, onStartFr
   const percent = Math.round((completedCount / totalCount) * 100);
 
   return (
-    <div style={{ maxWidth: '560px', margin: '100px auto', padding: '0 var(--spacing-base)' }}>
+    <div className="page-container page-container-narrow">
       <div style={{ textAlign: 'center', marginBottom: 'var(--spacing-xl)' }}>
         <span className="caption-uppercase" style={{ color: 'var(--color-primary)' }}>PDI Assistant</span>
         <h1 className="display-lg" style={{ color: 'var(--color-ink)', marginTop: 'var(--spacing-xxs)', marginBottom: 'var(--spacing-xs)' }}>
@@ -26,7 +26,7 @@ export default function ActiveSessionPanel({ vehicle, items, onResume, onStartFr
       </div>
 
       <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-lg)' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '1px solid var(--color-hairline)', paddingBottom: 'var(--spacing-base)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '12px', borderBottom: '1px solid var(--color-hairline)', paddingBottom: 'var(--spacing-base)' }}>
           <div style={{ textAlign: 'left' }}>
             <h3 className="title-md" style={{ color: 'var(--color-ink)', marginBottom: '4px' }}>
               {vehicle.make} {vehicle.model}
@@ -51,7 +51,7 @@ export default function ActiveSessionPanel({ vehicle, items, onResume, onStartFr
           </div>
         </div>
 
-        <div style={{ display: 'flex', gap: 'var(--spacing-base)', marginTop: 'var(--spacing-xs)' }}>
+        <div className="button-group-responsive" style={{ marginTop: 'var(--spacing-xs)' }}>
           <button className="button-primary" style={{ flex: 1.5, gap: '8px' }} onClick={onResume}>
             <span>Resume Inspection</span>
             <ArrowRight size={16} />

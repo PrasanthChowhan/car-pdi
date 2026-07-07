@@ -47,61 +47,61 @@ export const CHECKLIST_TEMPLATES: ChecklistItemTemplate[] = [
     id: 'doc-invoice-price', 
     categoryId: 'documents', 
     label: 'Verify ex-showroom price on invoice matches manufacturer official website',
-    description: 'Ensure the base car price matches official manufacturer listings. Reject forced dealer markups.'
+    description: 'Why: Dealers may sneak in inflated ex-showroom prices above the official MSRP, especially on popular models, costing you thousands extra.'
   },
   { 
     id: 'doc-rto-fees', 
     categoryId: 'documents', 
     label: 'Verify RTO tax, road tax, and registration fees against government sources',
-    description: 'RTO = Regional Transport Office. Check official state calculators; dealers often add illegal hidden handling markups here.'
+    description: 'Why: Dealers frequently overcharge for road tax and registration, pocketing the difference. Always cross-check against the official government receipt.'
   },
   { 
     id: 'doc-insurance', 
     categoryId: 'documents', 
     label: 'Verify insurance details (correct IDV, zero-dep/RTI add-ons, NCB if transferred)',
-    description: 'IDV (Insured Declared Value) should equal the car price. Check Zero-Depreciation and Return-to-Invoice (RTI) coverage.'
+    description: 'Why: Dealers markup insurance policies up to 50%. Ensuring IDV matches car cost and zero-depreciation is active prevents massive out-of-pocket claims.'
   },
   { 
     id: 'doc-extra-charges', 
     categoryId: 'documents', 
     label: 'Check for illegal handling/logistics charges, and ask to remove them',
-    description: 'Logistics/handling fees are illegal in most regions. Demand their removal before signing or making final payment.'
+    description: 'Why: Logistics/handling fees are officially declared illegal by courts and governments. Dealers add them as hidden profit margins.'
   },
   { 
     id: 'doc-spelling', 
     categoryId: 'documents', 
     label: 'Confirm your name and address are spelled 100% correctly on all documents',
-    description: 'A single typo on the invoice, registration form, or insurance card can void claims or delay registration.'
+    description: 'Why: A single spelling mistake on registration forms, tax invoices, or insurance documents can void insurance claims or delay registration.'
   },
   { 
     id: 'doc-specs-paper', 
     categoryId: 'documents', 
     label: 'Verify model, variant, engine/chassis number match between invoice, insurance, and Form 22',
-    description: 'Form 22 is the manufacturer road-worthiness certification. The variant (e.g. Luxury vs Sport) must match booking.'
+    description: 'Why: Ensures the dealer does not register or insure a lower trim level by mistake, or deliver a variant different from what you paid for.'
   },
   { 
     id: 'doc-vin-paper', 
     categoryId: 'documents', 
     label: 'Physical VIN (chassis number) matches paperwork exactly',
-    description: 'Locate the 17-character VIN plate on the windshield base or door pillar. Every digit must match the invoice.'
+    description: 'Why: If a single digit is mismatched, the car is legally not yours, and registration or insurance claims will be rejected.'
   },
   { 
     id: 'doc-engine-paper', 
     categoryId: 'documents', 
     label: 'Physical engine number or motor ID matches paperwork exactly',
-    description: 'Verify physical stamps match the Form 22 and sales certificate. For EVs, verify motor ID is correct.'
+    description: 'Why: Confirms that the physical engine block installed in the car is the same one registered on government databases, preventing legal issues.'
   },
   { 
     id: 'doc-stock-age', 
     categoryId: 'documents', 
     label: 'Decode VIN to verify manufacturing date and ensure it is not old stock',
-    description: 'Dealers sometimes push old stock. Use online VIN decoders; ensure the car is less than 2-3 months old.'
+    description: 'Why: Dealers push older inventory that has sat in open stockyards, suffering from paint oxidation, rusty brakes, and deep battery discharge.'
   },
   { 
     id: 'doc-must-have-check', 
     categoryId: 'documents', 
     label: 'Verify presence of Invoice, Sales Cert, Insurance, PUC, Manual, Service Book, and separate Warranties',
-    description: 'Ensure you get: Original Invoice, Form 21 (Sales Cert), Insurance policy, PUC (where applicable), Owner\'s Manual, stamped Service Book, and separate warranty cards for the third-party Battery and Tyres.'
+    description: 'Why: Third-party accessories (like batteries or tyres) have separate warranties from manufacturers. You need these physical cards to claim warranty.'
   },
 
   // Identity & Odometer
@@ -109,25 +109,25 @@ export const CHECKLIST_TEMPLATES: ChecklistItemTemplate[] = [
     id: 'id-specs', 
     categoryId: 'identity', 
     label: 'Verify engine type, transmission, safety kit (airbags), screen size, and wheels match booking',
-    description: 'Inspect the actual car layout to prevent variant bait-and-switch discrepancies (e.g., steel wheels instead of alloys).'
+    description: 'Why: Prevents variant bait-and-switch discrepancies (e.g., getting steel wheels instead of alloys or fewer airbags than booking specs).'
   },
   { 
     id: 'id-odo', 
     categoryId: 'identity', 
     label: 'Check odometer (ideal < 50 km, acceptable < 100 km, over 100 km is a red flag)',
-    description: 'Odometer should show minimal yard movement. High mileage indicates the car was used as a test-drive unit.'
+    description: 'Why: High mileage (>100 km) suggests the vehicle was used as a test-drive car, dealer demo, or driven roughly between stockyards.'
   },
   { 
     id: 'id-wear', 
     categoryId: 'identity', 
     label: 'Look for signs of use: worn pedals, scuffed seats, front stone chips, or dirty tyre treads',
-    description: 'Verify the car is truly brand new and has not been detailed over to hide previous customer or showroom demo use.'
+    description: 'Why: Confirms the car is brand new and not a refurbished demonstration unit or customer return that was cleaned up.'
   },
   { 
     id: 'id-records', 
     categoryId: 'identity', 
     label: 'Take backup photos of physical VIN plates, engine/motor numbers, and odometer readings',
-    description: 'Keep these photos on your phone as permanent evidence of the vehicle identity before taking possession.'
+    description: 'Why: Serves as absolute proof of the vehicle\'s original condition and identity should any discrepancies arise after you drive home.'
   },
 
   // Exterior & Paint
@@ -135,37 +135,37 @@ export const CHECKLIST_TEMPLATES: ChecklistItemTemplate[] = [
     id: 'ext-light-check', 
     categoryId: 'exterior', 
     label: 'Inspect outdoors in bright natural daylight (showroom lighting hides paint defects)',
-    description: 'Showroom spot-lights are angled specifically to hide minor dents, sanding marks, and color-matching repaints.'
+    description: 'Why: Angled showroom spotlights are strategically placed to mask minor scratches, swirl marks, or repainted sections.'
   },
   { 
     id: 'ext-paint-flaws', 
     categoryId: 'exterior', 
     label: 'Check panels for paint scratches, color shade mismatches, overspray, or orange-peel textures',
-    description: 'Look closely at angles. Mismatched shades or rough overspray on rubber sealings indicates transit repairs.'
+    description: 'Why: Mismatched paint shades or rough overspray on rubber sealings indicate the panel was damaged and repainted in the dealer workshop.'
   },
   { 
     id: 'ext-high-risk-areas', 
     categoryId: 'exterior', 
     label: 'Carefully check bumper corners, roof edges, door edges, mirror covers, and handles',
-    description: 'These are the most common areas scratched during truck loading and unloading.'
+    description: 'Why: These are the high-contact areas most likely to hit metal ramps or straps during truck loading and transit.'
   },
   { 
     id: 'ext-panel-gaps-verify', 
     categoryId: 'exterior', 
     label: 'Verify panel gaps are uniform and consistent left-to-right (no parts sticking out/sunk)',
-    description: 'Uneven gaps between the hood, doors, or boot indicate alignment issues or previous panel damage.'
+    description: 'Why: Uneven gaps between panels indicate poor factory quality control or a panel that was replaced and misaligned after a yard accident.'
   },
   { 
     id: 'ext-doors-operation', 
     categoryId: 'exterior', 
     label: 'Verify doors, hood, and boot open/close smoothly with a solid thud and no grinding noises',
-    description: 'Listen for friction, hinges catching, or clicking. Everything should align cleanly.'
+    description: 'Why: Hard opening or grinding indicates bent hinges or body misalignment, which leads to cabin rattles and water leaks.'
   },
   { 
     id: 'ext-beading-seals', 
     categoryId: 'exterior', 
     label: 'Check rubber door/window beadings are intact, soft, and properly seated',
-    description: 'Look for dry-rotting or loose sealing which causes cabin water leaks and high wind-noise levels later.'
+    description: 'Why: Dry-rotted or loose rubber beadings let rainwater leak into the cabin and cause high cabin wind-noise levels at highway speeds.'
   },
 
   // Tyres, Wheels & Brakes
@@ -173,43 +173,43 @@ export const CHECKLIST_TEMPLATES: ChecklistItemTemplate[] = [
     id: 'tyre-spec-match', 
     categoryId: 'tyres', 
     label: 'Verify tyre brand, size (e.g. 195/60 R16), and type (tubeless/run-flat) match brochure specs',
-    description: 'Dealers sometimes swap premium tyres with cheaper brands before delivery. Check all four tyres.'
+    description: 'Why: Dealers sometimes swap premium tyre brands with cheaper alternatives before delivery. Verify all four wheels.'
   },
   { 
     id: 'tyre-mfg-date', 
     categoryId: 'tyres', 
     label: 'Check tyre manufacturing week/year on sidewalls (e.g. 2425) - must be recent and matching',
-    description: 'Look for a 4-digit code on the tyre wall (e.g., 2425 means 24th week of 2025). Old tyres degrade and blow out.'
+    description: 'Why: Rubber degrades with age even when sitting. Mismatched or old stock tyres (>6-12 months old) are prone to early cracks and high-speed blowouts.'
   },
   { 
     id: 'tyre-physical-check', 
     categoryId: 'tyres', 
     label: 'Inspect all tyres for cuts, bubbles, sidewall damage, or embedded nails',
-    description: 'Transit damage on tyre sidewalls cannot be repaired; check the inner and outer tyre walls.'
+    description: 'Why: Sidewall structural bubbles cannot be repaired and require full tyre replacement. This happens from rough loading on trucks.'
   },
   { 
     id: 'tyre-rims-rash', 
     categoryId: 'tyres', 
     label: 'Check alloy wheels/rims for curb rash, scratches, bends, or cracks',
-    description: 'Damage occurs during yard transit or parking. Scratched alloy rims are expensive to replace.'
+    description: 'Why: Bends or cracks in alloys compromise tyre air seals. Curb rash indicates the vehicle hit a concrete block during yard transit.'
   },
   { 
     id: 'tyre-spare', 
     categoryId: 'tyres', 
     label: 'Verify spare wheel is present (or check for puncture inflator/sealant kit if vehicle has no spare)',
-    description: 'Many modern vehicles (especially EVs) omit a physical spare wheel to save weight. In this case, verify the official tyre mobility compressor/sealant kit is present in the boot.'
+    description: 'Why: Many modern cars (especially EVs) omit a spare tyre. Ensure you receive the official compressor and sealant kit instead.'
   },
   { 
     id: 'tyre-tools', 
     categoryId: 'tyres', 
     label: 'Verify presence of jack, spanner, towing hook, and wheel lock key (if applicable)',
-    description: 'Locate the puncture repair kit or physical tool pouch in the boot floor. Verify no tools are missing.'
+    description: 'Why: Standard tools are frequently missing or misplaced during dealer cleaning, leaving you stranded during a roadside puncture.'
   },
   { 
     id: 'tyre-pressure-adjust', 
     categoryId: 'tyres', 
     label: 'Have dealer adjust tyres to correct pressure (transport pressure is usually high)',
-    description: 'Vehicles ship overseas at 40-50 PSI. Check driver-door sticker; ask to bleed them to standard (usually 32-35 PSI).'
+    description: 'Why: Vehicles ship at 45-50 PSI to prevent tyre flat-spots during transit. Driving at this pressure causes a harsh ride and braking issues.'
   },
 
   // Glass & Lights
@@ -217,25 +217,25 @@ export const CHECKLIST_TEMPLATES: ChecklistItemTemplate[] = [
     id: 'glass-cracks', 
     categoryId: 'glass_lights', 
     label: 'Check windscreen, side windows, rear windshield, and sunroof for chips or deep scratches',
-    description: 'Run your fingernail over small dots. Even a minor chip can crack under thermal shock.'
+    description: 'Why: Tiny windshield chips expand into massive cracks under thermal shock (hot sun or cold AC). Sunroof glass scratches leak water.'
   },
   { 
     id: 'lights-fogging', 
     categoryId: 'glass_lights', 
     label: 'Inspect lamp housings for cracks, broken clips, and moisture or fogging inside',
-    description: 'Water drops inside headlights indicate a broken seal. Demand replacement, not drying.'
+    description: 'Why: Water inside headlight housings shorts the high-voltage LED arrays. Moisture indicates a cracked seal that requires complete replacement.'
   },
   { 
     id: 'lights-test', 
     categoryId: 'glass_lights', 
     label: 'Test headlights (high/low), DRLs, indicators, brake/reverse/fog lights, and hazards',
-    description: 'DRLs = Daytime Running Lights. Check auto-headlights and cornering light functions if equipped.'
+    description: 'Why: Inoperative lights are safety hazards and point to blown fuses, wiring faults, or loose bulb sockets.'
   },
   { 
     id: 'glass-fittings', 
     categoryId: 'glass_lights', 
     label: 'Check ORVM housings, roof rails, and plastic cladding for secure, flush fitment',
-    description: 'ORVM = Outer Rear View Mirror. Gently shake roof rails to ensure mounting bolts are solid.'
+    description: 'Why: Loose external trim panels or mirrors rattle at speed and can fly off on highways, presenting a safety hazard.'
   },
 
   // Engine & Fluids (ICE-Specific)
@@ -243,43 +243,43 @@ export const CHECKLIST_TEMPLATES: ChecklistItemTemplate[] = [
     id: 'eng-clean', 
     categoryId: 'engine', 
     label: 'Engine bay is clean, free of oil/coolant leaks, and excessive mud',
-    description: 'A dirty engine bay on a new car indicates flood storage or test use. Check corners for grease deposits.'
+    description: 'Why: A dirty, muddy engine bay indicates the car was parked in water-clogged yards or used for unauthorized test drives.'
   },
   { 
     id: 'eng-fluids-levels', 
     categoryId: 'engine', 
     label: 'Check fluid levels: engine oil (dipstick), coolant reservoir, brake fluid, and windshield washer',
-    description: 'Fluid levels should rest between MIN and MAX. Oil should be clear honey-colored, not dark brown.'
+    description: 'Why: Low oil or coolant levels cause immediate engine overheating. Discolored oil suggests engine wear or testing usage.'
   },
   { 
     id: 'eng-wiring-check', 
     categoryId: 'engine', 
     label: 'Look for tangled or cut wires, non-OEM clamps, tape, or signs of rodent bite',
-    description: 'Check exposed wires for bite marks or electrical tape fixes. Rats nesting in stockyards is very common.'
+    description: 'Why: Rodents nesting in open stockyards often chew through wiring harnesses, leading to complex electrical failures later.'
   },
   {
     id: 'eng-fuel-exhaust-leak',
     categoryId: 'engine',
     label: 'Check for raw fuel smells (inside/outside cabin) and exhaust alignment',
-    description: 'Ensure there is no raw gasoline/diesel smell. Check that the exhaust pipe is properly aligned and not hanging low.'
+    description: 'Why: Strong fuel smells indicate loose fuel lines or injector leaks, which are severe fire hazards.'
   },
   { 
     id: 'eng-ignition', 
     categoryId: 'engine', 
     label: 'Engine starts quickly, idles stably, with no metallic knocks or abnormal vibration',
-    description: 'Cold-start the engine. The idle RPM should settle smoothly within a minute without hunting.'
+    description: 'Why: Hard starting or rough idle indicates spark plug failure, bad fuel, or engine cylinder issues.'
   },
   { 
     id: 'eng-exhaust-smoke', 
     categoryId: 'engine', 
     label: 'Observe exhaust on startup for excessive black, blue, or white smoke',
-    description: 'Blue smoke = burning oil; white smoke = coolant leak; thick black smoke = fuel mix issue.'
+    description: 'Why: Blue smoke means engine oil leak; white smoke suggests internal coolant leak (head gasket failure); black smoke means poor combustion.'
   },
   { 
     id: 'eng-drips', 
     categoryId: 'engine', 
     label: 'Inspect engine bay floor and underbody for fresh leaks/drips after running the engine',
-    description: 'Look under the front chassis after test running. Condensation from AC is normal; oil, green, or red fluid is a leak.'
+    description: 'Why: Running the engine builds oil/coolant pressure. Fresh drips on the floor indicate loose gaskets or hose connections.'
   },
 
   // Battery & High-Voltage (EV-Specific)
@@ -287,49 +287,49 @@ export const CHECKLIST_TEMPLATES: ChecklistItemTemplate[] = [
     id: 'ev-battery-health',
     categoryId: 'ev',
     label: 'Check battery State of Health (SoH) and verify no high-voltage warning lights are active',
-    description: 'Request a copy of the battery diagnostic report from the dealership. Confirm the BMS (Battery Management System) has no active fault codes.'
+    description: 'Why: EV batteries sitting at 0% charge in stockyards degrade quickly. A diagnostic health report ensures maximum battery life.'
   },
   { 
     id: 'ev-port-check', 
     categoryId: 'ev', 
     label: 'Charging port lid opens smoothly and internal socket pins are clean/undamaged',
-    description: 'Inspect the charging port (CCS or Type 2 connector) for bent pins, moisture, or dust accumulation.'
+    description: 'Why: Bent or corroded pins in the charging socket prevent fast DC charging or generate heating faults during AC charge sessions.'
   },
   { 
     id: 'ev-cables-bag', 
     categoryId: 'ev', 
     label: 'Charging cable is present, clean, undamaged, and inside its carrying bag',
-    description: 'Locate the portable charging cable (EVSE). Check that the plugs and cables have no cuts or exposed wires.'
+    description: 'Why: EV portable chargers are high-cost components (up to $500/₹30,000) that can be stolen or misplaced in dealership storage.'
   },
   {
     id: 'ev-charging-demo',
     categoryId: 'ev',
     label: 'Request a live charging demonstration; confirm the handshakes and charging start without errors',
-    description: 'Plug the vehicle into an active charger at the dealership. Confirm it initiates charging and shows details on screen.'
+    description: 'Why: Verifies that the internal charger and cooling fans work under active load and communicate properly with charging guns.'
   },
   {
     id: 'ev-range-verify',
     categoryId: 'ev',
     label: 'Verify displayed range is consistent with battery SoC %; watch range stability on road test',
-    description: 'Check that range projection is logical for the current battery level. Monitor for wild estimated range drops.'
+    description: 'Why: Wild drops in estimated range over a short drive point to defective battery cells or uncalibrated battery management systems.'
   },
   {
     id: 'ev-regen-braking',
     categoryId: 'ev',
     label: 'Verify regenerative braking controls and check transition smoothness during road test',
-    description: 'Toggle through different regen levels (e.g. single-pedal drive, low, high). Ensure transition is smooth.'
+    description: 'Why: Ensures the EV recovers deceleration energy correctly and transitions smoothly between hydraulic pads and motor braking.'
   },
   {
     id: 'ev-thermal-mgmt',
     categoryId: 'ev',
     label: 'Check battery cooling/heating systems operation and verify AC range impact',
-    description: 'Turn on climate control and verify fans or thermal management indicators on screen operate without massive range penalties.'
+    description: 'Why: Battery thermal management is critical for EV safety. Excessive range drops when turning on AC suggest system inefficiency.'
   },
   {
     id: 'ev-warranty-docs',
     categoryId: 'ev',
     label: 'Confirm battery warranty (8 years / X km) and BMS service documentation are hand-delivered',
-    description: 'Ensure you receive physical stamped documents specifically detailing the high-voltage battery pack coverage.'
+    description: 'Why: EV batteries are the most expensive part of the car. Having original, stamped warranty cards is non-negotiable for future claims.'
   },
 
   // Interior & Cabin
@@ -337,37 +337,37 @@ export const CHECKLIST_TEMPLATES: ChecklistItemTemplate[] = [
     id: 'int-general', 
     categoryId: 'interior', 
     label: 'Check seats, door pads, roof liner, dashboard, and carpets for stains, tears, or loose stitching',
-    description: 'Ensure plastic covers are removed in front of you so you can verify the seats underneath are clean.'
+    description: 'Why: Detailing chemicals or yard dirt can stain premium leather upholstery. Tears in roof liners are expensive to replace.'
   },
   { 
     id: 'int-water-leak', 
     categoryId: 'interior', 
     label: 'Lift floor mats to check underneath for dampness, mud, or water stains (flooding sign)',
-    description: 'Press your hand deep into the floor carpet. Dampness points to window sealing failure or yard flooding.'
+    description: 'Why: Stagnant water under carpets causes rusted floorboard steel, moldy cabin air, and short circuits in bottom wiring harnesses.'
   },
   { 
     id: 'int-seats-move', 
     categoryId: 'interior', 
     label: 'Test all manual/electric seat adjustment controls for smooth, full range of motion',
-    description: 'Check lumber support, seat heating, or cooling fans if equipped. Verify seat rails are greased.'
+    description: 'Why: Seat motor gears can bind or catch. Manual slide tracks need proper lubrication to adjust smoothly.'
   },
   { 
     id: 'int-belts', 
     categoryId: 'interior', 
     label: 'Verify all seat belts pull out smoothly, latch securely, and lock when jerked',
-    description: 'Yank each belt quickly. It must lock immediately. This is a critical life-saving safety component.'
+    description: 'Why: Seatbelts are primary lifesavers. A jammed retractor or failed lock means the car is unsafe to drive.'
   },
   { 
     id: 'int-glovebox', 
     categoryId: 'interior', 
     label: 'Verify glovebox (and cooled function), center storage, and armrests open/close properly',
-    description: 'Check alignment of latches. Sun visors, sunglasses holders, and cup holders should lock in place.'
+    description: 'Why: Broken alignment latches on compartments cause annoying cabin squeaks and won\'t lock when parked.'
   },
   { 
     id: 'int-cabin-smell', 
     categoryId: 'interior', 
     label: 'Check for musty smells or foul odors coming from the HVAC vents',
-    description: 'HVAC = Heating, Ventilation, and Air Conditioning. A moldy smell indicates stagnant water in the cabin filter.'
+    description: 'Why: Musty air conditioning smells indicate mold growth in the cabin filter or pooling water in the evaporator drain.'
   },
 
   // Electronics & AC
@@ -375,43 +375,43 @@ export const CHECKLIST_TEMPLATES: ChecklistItemTemplate[] = [
     id: 'elec-instrument', 
     categoryId: 'electronics', 
     label: 'Warning lights show on ignition and all clear completely after starting the engine',
-    description: 'All system lights (ABS, Airbags, etc.) illuminate on key turn; they must turn off 2 seconds after engine start or EV power-on.'
+    description: 'Why: Check engine, ABS, or airbag lights must turn off. Active lights point to critical sensor failures.'
   },
   { 
     id: 'elec-climate', 
     categoryId: 'electronics', 
     label: 'AC/heater cooling is fast and strong, check blower speeds, vent directions, and modes',
-    description: 'Set climate control to minimum temperature. Cold air must flow within 30 seconds. Verify defogger functions.'
+    description: 'Why: Faulty AC compressors or low refrigerant charge cause poor cooling. Blower fan defects make clicking sounds.'
   },
   { 
     id: 'elec-infotainment-test', 
     categoryId: 'electronics', 
     label: 'Infotainment touchscreen is responsive, test Bluetooth, Apple CarPlay, and Android Auto',
-    description: 'Connect your phone; check for dead touch zones, screen flickering, or system crashes.'
+    description: 'Why: Infotainment units are complex computers. Screen lag, dead touch zones, or connection drops require full system replacement.'
   },
   { 
     id: 'elec-speakers-test', 
     categoryId: 'electronics', 
     label: 'Check balance/fader to ensure all speakers (front, rear, tweeters) function',
-    description: 'Adjust audio position on-screen to each corner; make sure no speaker sounds distorted or buzzing.'
+    description: 'Why: Blown speaker cones rattle at normal volumes. Incorrect factory wiring can leave some speakers disconnected.'
   },
   { 
     id: 'elec-controls-switches', 
     categoryId: 'electronics', 
     label: 'Test all power windows (auto up/down), central locking, ORVM fold/adjust, and map/boot lights',
-    description: 'Ensure anti-pinch functions work on windows. Boot and glovebox illumination should turn on.'
+    description: 'Why: Sticky windows suggest motor strain or misaligned tracks. Failed locks leave the car vulnerable to theft.'
   },
   { 
     id: 'elec-wipers-washer', 
     categoryId: 'electronics', 
     label: 'Test front/rear wipers, washer spray, and all speed settings',
-    description: 'Check that wipers sweep cleanly without juddering or scratching. Verify washer nozzles align properly.'
+    description: 'Why: Dry wiper rubber streaks or scratches the windshield. Clogged washer nozzles make driving in dirt unsafe.'
   },
   { 
     id: 'elec-obd-scanner', 
     categoryId: 'electronics', 
     label: 'Optional: Connect OBD-II scanner to verify there are no hidden diagnostic trouble codes (DTCs)',
-    description: 'OBD = On-Board Diagnostics. An OBD reader can find hidden engine codes that the cluster fails to show.'
+    description: 'Why: Dealerships can clear dashboard warning codes temporarily. An OBD scanner reads deep ECU registers for active history faults.'
   },
 
   // Road Test & Drive
@@ -419,37 +419,37 @@ export const CHECKLIST_TEMPLATES: ChecklistItemTemplate[] = [
     id: 'road-response', 
     categoryId: 'road_test', 
     label: 'Engine/Motor acceleration is smooth with no flat spots, hesitation, or jerking',
-    description: 'Under light and moderate acceleration, check that power delivery is linear and smooth without whine, slippage, or clunks.'
+    description: 'Why: Power delivery lag suggests transmission slippage, fuel injection faults, or motor calibration issues.'
   },
   { 
     id: 'road-steering-pull', 
     categoryId: 'road_test', 
     label: 'At 60 km/h on a level road, car tracks straight and doesn\'t pull to the left/right',
-    description: 'Briefly lift hands off the wheel. If the car pulls to either side, alignment or suspension is damaged.'
+    description: 'Why: Wheel pulling indicates bad alignment, uneven tyre pressure, or suspension damage from yard transport impacts.'
   },
   { 
     id: 'road-steering-noise', 
     categoryId: 'road_test', 
     label: 'Turn steering fully left/right at low speed - check for metallic grinding or cracking noises',
-    description: 'Grinding at lock points indicating suspension mount wear or steering rack steering failure.'
+    description: 'Why: Grinding at full lock points to steering rack defects or damaged constant velocity (CV) joints.'
   },
   { 
     id: 'road-brake-feel', 
     categoryId: 'road_test', 
     label: 'Brake pedal feels firm and progressive, car brakes straight without vibration or shudder',
-    description: 'Shuddering through the pedal indicates warped brake rotors. Braking should be silent and immediate.'
+    description: 'Why: Pedal shuddering under braking indicates warped brake rotors, which requires grinding or complete replacement.'
   },
   { 
     id: 'road-suspension', 
     categoryId: 'road_test', 
     label: 'Drive over bumps - check for suspension squeaks, rattles, or loose metallic thuds',
-    description: 'Listen closely with windows down. Squeaks indicate dry bushings; heavy thuds indicate shock absorber leak.'
+    description: 'Why: Squeaking points to dry rubber bushings; heavy metallic thuds indicate leaking shock absorbers or loose stabilizer links.'
   },
   { 
     id: 'road-transmission', 
     categoryId: 'road_test', 
     label: 'Verify gear shifts (manual/automatic) are smooth; test paddles or EV creep settings',
-    description: 'Clutch should be light. Automatics should not slip/jerk. EVs should creep smoothly in D/R.'
+    description: 'Why: Jerking during gear changes indicates low transmission oil or controller module faults.'
   },
 
   // Accessories & Keys
@@ -457,25 +457,25 @@ export const CHECKLIST_TEMPLATES: ChecklistItemTemplate[] = [
     id: 'acc-verify', 
     categoryId: 'accessories', 
     label: 'Check all promised accessories (mats, mud flaps, seat covers, dashcam, body kits) are installed',
-    description: 'Cross-check the booking invoice add-ons. Ensure all paid accessories are physically on the car.'
+    description: 'Why: Ensure you get everything you paid for in your booking invoice. Dealers forget accessories in rush hours.'
   },
   { 
     id: 'acc-quality-oem', 
     categoryId: 'accessories', 
     label: 'Ensure accessories are OEM/agreed brands and match the invoice specs without downgrades',
-    description: 'OEM = Original Equipment Manufacturer. Check that the dealer did not install cheap aftermarket substitutes.'
+    description: 'Why: Dealers sometimes install cheaper aftermarket components instead of genuine OEM kits while charging full price.'
   },
   { 
     id: 'acc-safety-kit', 
     categoryId: 'accessories', 
     label: 'Verify presence of first-aid kit, warning triangle, and tyre inflator (if no spare)',
-    description: 'Examine expiry date on first aid creams. Ensure high-visibility warning triangle clips are working.'
+    description: 'Why: Mandatory roadside safety equipment is often skipped by pre-delivery inspection teams.'
   },
   { 
     id: 'acc-all-keys', 
     categoryId: 'accessories', 
     label: 'Confirm presence of all keys (usually 2 remotes/fobs); verify each locks, unlocks, and starts',
-    description: 'Verify both key fobs are programmed. Lost keys are extremely expensive to program and replace later.'
+    description: 'Why: Smart keys cost up to $300/₹20,000 to replace. Ensure both keys are programmed to your engine immobilizer.'
   },
 ];
 

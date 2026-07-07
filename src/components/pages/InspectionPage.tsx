@@ -10,11 +10,17 @@ import {
   ArrowRight, 
   ArrowLeft, 
   ChevronRight, 
+  ChevronLeft,
   CheckSquare, 
   RefreshCw, 
   CheckCircle2,
-  HelpCircle
+  HelpCircle,
+  Info,
+  AlertCircle,
+  Disc,
+  Binary
 } from 'lucide-react';
+import { decodeIndianVIN, decodeTyreDOT } from '../../lib/decoderUtils';
 
 export default function InspectionPage() {
   const navigate = useNavigate();
@@ -28,10 +34,69 @@ export default function InspectionPage() {
     updateItemPhoto, 
     passAllCategoryItems,
     resetCategoryItems,
-    hydrateStore 
+    hydrateStore,
+    setVehicle
   } = useInspectionStore();
   const [selectedCategory, setSelectedCategory] = useState('overview');
   const tabsListRef = useRef<HTMLDivElement>(null);
+
+  const [tyreDOTs, setTyreDOTs] = useState({ FL: '', FR: '', RL: '', RR: '', SP: '' });
+  
+  const [showLeftScrollBtn, setShowLeftScrollBtn] = useState(false);
+  const [showRightScrollBtn, setShowRightScrollBtn] = useState(false);
+
+  const checkScroll = () => {
+    if (tabsListRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = tabsListRef.current;
+      setShowLeftScrollBtn(scrollLeft > 2);
+      setShowRightScrollBtn(scrollLeft < scrollWidth - clientWidth - 2);
+    }
+  };
+
+  const scrollTabs = (direction: 'left' | 'right') => {
+    if (tabsListRef.current) {
+      const scrollAmount = 150;
+      tabsListRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  useEffect(() => {
+    const el = tabsListRef.current;
+    if (el) {
+      checkScroll();
+      el.addEventListener('scroll', checkScroll);
+      window.addEventListener('resize', checkScroll);
+    }
+    return () => {
+      if (el) {
+        el.removeEventListener('scroll', checkScroll);
+      }
+      window.removeEventListener('resize', checkScroll);
+    };
+  }, [isHydrated, items]);
+
+  // Pre-populate tyre DOT codes if they are in the note
+  const tyreMfgItem = items['tyre-mfg-date'];
+  useEffect(() => {
+    if (tyreMfgItem?.note && Object.values(tyreDOTs).every(v => v === '')) {
+      const flMatch = tyreMfgItem.note.match(/FL:\s*Week\s*(\d{2})\/(\d{4})/i) || tyreMfgItem.note.match(/FL:\s*(\d{4})/i);
+      const frMatch = tyreMfgItem.note.match(/FR:\s*Week\s*(\d{2})\/(\d{4})/i) || tyreMfgItem.note.match(/FR:\s*(\d{4})/i);
+      const rlMatch = tyreMfgItem.note.match(/RL:\s*Week\s*(\d{2})\/(\d{4})/i) || tyreMfgItem.note.match(/RL:\s*(\d{4})/i);
+      const rrMatch = tyreMfgItem.note.match(/RR:\s*Week\s*(\d{2})\/(\d{4})/i) || tyreMfgItem.note.match(/RR:\s*(\d{4})/i);
+      const spMatch = tyreMfgItem.note.match(/SP:\s*Week\s*(\d{2})\/(\d{4})/i) || tyreMfgItem.note.match(/SP:\s*(\d{4})/i);
+
+      setTyreDOTs({
+        FL: flMatch ? (flMatch[1] + (flMatch[2] ? flMatch[2].substring(2) : '')) : '',
+        FR: frMatch ? (frMatch[1] + (frMatch[2] ? frMatch[2].substring(2) : '')) : '',
+        RL: rlMatch ? (rlMatch[1] + (rlMatch[2] ? rlMatch[2].substring(2) : '')) : '',
+        RR: rrMatch ? (rrMatch[1] + (rrMatch[2] ? rrMatch[2].substring(2) : '')) : '',
+        SP: spMatch ? (spMatch[1] + (spMatch[2] ? spMatch[2].substring(2) : '')) : '',
+      });
+    }
+  }, [tyreMfgItem?.note, tyreDOTs]);
 
   useEffect(() => {
     hydrateStore();
@@ -111,10 +176,10 @@ export default function InspectionPage() {
   const activeCategoryPending = categoryItems.filter((i) => i.status === 'pending').length;
 
   return (
-    <div style={{ maxWidth: '800px', margin: '40px auto', padding: '0 var(--spacing-base) 140px var(--spacing-base)' }}>
+    <div className="page-container page-container-wide" style={{ paddingBottom: '160px' }}>
       
       {/* Header Panel */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 'var(--spacing-base)', marginBottom: 'var(--spacing-lg)', borderBottom: '1px solid var(--color-hairline)', paddingBottom: 'var(--spacing-md)' }}>
+      <div className="inspection-header">
         <div style={{ textAlign: 'left' }}>
           <span className="caption-uppercase" style={{ color: 'var(--color-primary)' }}>Vehicle Under Inspection</span>
           <h1 className="display-sm" style={{ color: 'var(--color-ink)', marginTop: '2px', marginBottom: '4px', fontWeight: 600 }}>
@@ -170,6 +235,17 @@ export default function InspectionPage() {
 
       {/* Horizontal Tabs with Fades */}
       <div className="category-tabs-container">
+        {showLeftScrollBtn && (
+          <button 
+            type="button"
+            className="tabs-scroll-btn left-btn"
+            onClick={() => scrollTabs('left')}
+            aria-label="Scroll Left"
+          >
+            <ChevronLeft size={16} />
+          </button>
+        )}
+
         <div 
           ref={tabsListRef}
           className="no-scrollbar"
@@ -269,6 +345,17 @@ export default function InspectionPage() {
             );
           })}
         </div>
+
+        {showRightScrollBtn && (
+          <button 
+            type="button"
+            className="tabs-scroll-btn right-btn"
+            onClick={() => scrollTabs('right')}
+            aria-label="Scroll Right"
+          >
+            <ChevronRight size={16} />
+          </button>
+        )}
       </div>
 
       {/* Category Actions Bar (NO redundant label, aligned cleanly) */}
@@ -323,6 +410,186 @@ export default function InspectionPage() {
         <OverviewPhotosPanel />
       ) : (
         <div className="checklist-container">
+          {/* Documents Section VIN Tool Card */}
+          {selectedCategory === 'documents' && (
+            <div className="card animate-fadeIn" style={{ display: 'flex', flexDirection: 'column', gap: '12px', padding: '16px', marginBottom: 'var(--spacing-md)', textAlign: 'left', backgroundColor: 'var(--color-canvas-soft)', border: '1px solid var(--color-hairline-strong)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', borderBottom: '1px solid var(--color-hairline)', paddingBottom: '8px' }}>
+                <Binary size={18} style={{ color: 'var(--color-primary)' }} />
+                <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-ink)' }} className="caption-uppercase">Forensic VIN / Chassis Decoder</span>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                <label htmlFor="pdi-vin" style={{ fontSize: '10px', color: 'var(--color-muted)', fontWeight: 600 }} className="caption-uppercase">VIN / Chassis Number</label>
+                <input
+                  type="text"
+                  id="pdi-vin"
+                  maxLength={19}
+                  value={vehicle.vin || ''}
+                  onChange={(e) => setVehicle({ ...vehicle, vin: e.target.value.toUpperCase() })}
+                  placeholder="Enter 17 or 19-digit Chassis Number..."
+                  style={{ textTransform: 'uppercase', fontFamily: 'var(--font-mono)', letterSpacing: '1px', minHeight: '36px', height: '36px', fontSize: '13px' }}
+                />
+              </div>
+
+              {vehicle.vin && vehicle.vin.trim().length >= 3 && (() => {
+                const decoded = decodeIndianVIN(vehicle.vin);
+                if (!decoded.isValid) return null;
+
+                let statusColor = 'var(--color-muted)';
+                let bgColor = 'rgba(128, 125, 114, 0.03)';
+                let borderColor = 'var(--color-hairline-strong)';
+                let Icon = Info;
+
+                if (decoded.status === 'fresh') {
+                  statusColor = 'var(--color-semantic-success)';
+                  bgColor = 'rgba(31, 138, 101, 0.03)';
+                  borderColor = 'var(--color-semantic-success)';
+                  Icon = CheckCircle2;
+                } else if (decoded.status === 'caution') {
+                  statusColor = '#d08000';
+                  bgColor = 'rgba(208, 128, 0, 0.03)';
+                  borderColor = '#d08000';
+                  Icon = AlertTriangle;
+                } else if (decoded.status === 'flagged') {
+                  statusColor = 'var(--color-semantic-error)';
+                  bgColor = 'rgba(207, 45, 86, 0.03)';
+                  borderColor = 'var(--color-semantic-error)';
+                  Icon = AlertCircle;
+                }
+
+                return (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '4px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', fontSize: '12px', backgroundColor: 'rgba(0,0,0,0.02)', padding: '8px', borderRadius: 'var(--rounded-md)' }}>
+                      <div><strong>Brand:</strong> {decoded.manufacturer} ({decoded.country})</div>
+                      {decoded.year && <div><strong>MFG:</strong> {decoded.month ? `${decoded.month} ` : ''}{decoded.year}</div>}
+                      {decoded.ageMonths !== null && <div><strong>Age:</strong> {decoded.ageMonths} months old</div>}
+                    </div>
+                    
+                    <div style={{ display: 'flex', gap: '6px', alignItems: 'flex-start', padding: '8px', backgroundColor: bgColor, border: `1px solid ${borderColor}`, borderRadius: 'var(--rounded-md)' }}>
+                      <Icon size={14} style={{ color: statusColor, flexShrink: 0, marginTop: '2px' }} />
+                      <p style={{ fontSize: '11.5px', margin: 0, color: 'var(--color-body)', lineHeight: 1.3 }}>{decoded.message}</p>
+                    </div>
+
+                    <button
+                      type="button"
+                      className="button-primary"
+                      onClick={() => {
+                        updateItemStatus('doc-vin-paper', 'pass');
+                        updateItemNote('doc-vin-paper', `Chassis number verified: ${decoded.vin}`);
+                        
+                        const ageStatus = decoded.status === 'fresh' ? 'pass' : (decoded.status === 'flagged' ? 'flagged' : 'pending');
+                        updateItemStatus('doc-stock-age', ageStatus);
+                        updateItemNote('doc-stock-age', `Decoded VIN: ${decoded.manufacturer} (${decoded.country}), MFG Date: ${decoded.month ? `${decoded.month} ` : ''}${decoded.year} (Age: ${decoded.ageMonths}m old). Message: ${decoded.message}`);
+                        
+                        alert('Applied decoded details to paper match & stock age checklist items!');
+                      }}
+                      style={{ height: '32px', minHeight: '32px', padding: '0 10px', fontSize: '11.5px', alignSelf: 'flex-start', marginTop: '2px' }}
+                    >
+                      Apply to VIN Checklists
+                    </button>
+                  </div>
+                );
+              })()}
+            </div>
+          )}
+
+          {/* Tyres Section DOT Tool Card */}
+          {selectedCategory === 'tyres' && (
+            <div className="card animate-fadeIn" style={{ display: 'flex', flexDirection: 'column', gap: '12px', padding: '16px', marginBottom: 'var(--spacing-md)', textAlign: 'left', backgroundColor: 'var(--color-canvas-soft)', border: '1px solid var(--color-hairline-strong)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', borderBottom: '1px solid var(--color-hairline)', paddingBottom: '8px' }}>
+                <Disc size={18} style={{ color: 'var(--color-primary)' }} />
+                <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-ink)' }} className="caption-uppercase">Tyre DOT Date Decoder (WWYY)</span>
+              </div>
+              
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(70px, 1fr))', gap: '8px' }}>
+                {(['FL', 'FR', 'RL', 'RR', 'SP'] as const).map((key) => (
+                  <div key={key} style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                    <label htmlFor={`pdi-tyre-${key}`} style={{ fontSize: '10px', fontWeight: 600, color: 'var(--color-ink)' }}>
+                      {key} {key === 'SP' ? '(Spare)' : ''}
+                    </label>
+                    <input
+                      type="text"
+                      id={`pdi-tyre-${key}`}
+                      maxLength={4}
+                      placeholder="WWYY"
+                      value={tyreDOTs[key]}
+                      onChange={(e) => setTyreDOTs({ ...tyreDOTs, [key]: e.target.value.replace(/[^0-9]/g, '') })}
+                      style={{ minHeight: '36px', height: '36px', padding: '4px 6px', fontSize: '12.5px', textAlign: 'center', borderColor: 'var(--color-hairline-strong)' }}
+                    />
+                  </div>
+                ))}
+              </div>
+
+              {Object.values(tyreDOTs).some(v => v.length === 4) && (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', borderTop: '1px solid var(--color-hairline)', paddingTop: '8px', marginTop: '4px' }}>
+                  {Object.entries(tyreDOTs).map(([key, code]) => {
+                    if (code.length !== 4) return null;
+                    const decoded = decodeTyreDOT(code);
+                    if (!decoded.isValid) return null;
+
+                    let color = 'var(--color-semantic-success)';
+                    let badgeColor = 'rgba(31, 138, 101, 0.1)';
+                    if (decoded.status === 'caution') {
+                      color = '#d08000';
+                      badgeColor = 'rgba(208, 128, 0, 0.1)';
+                    }
+                    if (decoded.status === 'flagged') {
+                      color = 'var(--color-semantic-error)';
+                      badgeColor = 'rgba(207, 45, 86, 0.1)';
+                    }
+
+                    return (
+                      <div key={key} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '12px' }}>
+                        <span><strong>{key}:</strong> Week {decoded.week}, {decoded.year}</span>
+                        <span style={{ color, fontWeight: 700, backgroundColor: badgeColor, padding: '1px 6px', borderRadius: 'var(--rounded-pill)' }}>{decoded.ageMonths}m old ({decoded.status.toUpperCase()})</span>
+                      </div>
+                    );
+                  })}
+
+                  <button
+                    type="button"
+                    className="button-primary"
+                    onClick={() => {
+                      const summaryList = Object.entries(tyreDOTs)
+                        .map(([key, code]) => {
+                          if (code.length !== 4) return null;
+                          const decoded = decodeTyreDOT(code);
+                          if (!decoded.isValid) return null;
+                          return `${key}: Week ${decoded.week}/${decoded.year} (${decoded.ageMonths}m old)`;
+                        })
+                        .filter(Boolean);
+
+                      if (summaryList.length === 0) return;
+
+                      const noteText = `Tyres DOT Dates decoded - ${summaryList.join(', ')}.`;
+                      updateItemNote('tyre-mfg-date', noteText);
+
+                      const activeDecodes = Object.values(tyreDOTs)
+                        .filter(v => v.length === 4)
+                        .map(code => decodeTyreDOT(code))
+                        .filter(d => d.isValid);
+
+                      const hasFlagged = activeDecodes.some(d => d.status === 'flagged');
+                      const hasCaution = activeDecodes.some(d => d.status === 'caution');
+
+                      if (hasFlagged) {
+                        updateItemStatus('tyre-mfg-date', 'flagged');
+                      } else if (hasCaution) {
+                        updateItemStatus('tyre-mfg-date', 'pending');
+                      } else {
+                        updateItemStatus('tyre-mfg-date', 'pass');
+                      }
+
+                      alert('Applied tyre details and statuses to the tyre age checklist item!');
+                    }}
+                    style={{ height: '32px', minHeight: '32px', padding: '0 10px', fontSize: '11.5px', alignSelf: 'flex-start', marginTop: '4px' }}
+                  >
+                    Apply to Tyre Checklist
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+
           {categoryItems.map((item) => (
             <ChecklistItemRow
               key={item.id}
@@ -347,7 +614,7 @@ export default function InspectionPage() {
           <span style={{ fontSize: '13px' }}>Previous</span>
         </button>
 
-        <span className="caption-uppercase" style={{ color: 'var(--color-ink)', fontWeight: 600, fontSize: '10px', textAlign: 'center', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '200px' }}>
+        <span className="caption-uppercase bottom-sticky-nav-label">
           {filteredCategories[currentCategoryIndex]?.label}
         </span>
 

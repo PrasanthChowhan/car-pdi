@@ -7,6 +7,7 @@ import { loadImageBlob } from '../../lib/storage';
 import LoadingSpinner from '../common/LoadingSpinner';
 import SummaryPhoto from '../summary/SummaryPhoto';
 import SignaturePad from '../summary/SignaturePad';
+import { decodeIndianVIN } from '../../lib/decoderUtils';
 
 function SummaryOverviewPhoto({ photoId }: { photoId: string }) {
   const [url, setUrl] = useState<string | null>(null);
@@ -149,7 +150,7 @@ export default function SummaryPage() {
   }, [] as Array<{ category: typeof CATEGORIES[0], items: typeof flaggedItems }>);
 
   return (
-    <div style={{ maxWidth: '800px', margin: '40px auto 120px auto', padding: '0 var(--spacing-base)' }}>
+    <div className="page-container page-container-wide">
       
       {/* Header Panel */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-md)', marginBottom: 'var(--spacing-xl)' }}>
@@ -179,6 +180,18 @@ export default function SummaryPage() {
           <p className="body-sm" style={{ color: 'var(--color-muted)', margin: 0 }}>
             VIN: <span style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', letterSpacing: '0.5px' }}>{vehicle.vin || 'N/A'}</span> • {vehicle.isEV ? '⚡ Electric' : '⛽ Gas/Hybrid'}
           </p>
+          {(() => {
+            if (!vehicle.vin) return null;
+            const decodedVin = decodeIndianVIN(vehicle.vin);
+            if (!decodedVin.isValid) return null;
+            return (
+              <p className="body-sm" style={{ color: 'var(--color-muted)', marginTop: '4px', fontStyle: 'italic', margin: '4px 0 0 0' }}>
+                ℹ️ Decoded: {decodedVin.manufacturer} ({decodedVin.country}) 
+                {decodedVin.year ? ` • MFG: ${decodedVin.month ? `${decodedVin.month} ` : ''}${decodedVin.year}` : ''}
+                {decodedVin.ageMonths !== null ? ` (Age: ${decodedVin.ageMonths}m old)` : ''}
+              </p>
+            );
+          })()}
         </div>
         
         {/* Simple counts overview */}
@@ -483,7 +496,7 @@ export default function SummaryPage() {
           <span>{generating ? 'Assembling PDF...' : 'Download Official PDF Report'}</span>
         </button>
 
-        <div style={{ display: 'flex', gap: '12px' }}>
+        <div className="button-group-responsive" style={{ gap: '12px' }}>
           <button 
             className="button-secondary" 
             onClick={handleExportJSON}

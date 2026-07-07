@@ -9,7 +9,6 @@ interface SetupFormProps {
 export default function SetupForm({ onSubmit, isSubmitting }: SetupFormProps) {
   const [make, setMake] = useState('');
   const [model, setModel] = useState('');
-  const [vin, setVin] = useState('');
   const [isEV, setIsEV] = useState(false);
   const [showPrep, setShowPrep] = useState(true);
 
@@ -19,13 +18,13 @@ export default function SetupForm({ onSubmit, isSubmitting }: SetupFormProps) {
     onSubmit({
       make: make.trim(),
       model: model.trim(),
-      vin: vin.trim().toUpperCase(),
+      vin: '',
       isEV,
     });
   };
 
   return (
-    <div style={{ maxWidth: '600px', margin: '60px auto 120px auto', padding: '0 var(--spacing-base)' }}>
+    <div className="page-container page-container-narrow">
       <div style={{ textAlign: 'center', marginBottom: 'var(--spacing-xl)' }}>
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 12px', borderRadius: 'var(--rounded-pill)', backgroundColor: 'var(--color-hairline-soft)', border: '1px solid var(--color-hairline)', marginBottom: 'var(--spacing-sm)' }}>
           <Sparkles size={14} style={{ color: 'var(--color-primary)' }} />
@@ -74,7 +73,7 @@ export default function SetupForm({ onSubmit, isSubmitting }: SetupFormProps) {
 
       {/* Form */}
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-lg)', textAlign: 'left' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--spacing-md)' }}>
+        <div className="form-grid">
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
             <label htmlFor="make" className="title-sm" style={{ color: 'var(--color-ink)' }}>Brand / Make</label>
             <input
@@ -100,20 +99,7 @@ export default function SetupForm({ onSubmit, isSubmitting }: SetupFormProps) {
           </div>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
-          <label htmlFor="vin" className="title-sm" style={{ color: 'var(--color-ink)' }}>
-            VIN / Chassis Number <span style={{ color: 'var(--color-muted)', fontWeight: 400 }}>(Optional)</span>
-          </label>
-          <input
-            type="text"
-            id="vin"
-            maxLength={17}
-            value={vin}
-            onChange={(e) => setVin(e.target.value)}
-            placeholder="17-digit Vehicle Identification Number"
-            style={{ textTransform: 'uppercase', fontFamily: 'var(--font-mono)', letterSpacing: '1px' }}
-          />
-        </div>
+
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
           <span className="title-sm" style={{ color: 'var(--color-ink)' }}>Power Unit Architecture</span>
