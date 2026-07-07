@@ -2,7 +2,7 @@ import { createStore, get, set, del, keys, clear } from 'idb-keyval';
 
 // Create custom stores to keep AppState and heavy Blobs isolated
 const stateStore = createStore('pdi-db-v2', 'app-state');
-const blobStore = createStore('pdi-db-v2', 'image-blobs');
+const blobStore = createStore('pdi-blob-db', 'image-blobs');
 
 export interface VehicleInfo {
   make: string;
@@ -23,6 +23,8 @@ export interface ChecklistItem {
 export interface AppState {
   vehicle: VehicleInfo | null;
   items: Record<string, ChecklistItem>;
+  overviewPhotos?: Record<string, string>; // Maps view ID to photoId (UUID in blobStore)
+  metadata?: Record<string, string>;       // Maps metadata ID to string value (e.g. dealerName, signatures)
 }
 
 const STATE_KEY = 'pdi_app_state';

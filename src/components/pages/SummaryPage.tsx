@@ -2,9 +2,40 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useInspectionStore } from '../../store/useInspectionStore';
 import { generatePDIReport } from '../../lib/pdfGenerator';
-import { CATEGORIES } from '../../lib/checklistData';
+import { CATEGORIES, OVERVIEW_VIEWS } from '../../lib/checklistData';
+import { loadImageBlob } from '../../lib/storage';
 import LoadingSpinner from '../common/LoadingSpinner';
 import SummaryPhoto from '../summary/SummaryPhoto';
+import SignaturePad from '../summary/SignaturePad';
+
+function SummaryOverviewPhoto({ photoId }: { photoId: string }) {
+  const [url, setUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    let objectUrl: string | null = null;
+
+    const load = async () => {
+      const blob = await loadImageBlob(photoId);
+      if (blob && active) {
+        objectUrl = URL.createObjectURL(blob);
+        setUrl(objectUrl);
+      }
+    };
+    load();
+
+    return () => {
+      active = false;
+      if (objectUrl) {
+        URL.revokeObjectURL(objectUrl);
+      }
+    };
+  }, [photoId]);
+
+  if (!url) return <span style={{ fontSize: '9px', color: 'var(--color-muted)' }}>Loading...</span>;
+
+  return <img src={url} alt="Overview photo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />;
+}
 import { 
   ArrowLeft, 
   Download, 
@@ -18,7 +49,16 @@ import {
 
 export default function SummaryPage() {
   const navigate = useNavigate();
-  const { vehicle, items, isHydrated, resetInspection, hydrateStore } = useInspectionStore();
+  const { 
+    vehicle, 
+    items, 
+    overviewPhotos, 
+    metadata, 
+    isHydrated, 
+    resetInspection, 
+    updateMetadata, 
+    hydrateStore 
+  } = useInspectionStore();
   const [generating, setGenerating] = useState(false);
   const [debugLog, setDebugLog] = useState<string | null>(null);
 
@@ -52,7 +92,7 @@ export default function SummaryPage() {
     setGenerating(true);
     setDebugLog(null);
     try {
-      const pdfBlob = await generatePDIReport(vehicle, items);
+      const pdfBlob = await generatePDIReport(vehicle, items, overviewPhotos || {}, metadata || {});
       
       const url = URL.createObjectURL(pdfBlob);
       const a = document.createElement('a');
@@ -122,9 +162,9 @@ export default function SummaryPage() {
           <ArrowLeft size={20} />
         </button>
         <div style={{ textAlign: 'left' }}>
-          <span className="caption-uppercase" style={{ color: 'var(--color-primary)' }}>Inspection Certificate</span>
+          <span className="caption-uppercase" style={{ color: 'var(--color-primary)' }}>PDI Report Summary</span>
           <h1 className="display-sm" style={{ color: 'var(--color-ink)', marginTop: '2px', fontWeight: 600 }}>
-            Evaluation Summary
+            Inspection Summary
           </h1>
         </div>
       </div>
@@ -132,7 +172,7 @@ export default function SummaryPage() {
       {/* Vehicle Identity Card */}
       <div className="card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 'var(--spacing-base)', textAlign: 'left', marginBottom: 'var(--spacing-lg)' }}>
         <div style={{ flex: 1, minWidth: '220px' }}>
-          <span className="caption-uppercase" style={{ color: 'var(--color-muted)', fontSize: '10px' }}>Subject Vehicle</span>
+          <span className="caption-uppercase" style={{ color: 'var(--color-muted)', fontSize: '10px' }}>Vehicle Details</span>
           <h4 className="title-md" style={{ color: 'var(--color-ink)', marginTop: '4px', marginBottom: '2px', fontWeight: 600 }}>
             {vehicle.make} {vehicle.model}
           </h4>
@@ -158,6 +198,71 @@ export default function SummaryPage() {
         </div>
       </div>
 
+      {/* At a Glance Photos Grid */}
+      <div className="card" style={{ textAlign: 'left', marginBottom: 'var(--spacing-lg)' }}>
+        <h4 className="title-sm" style={{ color: 'var(--color-ink)', marginBottom: 'var(--spacing-sm)', fontWeight: 600 }}>
+          At a Glance Photo Overview
+        </h4>
+        <div 
+          style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', 
+            gap: '12px' 
+          }}
+        >
+          {OVERVIEW_VIEWS.map((view) => {
+            const photoId = overviewPhotos?.[view.id];
+            return (
+              <div 
+                key={view.id} 
+                style={{ 
+                  display: 'flex', 
+                  flexDirection: 'column', 
+                  gap: '6px',
+                  backgroundColor: 'var(--color-canvas-soft)',
+                  padding: '8px',
+                  borderRadius: 'var(--rounded-md)',
+                  border: '1px solid var(--color-hairline)'
+                }}
+              >
+                <span 
+                  style={{ 
+                    fontSize: '10px', 
+                    color: 'var(--color-muted)', 
+                    fontWeight: 600,
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis' 
+                  }}
+                  title={view.label}
+                >
+                  {view.label}
+                </span>
+                <div 
+                  style={{ 
+                    width: '100%', 
+                    aspectRatio: '4 / 3', 
+                    borderRadius: 'var(--rounded-xs)', 
+                    backgroundColor: 'rgba(38, 37, 30, 0.03)', 
+                    overflow: 'hidden', 
+                    border: '1px solid var(--color-hairline-soft)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                >
+                  {photoId ? (
+                    <SummaryOverviewPhoto photoId={photoId} />
+                  ) : (
+                    <span style={{ fontSize: '10px', color: 'var(--color-muted)' }}>Missing</span>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
       {/* Official Verdict Panel */}
       {flagged > 0 ? (
         <div 
@@ -175,10 +280,10 @@ export default function SummaryPage() {
           <ShieldAlert size={28} style={{ color: 'var(--color-semantic-error)', flexShrink: 0, marginTop: '2px' }} />
           <div>
             <h4 className="title-md" style={{ color: 'var(--color-semantic-error)', marginBottom: '6px', fontWeight: 600 }}>
-              {flagged} Defect{flagged > 1 ? 's' : ''} Flagged during evaluation
+              {flagged} Issue{flagged > 1 ? 's' : ''} Flagged during inspection
             </h4>
             <p className="body-sm" style={{ color: 'var(--color-body)', lineHeight: 1.5, margin: 0 }}>
-              We recommend presenting these findings to the dealership management before signing the final acceptance certificate or making remaining payments. Insist on a written remediation schedule on their official letterhead.
+              We recommend presenting these findings to the dealership before signing final delivery paperwork or making final payments. Insist on a written agreement to resolve these issues.
             </p>
           </div>
         </div>
@@ -224,16 +329,16 @@ export default function SummaryPage() {
               Verification Successful
             </h4>
             <p className="body-sm" style={{ color: 'var(--color-body)', lineHeight: 1.5, margin: 0 }}>
-              All checklist items have passed forensic inspection! The vehicle matches booking requirements and is fit for official delivery.
+              All checklist items have passed inspection successfully! The vehicle matches booking requirements and is ready for delivery.
             </p>
           </div>
         </div>
       )}
 
-      {/* Forensic Delivery / Refusal Guide */}
+      {/* Delivery / Rejection Guide */}
       <div className="card" style={{ marginBottom: 'var(--spacing-xl)', border: '1px solid var(--color-hairline-strong)', padding: '20px', textAlign: 'left', backgroundColor: 'var(--color-canvas-soft)' }}>
         <h4 className="title-sm" style={{ color: 'var(--color-ink)', margin: '0 0 var(--spacing-sm) 0', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 600 }}>
-          <span>🛡️</span> Official Refusal & Escalation Standard
+          <span>🛡️</span> Delivery & Rejection Guidelines
         </h4>
         <div style={{ fontSize: '13.5px', color: 'var(--color-body)', display: 'flex', flexDirection: 'column', gap: '10px', lineHeight: 1.5 }}>
           <div>
@@ -250,6 +355,118 @@ export default function SummaryPage() {
               <li>Write down the exact defect with photos. Get a signed commitment from the dealer on their letterhead containing a clear timeline for repair.</li>
               <li>Never accept verbal promises. If it's not documented, it does not exist.</li>
             </ul>
+          </div>
+        </div>
+      </div>
+
+      {/* Handover Sign-off & Details */}
+      <div className="card" style={{ textAlign: 'left', marginBottom: 'var(--spacing-lg)' }}>
+        <h4 className="title-sm" style={{ color: 'var(--color-ink)', marginBottom: 'var(--spacing-md)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span>📝</span> Handover Sign-off & Details
+        </h4>
+        
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-base)' }}>
+          {/* Metadata Inputs */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--spacing-sm)' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              <label htmlFor="dealerName" style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-muted)' }} className="caption-uppercase">
+                Dealership Name
+              </label>
+              <input
+                id="dealerName"
+                type="text"
+                value={metadata?.dealerName || ''}
+                onChange={(e) => updateMetadata('dealerName', e.target.value)}
+                placeholder="Enter dealership name"
+              />
+            </div>
+            
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              <label htmlFor="salesRep" style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-muted)' }} className="caption-uppercase">
+                Sales Representative
+              </label>
+              <input
+                id="salesRep"
+                type="text"
+                value={metadata?.salesRep || ''}
+                onChange={(e) => updateMetadata('salesRep', e.target.value)}
+                placeholder="Enter sales representative name"
+              />
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              <label htmlFor="odometer" style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-muted)' }} className="caption-uppercase">
+                Delivery Odometer (km)
+              </label>
+              <input
+                id="odometer"
+                type="text"
+                value={metadata?.odometer || ''}
+                onChange={(e) => {
+                  const cleaned = e.target.value.replace(/[^0-9]/g, '');
+                  updateMetadata('odometer', cleaned);
+                }}
+                placeholder="Enter current odometer reading"
+              />
+              {parseInt(metadata?.odometer || '0', 10) > 100 && (
+                <div style={{ display: 'flex', gap: '6px', color: 'var(--color-semantic-error)', fontSize: '12px', alignItems: 'center', marginTop: '4px', fontWeight: 500 }}>
+                  <AlertTriangle size={14} />
+                  <span>Odometer &gt; 100 km is a major Pre-Delivery red flag!</span>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Remediation Details */}
+          {flagged > 0 && (
+            <div style={{ borderTop: '1px solid var(--color-hairline)', paddingTop: 'var(--spacing-base)', display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                <input
+                  type="checkbox"
+                  checked={metadata?.hasRemediation === 'true'}
+                  onChange={(e) => {
+                    updateMetadata('hasRemediation', e.target.checked ? 'true' : 'false');
+                    if (!e.target.checked) {
+                      updateMetadata('remediationCommitment', '');
+                    }
+                  }}
+                  style={{ width: '16px', height: '16px', accentColor: 'var(--color-primary)', cursor: 'pointer' }}
+                />
+                <span style={{ fontSize: '13.5px', fontWeight: 500, color: 'var(--color-ink)' }}>
+                  Log Official Dealership Remediation Commitment
+                </span>
+              </label>
+
+              {metadata?.hasRemediation === 'true' && (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', animation: 'slideDown 0.2s ease' }}>
+                  <textarea
+                    rows={3}
+                    value={metadata?.remediationCommitment || ''}
+                    onChange={(e) => updateMetadata('remediationCommitment', e.target.value)}
+                    placeholder="Describe specific dealer commitments, required parts replacement, timelines, and signatory representatives..."
+                    style={{ fontSize: '14px', width: '100%' }}
+                  />
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Signature Pads */}
+          <div style={{ borderTop: '1px solid var(--color-hairline)', paddingTop: 'var(--spacing-base)' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 'var(--spacing-md)' }}>
+              <SignaturePad
+                label="Buyer / Inspector Signature"
+                value={metadata?.sigCustomer}
+                onChange={(val) => updateMetadata('sigCustomer', val)}
+                onClear={() => updateMetadata('sigCustomer', '')}
+              />
+              <SignaturePad
+                label="Dealership Representative Signature"
+                value={metadata?.sigRepresentative}
+                onChange={(val) => updateMetadata('sigRepresentative', val)}
+                onClear={() => updateMetadata('sigRepresentative', '')}
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -303,7 +520,7 @@ export default function SummaryPage() {
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: 'var(--spacing-md)', borderBottom: '1px solid var(--color-hairline)', paddingBottom: '8px' }}>
             <ShieldAlert size={20} style={{ color: 'var(--color-semantic-error)' }} />
             <h3 className="title-md" style={{ color: 'var(--color-ink)', fontWeight: 600 }}>
-              Structural & Document Defect Logs
+              Flagged Issues & Defects Log
             </h3>
           </div>
           

@@ -1,7 +1,7 @@
 import { jsPDF } from 'jspdf';
 import type { VehicleInfo, ChecklistItem } from './storage';
 import { loadImageBlob } from './storage';
-import { CATEGORIES } from './checklistData';
+import { CATEGORIES, OVERVIEW_VIEWS } from './checklistData';
 
 // Helper to convert Blob to base64 Data URL
 function readBlobAsDataURL(blob: Blob): Promise<string> {
@@ -33,7 +33,9 @@ function getImageDimensions(dataUrl: string): Promise<{ width: number; height: n
 
 export async function generatePDIReport(
   vehicle: VehicleInfo,
-  items: Record<string, ChecklistItem>
+  items: Record<string, ChecklistItem>,
+  overviewPhotos: Record<string, string> = {},
+  metadata: Record<string, string> = {}
 ): Promise<Blob> {
   // A4 dimensions in mm: 210 x 297
   const doc = new jsPDF({
@@ -86,7 +88,7 @@ export async function generatePDIReport(
   doc.setFont('Helvetica', 'bold');
   doc.setFontSize(9);
   doc.setTextColor(cPrimary[0], cPrimary[1], cPrimary[2]);
-  doc.text('ANTIGRAVITY FORENSIC PDI SYSTEM', margin, currentY);
+  doc.text('PRE-DELIVERY INSPECTION (PDI) SYSTEM', margin, currentY);
   currentY += 6;
 
   // Document Title
@@ -115,16 +117,17 @@ export async function generatePDIReport(
   doc.text('VEHICLE AUDIT SUMMARY', margin, currentY);
   currentY += 4;
 
-  // Draw Grid Table
+  // Draw Grid Table (4 rows, 48mm height)
   doc.setFillColor(cCanvasSoft[0], cCanvasSoft[1], cCanvasSoft[2]);
-  doc.rect(margin, currentY, contentWidth, 36, 'F');
+  doc.rect(margin, currentY, contentWidth, 48, 'F');
   doc.setDrawColor(cHairline[0], cHairline[1], cHairline[2]);
-  doc.rect(margin, currentY, contentWidth, 36, 'D');
+  doc.rect(margin, currentY, contentWidth, 48, 'D');
   
   // Table Dividers
-  doc.line(margin + 90, currentY, margin + 90, currentY + 36);
+  doc.line(margin + 90, currentY, margin + 90, currentY + 48);
   doc.line(margin, currentY + 12, margin + contentWidth, currentY + 12);
   doc.line(margin, currentY + 24, margin + contentWidth, currentY + 24);
+  doc.line(margin, currentY + 36, margin + contentWidth, currentY + 36);
 
   // Table Content
   doc.setFontSize(9.5);
@@ -137,7 +140,7 @@ export async function generatePDIReport(
   doc.setFont('Helvetica', 'bold');
   doc.text('Power Unit:', margin + 94, currentY + 7.5);
   doc.setFont('Helvetica', 'normal');
-  doc.text(vehicle.isEV ? '⚡ Electric Vehicle (EV)' : '⛽ Gasoline/Hybrid (ICE)', margin + 124, currentY + 7.5);
+  doc.text(vehicle.isEV ? 'Electric Vehicle (EV)' : 'Gasoline/Hybrid (ICE)', margin + 124, currentY + 7.5);
 
   // Row 2
   doc.setFont('Helvetica', 'bold');
@@ -157,11 +160,22 @@ export async function generatePDIReport(
   doc.text(vehicle.vin || 'Not Provided', margin + 34, currentY + 31.5);
 
   doc.setFont('Helvetica', 'bold');
-  doc.text('Audit Origin:', margin + 94, currentY + 31.5);
+  doc.text('Dealership:', margin + 94, currentY + 31.5);
   doc.setFont('Helvetica', 'normal');
-  doc.text('Customer Forensic Standard', margin + 124, currentY + 31.5);
+  doc.text(metadata.dealerName || 'Not Provided', margin + 124, currentY + 31.5);
 
-  currentY += 46;
+  // Row 4
+  doc.setFont('Helvetica', 'bold');
+  doc.text('Sales Rep:', margin + 4, currentY + 43.5);
+  doc.setFont('Helvetica', 'normal');
+  doc.text(metadata.salesRep || 'Not Provided', margin + 34, currentY + 43.5);
+
+  doc.setFont('Helvetica', 'bold');
+  doc.text('Odometer:', margin + 94, currentY + 43.5);
+  doc.setFont('Helvetica', 'normal');
+  doc.text(metadata.odometer ? `${metadata.odometer} km` : 'Not Provided', margin + 124, currentY + 43.5);
+
+  currentY += 58;
 
   // --- STATISTICS DASHBOARD ---
   const allItems = Object.values(items);
@@ -244,12 +258,12 @@ export async function generatePDIReport(
     doc.setFont('Helvetica', 'bold');
     doc.setFontSize(11);
     doc.setTextColor(cSuccess[0], cSuccess[1], cSuccess[2]);
-    doc.text('✓ INSPECTION STATUS: CLEAN / HANDOVER RECOMMENDED', margin + 6, currentY + 8);
+    doc.text('INSPECTION STATUS: CLEAN / HANDOVER RECOMMENDED', margin + 6, currentY + 8);
     doc.setFont('Helvetica', 'normal');
     doc.setFontSize(9.5);
     doc.setTextColor(cBody[0], cBody[1], cBody[2]);
-    doc.text('All checked forensic verification parameters were marked as PASSED. The vehicle conforms to', margin + 6, currentY + 15);
-    doc.text('manufacture specifications. Fit for official handover.', margin + 6, currentY + 19);
+    doc.text('All checklist parameters were successfully verified and marked as PASSED. The vehicle conforms to', margin + 6, currentY + 15);
+    doc.text('manufacturer specifications. Fit for official handover.', margin + 6, currentY + 19);
   } else if (isPendingWarning) {
     doc.setFillColor(254, 248, 242);
     doc.setDrawColor(cPrimary[0], cPrimary[1], cPrimary[2]);
@@ -257,7 +271,7 @@ export async function generatePDIReport(
     doc.setFont('Helvetica', 'bold');
     doc.setFontSize(11);
     doc.setTextColor(cPrimary[0], cPrimary[1], cPrimary[2]);
-    doc.text('⚠ INSPECTION STATUS: INCOMPLETE / REVIEW REQUIRED', margin + 6, currentY + 8);
+    doc.text('INSPECTION STATUS: INCOMPLETE / REVIEW REQUIRED', margin + 6, currentY + 8);
     doc.setFont('Helvetica', 'normal');
     doc.setFontSize(9.5);
     doc.setTextColor(cBody[0], cBody[1], cBody[2]);
@@ -270,7 +284,7 @@ export async function generatePDIReport(
     doc.setFont('Helvetica', 'bold');
     doc.setFontSize(11);
     doc.setTextColor(cError[0], cError[1], cError[2]);
-    doc.text(`⚠ INSPECTION STATUS: ${flagged} DEVIATIONS DETECTED`, margin + 6, currentY + 8);
+    doc.text(`INSPECTION STATUS: ${flagged} DEVIATIONS DETECTED`, margin + 6, currentY + 8);
     doc.setFont('Helvetica', 'normal');
     doc.setFontSize(9.5);
     doc.setTextColor(cBody[0], cBody[1], cBody[2]);
@@ -279,6 +293,29 @@ export async function generatePDIReport(
   }
 
   currentY += 34;
+
+  // --- REMEDIATION COMMITMENT SECTION ---
+  if (metadata.remediationCommitment && metadata.remediationCommitment.trim()) {
+    doc.setFont('Helvetica', 'bold');
+    doc.setFontSize(10);
+    doc.setTextColor(cInk[0], cInk[1], cInk[2]);
+    doc.text('DEALERSHIP REMEDIATION COMMITMENT', margin, currentY);
+    currentY += 4;
+
+    const wrappedCommitment = doc.splitTextToSize(metadata.remediationCommitment, contentWidth - 10);
+    const boxHeight = (wrappedCommitment.length * 4.5) + 6;
+
+    doc.setFillColor(cCanvasSoft[0], cCanvasSoft[1], cCanvasSoft[2]);
+    doc.setDrawColor(cPrimary[0], cPrimary[1], cPrimary[2]);
+    doc.rect(margin, currentY, contentWidth, boxHeight, 'FD');
+
+    doc.setFont('Helvetica', 'italic');
+    doc.setFontSize(9);
+    doc.setTextColor(cBody[0], cBody[1], cBody[2]);
+    doc.text(wrappedCommitment, margin + 5, currentY + 5.5);
+
+    currentY += boxHeight + 8;
+  }
 
   // --- SIGNATURE SECTION ---
   doc.setFont('Helvetica', 'bold');
@@ -302,6 +339,15 @@ export async function generatePDIReport(
   doc.text('CUSTOMER / INSPECTOR', margin + 4, currentY + 6);
   doc.setFont('Helvetica', 'normal');
   doc.setFontSize(8);
+
+  if (metadata.sigCustomer) {
+    try {
+      doc.addImage(metadata.sigCustomer, 'PNG', margin + 11, currentY + 8, 60, 16);
+    } catch (err) {
+      console.error('Failed to add customer signature to PDF:', err);
+    }
+  }
+
   doc.line(margin + 4, currentY + 26, margin + 78, currentY + 26);
   doc.text('Authorized Signature', margin + 4, currentY + 31);
   doc.text(`Date: ${new Date().toLocaleDateString()}`, margin + 4, currentY + 35);
@@ -314,9 +360,22 @@ export async function generatePDIReport(
   doc.text('DEALERSHIP REPRESENTATIVE', margin + 92, currentY + 6);
   doc.setFont('Helvetica', 'normal');
   doc.setFontSize(8);
+
+  if (metadata.sigRepresentative) {
+    try {
+      doc.addImage(metadata.sigRepresentative, 'PNG', margin + 104, currentY + 8, 60, 16);
+    } catch (err) {
+      console.error('Failed to add representative signature to PDF:', err);
+    }
+  }
+
   doc.line(margin + 92, currentY + 26, margin + 150, currentY + 26);
   doc.text('Stamp & Signature', margin + 92, currentY + 31);
-  doc.text('Date: ____ / ____ / ________', margin + 92, currentY + 35);
+  if (metadata.sigRepresentative) {
+    doc.text(`Date: ${new Date().toLocaleDateString()}`, margin + 92, currentY + 35);
+  } else {
+    doc.text('Date: ____ / ____ / ________', margin + 92, currentY + 35);
+  }
 
   // Dealer Stamp Place Box
   doc.setDrawColor(cHairline[0], cHairline[1], cHairline[2]);
@@ -325,24 +384,115 @@ export async function generatePDIReport(
   doc.setTextColor(cMuted[0], cMuted[1], cMuted[2]);
   doc.text('STAMP', margin + 159, currentY + 21);
 
-  // Force page break to start Section 2 on Page 2
+  // Force page break to start Section 2 (At a Glance Overview Photos) on Page 2
   doc.addPage();
   currentY = margin + 10;
 
   // ==========================================
-  // --- PAGE 2: FULL AUDIT CHECKLIST LOG ---
+  // --- PAGE 2: AT A GLANCE REFERENCE PHOTOS ---
   // ==========================================
-  
   doc.setFont('Helvetica', 'bold');
   doc.setFontSize(14);
   doc.setTextColor(cInk[0], cInk[1], cInk[2]);
-  doc.text('Section 2: Complete Audit Log', margin, currentY);
+  doc.text('Section 2: At a Glance Reference Photos', margin, currentY);
   currentY += 6;
 
   doc.setFont('Helvetica', 'normal');
   doc.setFontSize(9);
   doc.setTextColor(cBody[0], cBody[1], cBody[2]);
-  doc.text('Detailed check record of all forensic vehicle parameters verified in this session.', margin, currentY);
+  doc.text('Reference photographs establishing a baseline record of the vehicle\'s overall condition.', margin, currentY);
+  currentY += 10;
+
+  const colWidth = 56;
+  const rowHeight = 42;
+  const gapX = 6;
+  const gapY = 12;
+
+  for (let idx = 0; idx < OVERVIEW_VIEWS.length; idx++) {
+    const view = OVERVIEW_VIEWS[idx];
+    const photoId = overviewPhotos[view.id];
+    
+    const col = idx % 3;
+    const row = Math.floor(idx / 3);
+    
+    const x = margin + col * (colWidth + gapX);
+    const y = currentY + row * (rowHeight + gapY);
+
+    // Draw card background
+    doc.setFillColor(cCanvasSoft[0], cCanvasSoft[1], cCanvasSoft[2]);
+    doc.setDrawColor(cHairline[0], cHairline[1], cHairline[2]);
+    doc.rect(x, y, colWidth, rowHeight, 'FD');
+
+    if (photoId) {
+      try {
+        const blob = await loadImageBlob(photoId);
+        if (blob) {
+          const dataUrl = await readBlobAsDataURL(blob);
+          const imgSize = await getImageDimensions(dataUrl);
+          
+          const maxW = colWidth - 2;
+          const maxH = rowHeight - 8;
+          
+          let w = maxW;
+          let h = (imgSize.height * maxW) / imgSize.width;
+          if (h > maxH) {
+            h = maxH;
+            w = (imgSize.width * maxH) / imgSize.height;
+          }
+          
+          const imgX = x + (colWidth - w) / 2;
+          const imgY = y + 1 + (maxH - h) / 2;
+          
+          doc.addImage(dataUrl, 'JPEG', imgX, imgY, w, h);
+        }
+      } catch (imgError) {
+        console.error(`Failed to render overview photo ${view.id} in PDF`, imgError);
+        doc.setLineDashPattern([1.5, 1.5], 0);
+        doc.setDrawColor(cError[0], cError[1], cError[2]);
+        doc.rect(x + 1, y + 1, colWidth - 2, rowHeight - 8, 'D');
+        doc.setLineDashPattern([], 0);
+        doc.setFont('Helvetica', 'normal');
+        doc.setFontSize(7.5);
+        doc.setTextColor(cError[0], cError[1], cError[2]);
+        doc.text('Render Error', x + colWidth / 2, y + (rowHeight - 8) / 2 + 2, { align: 'center' });
+      }
+    } else {
+      // Draw placeholder
+      doc.setLineDashPattern([1.5, 1.5], 0);
+      doc.setDrawColor(cMuted[0], cMuted[1], cMuted[2]);
+      doc.rect(x + 1, y + 1, colWidth - 2, rowHeight - 8, 'D');
+      doc.setLineDashPattern([], 0); // reset
+      
+      doc.setFont('Helvetica', 'normal');
+      doc.setFontSize(7.5);
+      doc.setTextColor(cMuted[0], cMuted[1], cMuted[2]);
+      doc.text('No Photo', x + colWidth / 2, y + (rowHeight - 8) / 2 + 2, { align: 'center' });
+    }
+
+    // Draw label
+    doc.setFont('Helvetica', 'bold');
+    doc.setFontSize(8);
+    doc.setTextColor(cInk[0], cInk[1], cInk[2]);
+    doc.text(view.label, x + colWidth / 2, y + rowHeight - 3, { align: 'center' });
+  }
+
+  // Force page break to start Section 3 (Checklist) on Page 3
+  doc.addPage();
+  currentY = margin + 10;
+
+  // ==========================================
+  // --- PAGE 3: FULL AUDIT CHECKLIST LOG ---
+  // ==========================================
+  doc.setFont('Helvetica', 'bold');
+  doc.setFontSize(14);
+  doc.setTextColor(cInk[0], cInk[1], cInk[2]);
+  doc.text('Section 3: Complete Checklist Log', margin, currentY);
+  currentY += 6;
+
+  doc.setFont('Helvetica', 'normal');
+  doc.setFontSize(9);
+  doc.setTextColor(cBody[0], cBody[1], cBody[2]);
+  doc.text('Detailed check record of all vehicle parameters verified in this session.', margin, currentY);
   currentY += 6;
 
   // Render Legend
@@ -383,7 +533,7 @@ export async function generatePDIReport(
     return true;
   });
 
-  const headerLabel = 'Section 2: Complete Audit Log (Continued)';
+  const headerLabel = 'Section 3: Complete Audit Log (Continued)';
 
   // Helper to draw table header
   const drawTableHeader = (y: number) => {
@@ -422,7 +572,14 @@ export async function generatePDIReport(
       // Wrap text to fit page
       const labelText = item.label;
       const wrappedLabel = doc.splitTextToSize(labelText, contentWidth - 28);
-      const rowHeight = Math.max(8, (wrappedLabel.length * 4.5) + 3);
+      
+      let rowHeight = (wrappedLabel.length * 4.5) + 3;
+      let wrappedNote: string[] = [];
+      if (item.note && item.note.trim()) {
+        wrappedNote = doc.splitTextToSize(`Comment: ${item.note}`, contentWidth - 28);
+        rowHeight += (wrappedNote.length * 3.8) + 2;
+      }
+      rowHeight = Math.max(8, rowHeight);
 
       // Check page break for item. If broke, redraw table header
       const brokePage = checkPageBreak(rowHeight, headerLabel);
@@ -466,10 +623,19 @@ export async function generatePDIReport(
       doc.setLineWidth(0.1); // reset
 
       // Render Item Label Text
+      let textY = currentY + 4.5;
       doc.setFont('Helvetica', 'normal');
       doc.setFontSize(9);
       doc.setTextColor(cBody[0], cBody[1], cBody[2]);
-      doc.text(wrappedLabel, margin + 26, currentY + 4.5);
+      doc.text(wrappedLabel, margin + 26, textY);
+      
+      if (item.note && item.note.trim()) {
+        const noteY = textY + (wrappedLabel.length * 4.5) + 1;
+        doc.setFont('Helvetica', 'italic');
+        doc.setFontSize(7.5);
+        doc.setTextColor(cMuted[0], cMuted[1], cMuted[2]);
+        doc.text(wrappedNote, margin + 26, noteY);
+      }
       
       currentY += rowHeight;
       rowIndex++;
@@ -490,7 +656,7 @@ export async function generatePDIReport(
     doc.setFont('Helvetica', 'bold');
     doc.setFontSize(14);
     doc.setTextColor(cInk[0], cInk[1], cInk[2]);
-    doc.text('Section 3: Flagged Defects & Photographic Evidence', margin, currentY);
+    doc.text('Section 4: Flagged Defects & Photographic Evidence', margin, currentY);
     currentY += 6;
 
     doc.setFont('Helvetica', 'normal');
@@ -499,7 +665,7 @@ export async function generatePDIReport(
     doc.text('Detailed logs, notes, and evidence attachments for parameters that failed audit inspection.', margin, currentY);
     currentY += 8;
 
-    const defectHeaderLabel = 'Section 3: Flagged Defects & Evidence (Continued)';
+    const defectHeaderLabel = 'Section 4: Flagged Defects & Evidence (Continued)';
 
     for (const item of flaggedItems) {
       const catLabel = CATEGORIES.find(c => c.id === item.categoryId)?.label || 'General';
@@ -604,7 +770,7 @@ export async function generatePDIReport(
     
     // Page bottom margin
     doc.text(
-      `Generated by PDI Forensic Web App • Page ${i} of ${pageCount}`,
+      `PDI Report • Page ${i} of ${pageCount}`,
       pageWidth / 2,
       pageHeight - 8,
       { align: 'center' }

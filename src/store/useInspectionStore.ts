@@ -9,6 +9,8 @@ interface InspectionStore extends AppState {
   updateItemStatus: (id: string, status: ChecklistItem['status']) => void;
   updateItemNote: (id: string, note: string) => void;
   updateItemPhoto: (id: string, photoId: string | undefined) => void;
+  updateOverviewPhoto: (key: string, photoId: string | undefined) => void;
+  updateMetadata: (key: string, value: string) => void;
   passAllCategoryItems: (categoryId: string) => void;
   resetCategoryItems: (categoryId: string) => Promise<void>;
   resetInspection: () => Promise<void>;
@@ -18,17 +20,29 @@ interface InspectionStore extends AppState {
 export const useInspectionStore = create<InspectionStore>((set, get) => ({
   vehicle: null,
   items: {},
+  overviewPhotos: {},
+  metadata: {},
   isHydrated: false,
 
   setVehicle: (vehicle) => {
     set({ vehicle });
     // Eagerly sync to IDB
-    saveAppState({ vehicle, items: get().items });
+    saveAppState({
+      vehicle,
+      items: get().items,
+      overviewPhotos: get().overviewPhotos,
+      metadata: get().metadata,
+    });
   },
 
   setItems: (items) => {
     set({ items });
-    saveAppState({ vehicle: get().vehicle, items });
+    saveAppState({
+      vehicle: get().vehicle,
+      items,
+      overviewPhotos: get().overviewPhotos,
+      metadata: get().metadata,
+    });
   },
 
   updateItemStatus: (id, status) => {
@@ -41,13 +55,18 @@ export const useInspectionStore = create<InspectionStore>((set, get) => ({
         [id]: {
           ...item,
           status,
-          // Reset notes/photos if marked pass or pending
-          note: status !== 'flagged' ? undefined : item.note,
-          photoId: status !== 'flagged' ? undefined : item.photoId,
+          // Reset notes/photos only if marked back to pending
+          note: status === 'pending' ? undefined : item.note,
+          photoId: status === 'pending' ? undefined : item.photoId,
         },
       };
 
-      saveAppState({ vehicle: state.vehicle, items: updatedItems });
+      saveAppState({
+        vehicle: state.vehicle,
+        items: updatedItems,
+        overviewPhotos: state.overviewPhotos,
+        metadata: state.metadata,
+      });
       return { items: updatedItems };
     });
   },
@@ -62,7 +81,12 @@ export const useInspectionStore = create<InspectionStore>((set, get) => ({
         [id]: { ...item, note },
       };
 
-      saveAppState({ vehicle: state.vehicle, items: updatedItems });
+      saveAppState({
+        vehicle: state.vehicle,
+        items: updatedItems,
+        overviewPhotos: state.overviewPhotos,
+        metadata: state.metadata,
+      });
       return { items: updatedItems };
     });
   },
@@ -77,8 +101,50 @@ export const useInspectionStore = create<InspectionStore>((set, get) => ({
         [id]: { ...item, photoId },
       };
 
-      saveAppState({ vehicle: state.vehicle, items: updatedItems });
+      saveAppState({
+        vehicle: state.vehicle,
+        items: updatedItems,
+        overviewPhotos: state.overviewPhotos,
+        metadata: state.metadata,
+      });
       return { items: updatedItems };
+    });
+  },
+
+  updateOverviewPhoto: (key, photoId) => {
+    set((state) => {
+      const updatedPhotos = {
+        ...state.overviewPhotos,
+        [key]: photoId || '',
+      };
+      if (!photoId) {
+        delete updatedPhotos[key];
+      }
+
+      saveAppState({
+        vehicle: state.vehicle,
+        items: state.items,
+        overviewPhotos: updatedPhotos,
+        metadata: state.metadata,
+      });
+      return { overviewPhotos: updatedPhotos };
+    });
+  },
+
+  updateMetadata: (key, value) => {
+    set((state) => {
+      const updatedMetadata = {
+        ...state.metadata,
+        [key]: value,
+      };
+
+      saveAppState({
+        vehicle: state.vehicle,
+        items: state.items,
+        overviewPhotos: state.overviewPhotos,
+        metadata: updatedMetadata,
+      });
+      return { metadata: updatedMetadata };
     });
   },
 
@@ -98,7 +164,12 @@ export const useInspectionStore = create<InspectionStore>((set, get) => ({
         }
       });
       if (!changed) return state;
-      saveAppState({ vehicle: state.vehicle, items: updatedItems });
+      saveAppState({
+        vehicle: state.vehicle,
+        items: updatedItems,
+        overviewPhotos: state.overviewPhotos,
+        metadata: state.metadata,
+      });
       return { items: updatedItems };
     });
   },
@@ -126,12 +197,17 @@ export const useInspectionStore = create<InspectionStore>((set, get) => ({
 
     if (changed) {
       set({ items: updatedItems });
-      await saveAppState({ vehicle: state.vehicle, items: updatedItems });
+      await saveAppState({
+        vehicle: state.vehicle,
+        items: updatedItems,
+        overviewPhotos: state.overviewPhotos,
+        metadata: state.metadata,
+      });
     }
   },
 
   resetInspection: async () => {
-    set({ vehicle: null, items: {} });
+    set({ vehicle: null, items: {}, overviewPhotos: {}, metadata: {} });
     await clearAppState();
     await clearAllBlobs();
   },
@@ -142,6 +218,8 @@ export const useInspectionStore = create<InspectionStore>((set, get) => ({
       set({
         vehicle: cachedState.vehicle,
         items: cachedState.items,
+        overviewPhotos: cachedState.overviewPhotos || {},
+        metadata: cachedState.metadata || {},
         isHydrated: true,
       });
     } else {

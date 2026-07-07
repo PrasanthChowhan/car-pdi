@@ -8,7 +8,8 @@ import {
   Camera, 
   Trash2, 
   AlertTriangle, 
-  RefreshCw 
+  RefreshCw,
+  MessageSquare
 } from 'lucide-react';
 
 interface ChecklistItemRowProps {
@@ -21,6 +22,8 @@ interface ChecklistItemRowProps {
 export default function ChecklistItemRow({ item, updateStatus, updateNote, updatePhoto }: ChecklistItemRowProps) {
   const [photoUrl, setPhotoUrl] = useState<string | null>(null);
   const [loadingImage, setLoadingImage] = useState(false);
+  const [showPassNote, setShowPassNote] = useState(false);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Load preview URL if photoId exists
@@ -72,9 +75,8 @@ export default function ChecklistItemRow({ item, updateStatus, updateNote, updat
       alert('Photo capture failed. Please try again.');
     } finally {
       setLoadingImage(false);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
+      if (cameraInputRef.current) cameraInputRef.current.value = '';
+      if (fileInputRef.current) fileInputRef.current.value = '';
     }
   };
 
@@ -171,6 +173,23 @@ export default function ChecklistItemRow({ item, updateStatus, updateNote, updat
           )}
         </div>
 
+        {/* Comment Icon (Passed notes toggler) */}
+        {isPassed && (
+          <button
+            type="button"
+            onClick={() => setShowPassNote(!showPassNote)}
+            className={`row-flag-btn ${item.note ? 'flagged' : ''}`}
+            style={{
+              color: item.note ? 'var(--color-primary)' : 'var(--color-muted)',
+              backgroundColor: item.note ? 'rgba(245, 78, 0, 0.05)' : 'transparent',
+            }}
+            aria-label={item.note ? "Edit comment" : "Add comment"}
+            title="Add verification note"
+          >
+            <MessageSquare size={16} />
+          </button>
+        )}
+
         {/* Warning Icon (Flag Toggler) */}
         <button
           type="button"
@@ -183,17 +202,17 @@ export default function ChecklistItemRow({ item, updateStatus, updateNote, updat
         </button>
       </div>
 
-      {isFlagged && (
+      {(isFlagged || (isPassed && (showPassNote || item.note))) && (
         <div className="note-container" style={{ paddingLeft: '40px', display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)', marginTop: '12px' }}>
           <label htmlFor={`note-${item.id}`} className="caption-uppercase" style={{ color: 'var(--color-muted)', fontSize: '10px' }}>
-            Flagged Defect Note
+            {isPassed ? 'Verification Notes / Comments' : 'Flagged Defect Note'}
           </label>
           <textarea
             id={`note-${item.id}`}
             rows={2}
             value={item.note || ''}
             onChange={(e) => updateNote(item.id, e.target.value)}
-            placeholder={dynamicPlaceholder}
+            placeholder={isPassed ? 'Add verification details (e.g. tyre puncture kit present instead of spare tyre)...' : dynamicPlaceholder}
             style={{ width: '100%', resize: 'vertical' }}
           />
 
@@ -260,7 +279,7 @@ export default function ChecklistItemRow({ item, updateStatus, updateNote, updat
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
             <span className="caption-uppercase" style={{ color: 'var(--color-muted)', fontSize: '10px' }}>
-              Evidence Photo
+              {isPassed ? 'Verification Photo' : 'Evidence Photo'}
             </span>
             
             {loadingImage ? (
@@ -298,7 +317,15 @@ export default function ChecklistItemRow({ item, updateStatus, updateNote, updat
                 </button>
               </div>
             ) : (
-              <div>
+              <div style={{ display: 'flex', gap: '10px', marginTop: '4px' }}>
+                <input
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                  ref={cameraInputRef}
+                  onChange={handleCapture}
+                  style={{ display: 'none' }}
+                />
                 <input
                   type="file"
                   accept="image/*"
@@ -306,17 +333,43 @@ export default function ChecklistItemRow({ item, updateStatus, updateNote, updat
                   onChange={handleCapture}
                   style={{ display: 'none' }}
                 />
-                <div 
-                  onClick={() => fileInputRef.current?.click()}
-                  className="upload-btn"
-                  style={{ marginTop: '4px' }}
+                
+                <button
+                  type="button"
+                  onClick={() => cameraInputRef.current?.click()}
+                  className="button-secondary"
+                  style={{ 
+                    flex: 1, 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'center', 
+                    gap: '8px', 
+                    height: '40px',
+                    borderColor: 'var(--color-hairline-strong)',
+                    boxShadow: 'none'
+                  }}
                 >
-                  <Camera size={18} />
-                  <div>
-                    <span className="body-sm" style={{ fontWeight: 500, display: 'block' }}>Add Photo Evidence</span>
-                    <span className="caption-uppercase" style={{ fontSize: '9px', color: 'var(--color-muted)', marginTop: '2px', display: 'block' }}>Camera or Gallery</span>
-                  </div>
-                </div>
+                  <Camera size={15} />
+                  <span style={{ fontSize: '13px' }}>Take Photo</span>
+                </button>
+                
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="button-secondary"
+                  style={{ 
+                    flex: 1, 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'center', 
+                    gap: '8px', 
+                    height: '40px',
+                    borderColor: 'var(--color-hairline-strong)',
+                    boxShadow: 'none'
+                  }}
+                >
+                  <span style={{ fontSize: '13px' }}>Upload Photo</span>
+                </button>
               </div>
             )}
           </div>

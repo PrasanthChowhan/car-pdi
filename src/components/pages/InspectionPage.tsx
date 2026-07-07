@@ -4,6 +4,7 @@ import { useInspectionStore } from '../../store/useInspectionStore';
 import { CATEGORIES } from '../../lib/checklistData';
 import LoadingSpinner from '../common/LoadingSpinner';
 import ChecklistItemRow from '../inspection/ChecklistItemRow';
+import OverviewPhotosPanel from '../inspection/OverviewPhotosPanel';
 import { 
   AlertTriangle, 
   ArrowRight, 
@@ -20,6 +21,7 @@ export default function InspectionPage() {
   const { 
     vehicle, 
     items, 
+    overviewPhotos,
     isHydrated, 
     updateItemStatus, 
     updateItemNote, 
@@ -28,7 +30,7 @@ export default function InspectionPage() {
     resetCategoryItems,
     hydrateStore 
   } = useInspectionStore();
-  const [selectedCategory, setSelectedCategory] = useState('documentation');
+  const [selectedCategory, setSelectedCategory] = useState('overview');
   const tabsListRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -60,12 +62,15 @@ export default function InspectionPage() {
     );
   }
 
-  // Filter categories
-  const filteredCategories = CATEGORIES.filter((cat) => {
-    if (cat.id === 'ev') return vehicle.isEV;
-    if (cat.id === 'engine') return !vehicle.isEV;
-    return true;
-  });
+  // Filter categories and prepend "At a Glance"
+  const filteredCategories = [
+    { id: 'overview', label: 'At a Glance' },
+    ...CATEGORIES.filter((cat) => {
+      if (cat.id === 'ev') return vehicle.isEV;
+      if (cat.id === 'engine') return !vehicle.isEV;
+      return true;
+    })
+  ];
   const categoryItems = Object.values(items).filter((item) => item.categoryId === selectedCategory);
 
   // Statistics
@@ -179,6 +184,8 @@ export default function InspectionPage() {
         >
           {filteredCategories.map((cat) => {
             const isActive = selectedCategory === cat.id;
+            const isOverview = cat.id === 'overview';
+            const capturedCount = isOverview ? Object.keys(overviewPhotos || {}).length : 0;
             const catItems = Object.values(items).filter((i) => i.categoryId === cat.id);
             const catPending = catItems.filter((i) => i.status === 'pending').length;
             const catFlagged = catItems.filter((i) => i.status === 'flagged').length;
@@ -205,37 +212,58 @@ export default function InspectionPage() {
                 }}
               >
                 <span>{cat.label}</span>
-                {catFlagged > 0 && (
-                  <span style={{ 
-                    fontSize: '10px', 
-                    backgroundColor: 'var(--color-semantic-error)', 
-                    color: '#ffffff',
-                    borderRadius: 'var(--rounded-pill)',
-                    padding: '1px 5px',
-                    fontWeight: 'bold'
-                  }}>
-                    {catFlagged}🚨
-                  </span>
-                )}
-                {catPending > 0 ? (
-                  <span 
-                    style={{ 
-                      fontSize: '10px', 
-                      backgroundColor: isActive ? 'var(--color-primary)' : 'var(--color-hairline-soft)', 
-                      color: isActive ? '#ffffff' : 'var(--color-muted)',
-                      borderRadius: '50%',
-                      width: '18px',
-                      height: '18px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontWeight: 'bold'
-                    }}
-                  >
-                    {catPending}
-                  </span>
+                {isOverview ? (
+                  capturedCount === 9 ? (
+                    <CheckCircle2 size={14} style={{ color: 'var(--color-semantic-success)' }} />
+                  ) : (
+                    <span 
+                      style={{ 
+                        fontSize: '10px', 
+                        backgroundColor: isActive ? 'var(--color-primary)' : 'var(--color-hairline-soft)', 
+                        color: isActive ? '#ffffff' : 'var(--color-muted)',
+                        borderRadius: 'var(--rounded-pill)',
+                        padding: '1px 6px',
+                        fontWeight: 'bold'
+                      }}
+                    >
+                      {capturedCount}/9
+                    </span>
+                  )
                 ) : (
-                  <CheckCircle2 size={14} style={{ color: 'var(--color-semantic-success)' }} />
+                  <>
+                    {catFlagged > 0 && (
+                      <span style={{ 
+                        fontSize: '10px', 
+                        backgroundColor: 'var(--color-semantic-error)', 
+                        color: '#ffffff',
+                        borderRadius: 'var(--rounded-pill)',
+                        padding: '1px 5px',
+                        fontWeight: 'bold'
+                      }}>
+                        {catFlagged}🚨
+                      </span>
+                    )}
+                    {catPending > 0 ? (
+                      <span 
+                        style={{ 
+                          fontSize: '10px', 
+                          backgroundColor: isActive ? 'var(--color-primary)' : 'var(--color-hairline-soft)', 
+                          color: isActive ? '#ffffff' : 'var(--color-muted)',
+                          borderRadius: '50%',
+                          width: '18px',
+                          height: '18px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          fontWeight: 'bold'
+                        }}
+                      >
+                        {catPending}
+                      </span>
+                    ) : (
+                      <CheckCircle2 size={14} style={{ color: 'var(--color-semantic-success)' }} />
+                    )}
+                  </>
                 )}
               </button>
             );
@@ -244,62 +272,68 @@ export default function InspectionPage() {
       </div>
 
       {/* Category Actions Bar (NO redundant label, aligned cleanly) */}
-      <div className="quick-action-bar">
-        <div style={{ display: 'flex', gap: '8px' }}>
-          {activeCategoryPending > 0 && (
+      {selectedCategory !== 'overview' && (
+        <div className="quick-action-bar">
+          <div style={{ display: 'flex', gap: '8px' }}>
+            {activeCategoryPending > 0 && (
+              <button 
+                onClick={handlePassAllCategory}
+                className="button-secondary"
+                style={{ 
+                  height: '36px', 
+                  minHeight: '36px', 
+                  padding: '0 12px', 
+                  fontSize: '12px', 
+                  color: 'var(--color-semantic-success)',
+                  borderColor: 'var(--color-semantic-success)',
+                  backgroundColor: 'rgba(31, 138, 101, 0.02)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px'
+                }}
+              >
+                <CheckSquare size={14} />
+                <span>Pass All Remaining</span>
+              </button>
+            )}
+            
             <button 
-              onClick={handlePassAllCategory}
+              onClick={handleResetCategory}
               className="button-secondary"
               style={{ 
                 height: '36px', 
                 minHeight: '36px', 
                 padding: '0 12px', 
                 fontSize: '12px', 
-                color: 'var(--color-semantic-success)',
-                borderColor: 'var(--color-semantic-success)',
-                backgroundColor: 'rgba(31, 138, 101, 0.02)',
+                color: 'var(--color-muted)',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '4px'
               }}
             >
-              <CheckSquare size={14} />
-              <span>Pass All Remaining</span>
+              <RefreshCw size={12} />
+              <span>Reset Section</span>
             </button>
-          )}
-          
-          <button 
-            onClick={handleResetCategory}
-            className="button-secondary"
-            style={{ 
-              height: '36px', 
-              minHeight: '36px', 
-              padding: '0 12px', 
-              fontSize: '12px', 
-              color: 'var(--color-muted)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px'
-            }}
-          >
-            <RefreshCw size={12} />
-            <span>Reset Section</span>
-          </button>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Checklist Items Container */}
-      <div className="checklist-container">
-        {categoryItems.map((item) => (
-          <ChecklistItemRow
-            key={item.id}
-            item={item}
-            updateStatus={updateItemStatus}
-            updateNote={updateItemNote}
-            updatePhoto={updateItemPhoto}
-          />
-        ))}
-      </div>
+      {selectedCategory === 'overview' ? (
+        <OverviewPhotosPanel />
+      ) : (
+        <div className="checklist-container">
+          {categoryItems.map((item) => (
+            <ChecklistItemRow
+              key={item.id}
+              item={item}
+              updateStatus={updateItemStatus}
+              updateNote={updateItemNote}
+              updatePhoto={updateItemPhoto}
+            />
+          ))}
+        </div>
+      )}
 
       {/* Sticky Bottom Navigation */}
       <div className="bottom-sticky-nav">

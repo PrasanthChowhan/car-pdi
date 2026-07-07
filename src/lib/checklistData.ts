@@ -24,6 +24,23 @@ export const CATEGORIES: Category[] = [
   { id: 'accessories', label: 'Accessories & Keys' },
 ];
 
+export interface OverviewView {
+  id: string;
+  label: string;
+}
+
+export const OVERVIEW_VIEWS: OverviewView[] = [
+  { id: 'front', label: 'Front View' },
+  { id: 'rear', label: 'Rear View' },
+  { id: 'left', label: 'Left Side View' },
+  { id: 'right', label: 'Right Side View' },
+  { id: 'underhood', label: 'Underhood (Engine Bay)' },
+  { id: 'interior', label: 'Inside Cabin' },
+  { id: 'odometer', label: 'Odometer Display' },
+  { id: 'keys', label: 'Duplicate Keys' },
+  { id: 'vin', label: 'VIN Plate Stamp' },
+];
+
 export const CHECKLIST_TEMPLATES: ChecklistItemTemplate[] = [
   // Documents & Billing
   { 
@@ -92,7 +109,7 @@ export const CHECKLIST_TEMPLATES: ChecklistItemTemplate[] = [
     id: 'id-specs', 
     categoryId: 'identity', 
     label: 'Verify engine type, transmission, safety kit (airbags), screen size, and wheels match booking',
-    description: 'Inspect the actual car layout to prevent variant bait-and-switch scams (e.g., steel wheels instead of alloys).'
+    description: 'Inspect the actual car layout to prevent variant bait-and-switch discrepancies (e.g., steel wheels instead of alloys).'
   },
   { 
     id: 'id-odo', 
