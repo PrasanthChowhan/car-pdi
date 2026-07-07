@@ -1,0 +1,501 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Colors - Cursor Design System */
+  --color-primary: #f54e00;
+  --color-primary-active: #d04200;
+  --color-ink: #26251e;
+  --color-body: #5a5852;
+  --color-body-strong: #26251e;
+  --color-muted: #807d72;
+  --color-muted-soft: #a09c92;
+  --color-hairline: #e6e5e0;
+  --color-hairline-soft: #efeee8;
+  --color-hairline-strong: #cfcdc4;
+  --color-canvas: #f7f7f4;
+  --color-canvas-soft: #fafaf7;
+  --color-surface-card: #ffffff;
+  --color-surface-strong: #e6e5e0;
+  --color-on-primary: #ffffff;
+  --color-semantic-error: #cf2d56;
+  --color-semantic-success: #1f8a65;
+  
+  /* Timeline Action Colors (for categorization & status highlight) */
+  --color-timeline-thinking: #dfa88f;
+  --color-timeline-grep: #9fc9a2;
+  --color-timeline-read: #9fbbe0;
+  --color-timeline-edit: #c0a8dd;
+  --color-timeline-done: #c08532;
+
+  /* Typography Families */
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Rounded Borders */
+  --rounded-none: 0px;
+  --rounded-xs: 4px;
+  --rounded-sm: 6px;
+  --rounded-md: 8px;
+  --rounded-lg: 12px;
+  --rounded-xl: 16px;
+  --rounded-pill: 9999px;
+  --rounded-full: 9999px;
+
+  /* Spacing */
+  --spacing-xxs: 4px;
+  --spacing-xs: 8px;
+  --spacing-sm: 12px;
+  --spacing-base: 16px;
+  --spacing-md: 20px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-xxl: 48px;
+  --spacing-section: 80px;
+
+  accent-color: var(--color-primary);
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background-color: var(--color-canvas);
+  color: var(--color-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Base Typographic Settings - Magazine Voice (Weight 400 with negative tracking) */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-ink);
+  font-weight: 400;
+  margin: 0;
+}
+
+code, pre {
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+
+/* Editorial Sizing System */
+.display-mega {
+  font-size: 72px;
+  line-height: 1.1;
+  letter-spacing: -2.16px;
+}
+
+.display-lg {
+  font-size: 36px;
+  line-height: 1.2;
+  letter-spacing: -0.72px;
+}
+
+.display-md {
+  font-size: 26px;
+  line-height: 1.25;
+  letter-spacing: -0.325px;
+}
+
+.display-sm {
+  font-size: 22px;
+  line-height: 1.3;
+  letter-spacing: -0.11px;
+}
+
+.title-md {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.title-sm {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.body-md {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.body-sm {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.caption-uppercase {
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0.88px;
+  text-transform: uppercase;
+}
+
+/* Accessibility */
+.visually-hidden {
+  position: absolute;
+  clip-path: inset(50%);
+  overflow: hidden;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  white-space: nowrap;
+}
+
+/* Buttons & Interactive Elements */
+button {
+  font-family: var(--font-sans);
+  cursor: pointer;
+  border: none;
+  background: none;
+  outline: none;
+}
+
+.button-primary {
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.0;
+  border-radius: var(--rounded-md);
+  padding: 10px 18px;
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid transparent;
+}
+
+.button-primary:hover:not(:disabled) {
+  background-color: var(--color-primary-active);
+  transform: translateY(-1px);
+}
+
+.button-primary:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.button-primary:disabled {
+  background-color: var(--color-muted-soft);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.button-secondary {
+  background-color: var(--color-surface-card);
+  color: var(--color-ink);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.0;
+  border-radius: var(--rounded-md);
+  padding: 9px 17px;
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-hairline-strong);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.button-secondary:hover:not(:disabled) {
+  background-color: var(--color-canvas-soft);
+  border-color: var(--color-ink);
+  transform: translateY(-1px);
+}
+
+.button-secondary:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+/* Card - Hairline-only Depth, No Drop Shadows */
+.card {
+  background-color: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--rounded-lg);
+  padding: var(--spacing-lg);
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+/* Inputs & Form Controls */
+input[type="text"], input[type="email"], textarea {
+  background-color: var(--color-surface-card);
+  color: var(--color-ink);
+  border: 1px solid var(--color-hairline-strong);
+  border-radius: var(--rounded-md);
+  padding: 12px 16px;
+  min-height: 48px;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  box-sizing: border-box;
+  width: 100%;
+  transition: all 0.2s ease;
+}
+
+input[type="text"]:focus, input[type="email"]:focus, textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(245, 78, 0, 0.1);
+}
+
+/* Segmented Control Selector */
+.segmented-control {
+  display: flex;
+  background-color: var(--color-hairline-soft);
+  border: 1px solid var(--color-hairline-strong);
+  border-radius: var(--rounded-lg);
+  padding: 4px;
+  gap: 4px;
+  position: relative;
+}
+
+.segmented-control button {
+  flex: 1;
+  height: 40px;
+  min-height: 40px;
+  border-radius: var(--rounded-md);
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-body);
+}
+
+.segmented-control button.active {
+  background-color: var(--color-surface-card);
+  color: var(--color-ink);
+  font-weight: 600;
+  border: 1px solid var(--color-hairline);
+  box-shadow: 0 1px 3px rgba(38, 37, 30, 0.05);
+}
+
+/* Custom Scrollbar hide for tabs list but preserving scrolling */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Category horizontal tabs with soft edge fade indicators */
+.category-tabs-container {
+  position: relative;
+  margin-bottom: var(--spacing-lg);
+}
+
+.category-tabs-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 32px;
+  background: linear-gradient(90deg, transparent, var(--color-canvas));
+  pointer-events: none;
+}
+
+.category-tabs-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 32px;
+  background: linear-gradient(-90deg, transparent, var(--color-canvas));
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Quick Action Bar */
+.quick-action-bar {
+  display: flex;
+  justify-content: flex-end; /* Align actions cleanly to the right */
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-xs) 0;
+  margin-bottom: var(--spacing-md);
+}
+
+/* Breathable Checklist List Layout (No nested cards) */
+.checklist-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.checklist-row {
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--color-hairline-soft);
+  transition: background-color 0.2s ease;
+}
+
+.checklist-row-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.checklist-row:last-child {
+  border-bottom: none;
+}
+
+/* Circular Checkbox Toggler */
+.circular-checkbox {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  min-height: 24px;
+  border-radius: 50%;
+  border: 2px solid var(--color-hairline-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: transparent;
+  background-color: var(--color-surface-card);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  padding: 0;
+}
+
+.circular-checkbox:hover {
+  border-color: var(--color-semantic-success);
+  background-color: rgba(31, 138, 101, 0.05);
+}
+
+.circular-checkbox.passed {
+  border-color: var(--color-semantic-success);
+  background-color: var(--color-semantic-success);
+  color: #ffffff;
+}
+
+/* Checklist Row Warning Toggle */
+.row-flag-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--rounded-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-muted);
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.row-flag-btn:hover {
+  background-color: var(--color-hairline-soft);
+  color: var(--color-ink);
+}
+
+.row-flag-btn.flagged {
+  color: var(--color-semantic-error);
+  background-color: rgba(207, 45, 86, 0.05);
+}
+
+/* Anchored Solid Metrics Dashboard */
+.metrics-dashboard-solid {
+  background-color: var(--color-ink);
+  color: var(--color-canvas);
+  border-radius: var(--rounded-lg);
+  padding: 20px 24px;
+  margin-bottom: var(--spacing-xl);
+  border: 1px solid var(--color-ink);
+  box-shadow: 0 4px 20px rgba(38, 37, 30, 0.08);
+}
+
+.metrics-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.metrics-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: var(--rounded-md);
+  color: #ffffff;
+}
+
+.metrics-badge-passed {
+  background-color: var(--color-semantic-success);
+}
+
+.metrics-badge-flagged {
+  background-color: var(--color-semantic-error);
+}
+
+.metrics-badge-pending {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: var(--color-canvas-soft);
+}
+
+/* Slide Down Note Transition */
+.note-container {
+  animation: slideDown 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Floating Navigation Bottom Sticky Bar */
+.bottom-sticky-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(247, 247, 244, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-top: 1px solid var(--color-hairline);
+  padding: var(--spacing-base) var(--spacing-lg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Custom file/camera button */
+.upload-btn {
+  background-color: var(--color-canvas-soft);
+  border: 1px dashed var(--color-hairline-strong);
+  color: var(--color-body);
+  border-radius: var(--rounded-md);
+  padding: 16px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.upload-btn:hover {
+  background-color: var(--color-surface-card);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
