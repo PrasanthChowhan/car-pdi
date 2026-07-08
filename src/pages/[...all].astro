@@ -8,16 +8,29 @@ export function getStaticPaths() {
   ];
 }
 import App from '../App.tsx';
+import favicon from '../assets/favicon.svg';
 import '../index.css';
 ---
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" type="image/svg+xml" href={favicon.src} />
+    <link rel="manifest" href="/manifest.webmanifest" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pre-Delivery Inspection (PDI) Web App</title>
     <meta name="description" content="Offline-capable progressive web application for car buyers to perform thorough pre-delivery inspections, capture issues with photos/notes, and generate A4 PDF reports." />
+    <script>
+      // Register service worker for offline PWA capability
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').catch(err => {
+            console.warn('Service worker registration failed:', err);
+          });
+        });
+      }
+    </script>
   </head>
   <body>
     <App client:only="react" />
