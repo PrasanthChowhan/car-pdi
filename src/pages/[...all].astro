@@ -19,8 +19,62 @@ import '../index.css';
     <link rel="icon" type="image/svg+xml" href={favicon.src} />
     <link rel="manifest" href="/manifest.webmanifest" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pre-Delivery Inspection (PDI) Web App</title>
-    <meta name="description" content="Offline-capable progressive web application for car buyers to perform thorough pre-delivery inspections, capture issues with photos/notes, and generate A4 PDF reports." />
+    <title>Car PDI Checklist — Pre-Delivery Inspection Car India</title>
+    <meta name="description" content="India's smartest car PDI checklist tool. Perform a thorough pre-delivery inspection of new cars &amp; EVs. Use VIN decoder India, flag defects, and download a free PDF report." />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://pdiassistant.com/" />
+    <meta property="og:title" content="Car PDI Checklist — Pre-Delivery Inspection Car India" />
+    <meta property="og:description" content="India's smartest car PDI checklist tool. Perform a thorough pre-delivery inspection of new cars &amp; EVs. Use VIN decoder India, flag defects, and download a free PDF report." />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary" />
+    <meta property="twitter:url" content="https://pdiassistant.com/" />
+    <meta property="twitter:title" content="Car PDI Checklist — Pre-Delivery Inspection Car India" />
+    <meta property="twitter:description" content="India's smartest car PDI checklist tool. Perform a thorough pre-delivery inspection of new cars &amp; EVs. Use VIN decoder India, flag defects, and download a free PDF report." />
+
+    <!-- JSON-LD FAQ Schema -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is PDI in car?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "PDI stands for Pre-Delivery Inspection. It is a comprehensive check conducted by the dealer and the buyer before registering the car and taking final delivery, ensuring the vehicle is free from defects, transit damage, and manufacturing issues."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How to do PDI of new car?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "To do a PDI of a new car, you should inspect it in broad daylight, verify that the VIN matches, verify the odometer reading is low, check all exterior paint work, test internal electronics, sunroof, and drive controls, and ensure all tools, accessories, and spare keys are present."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What to check in car PDI?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "In a car PDI, you check the exterior for panel gaps, paint mismatches, and transport damage; the interior for seat condition, steering wheel controls, climate control, and touchscreen; the engine bay for fluid levels and rodent signs; and electric components, including EV batteries and chargers if applicable."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "When to do PDI of car?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "You must perform the pre-delivery inspection BEFORE paying the final invoice, signing the delivery papers, or letting the dealer register the vehicle with the RTO. Once the vehicle is registered, it is very difficult to reject a defective car."
+            }
+          }
+        ]
+      }
+    </script>
     <script>
       // Register service worker for offline PWA capability
       if ('serviceWorker' in navigator) {
