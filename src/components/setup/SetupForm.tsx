@@ -63,11 +63,11 @@ export default function SetupForm({ onSubmit, isSubmitting }: SetupFormProps) {
             </div>
             
             <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '12px', fontSize: '13px', color: 'var(--color-body)', lineHeight: 1.5 }}>
-              <div>🚫 <strong>No PDI, No Pay:</strong> Walk away if the dealer refuses a PDI, demands full payment before inspection, or rushes you. Once registered, resolving defects is extremely difficult.</div>
-              <div>☀️ <strong>Natural Daylight:</strong> Always inspect outdoors. Showroom spotlights are angled to hide paint defects, scratches, and panel repaints.</div>
-              <div>🆔 <strong>VIN Verification:</strong> Match the physical chassis VIN (usually on a tag under the windshield or on the driver door pillar) with your invoice to ensure no car-switching.</div>
-              <div>⏲️ <strong>Verify Odometer:</strong> The odometer must be under 50–100 km. Higher readings suggest it was used as a test drive vehicle or abused in transit.</div>
-              <div>📅 <strong>Tire DOT Check:</strong> Check the 4-digit code (WWYY) on the tire sidewalls to ensure the tires are not significantly older than the vehicle manufacturing date.</div>
+              <div>🚫 <strong>No PDI, No Purchase:</strong> Walk away if the dealer refuses a PDI, denies access to the stockyard, or prohibits third-party mechanic inspections. You are fully entitled to inspect before registration.</div>
+              <div>💰 <strong>No Full Payment Before PDI:</strong> Never pay the full amount or register the vehicle until you satisfy this checklist. Only pay the booking amount beforehand. Do not fall for artificial urgency.</div>
+              <div>☀️ <strong>Natural Daylight:</strong> Always inspect outdoors. Showroom spotlights are angled to hide paint defects, scratches, and panel repaints. Reject basement or night inspections.</div>
+              <div>🔒 <strong>No Locked Features:</strong> Ensure all features (sunroof, electronics, screens) are functional. Evasiveness, "locked" screens, or blocking OBD scans usually hide underlying faults.</div>
+              <div>🆔 <strong>VIN & Odometer Match:</strong> Match the physical chassis VIN (usually on a tag under the windshield or driver door pillar) with your invoice to ensure no car-switching. Verify odometer is under 50–100 km.</div>
               <div>🛠️ <strong>Bring Essentials:</strong> Pack a bright flashlight, a tyre pressure gauge, a phone camera to log defects, and a friend/family member for a second set of eyes.</div>
             </div>
           </div>
