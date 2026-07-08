@@ -1,6 +1,7 @@
 ---
 import favicon from '../assets/favicon.svg';
 import '../index.css';
+import Footer from '../components/common/Footer.tsx';
 
 interface Props {
   title: string;
@@ -34,14 +35,17 @@ const { title, description } = Astro.props;
     <meta property="twitter:description" content={description} />
     <meta property="twitter:image" content="/pdi_og_preview.jpg" />
   </head>
-  <body>
-    <header style="height: 64px; padding: 0 var(--spacing-lg); border-bottom: 1px solid var(--color-hairline); display: flex; align-items: center; justify-content: space-between; background-color: var(--color-canvas);">
-        <a href="/" style="text-decoration: none; display: flex; align-items: center; gap: 8px; color: var(--color-ink); font-size: 14px; font-weight: 500;">
-            &larr; Back to App
-        </a>
-    </header>
-    <main class="page-container page-container-narrow" style="padding-top: var(--spacing-section); padding-bottom: var(--spacing-section);">
-        <slot />
-    </main>
+  <body style="display: flex; flex-direction: column; min-height: 100vh; margin: 0;">
+    <div style="flex: 1;">
+      <header style="height: 64px; padding: 0 var(--spacing-lg); border-bottom: 1px solid var(--color-hairline); display: flex; align-items: center; justify-content: space-between; background-color: var(--color-canvas);">
+          <a href="/" style="text-decoration: none; display: flex; align-items: center; gap: 8px; color: var(--color-ink); font-size: 14px; font-weight: 500;">
+              &larr; Back to App
+          </a>
+      </header>
+      <main class="page-container page-container-narrow" style="padding-top: var(--spacing-section); padding-bottom: var(--spacing-section);">
+          <slot />
+      </main>
+    </div>
+    <Footer />
   </body>
 </html>

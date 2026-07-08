@@ -283,16 +283,6 @@ export default function SetupForm({ onSubmit, isSubmitting }: SetupFormProps) {
           </button>
         </div>
       </section>
-      
-      <footer style={{ marginTop: 'var(--spacing-xl)', textAlign: 'center', display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
-        <div style={{ display: 'flex', justifyContent: 'center', gap: 'var(--spacing-md)', flexWrap: 'wrap' }}>
-          <a href="/about-us" style={{ color: 'var(--color-muted)', fontSize: '14px', textDecoration: 'none' }}>About Us</a>
-          <a href="/privacy-policy" style={{ color: 'var(--color-muted)', fontSize: '14px', textDecoration: 'none' }}>Privacy Policy</a>
-          <a href="/terms-conditions" style={{ color: 'var(--color-muted)', fontSize: '14px', textDecoration: 'none' }}>Terms & Conditions</a>
-          <a href="/contact-us" style={{ color: 'var(--color-muted)', fontSize: '14px', textDecoration: 'none' }}>Contact Us</a>
-        </div>
-        <p style={{ color: 'var(--color-muted)', fontSize: '12px', margin: 0 }}>© {new Date().getFullYear()} Car PDI Checklist. All rights reserved.</p>
-      </footer>
     </div>
   );
 }
