@@ -17,25 +17,7 @@ These are your main page/homepage keywords. All are **Easy KD** with real volume
 
 ***
 
-## 📍 LOCAL / GEO KEYWORDS (City-Level SEO)
 
-Add city-specific landing pages or meta tags for these. They're low competition with strong local intent in your region.
-
-| Keyword | Vol | KD |
-|---|---|---|
-| car pdi hyderabad | >100 | N/A |
-| car pdi service in hyderabad | >100 | N/A |
-| car pdi bangalore | >100 | N/A |
-| car pdi service in bangalore | >100 | N/A |
-| car pdi service in pune | >100 | N/A |
-| car pdi service in delhi | >100 | N/A |
-| new car pdi service near me | >100 | Easy |
-| car pdi service near me | >100 | Easy |
-| car pdi near me | >100 | — |
-| pre delivery inspection car india | <100 | N/A |
-| new car delivery checklist india | <100 | N/A |
-
-***
 
 ## 📋 CHECKLIST & DOCUMENT KEYWORDS (Feature-Aligned)
 
@@ -147,7 +129,6 @@ These are niche but relevant if you're targeting tech-savvy buyers or developers
 | H1 Homepage | "Free Car PDI Checklist App — Pre-Delivery Inspection Tool for India" |
 | H2 Sections | Match each feature to a keyword cluster (VIN decoder, EV checklist, deal-breakers) |
 | Blog Posts | Target all FAQ/question keywords individually (one post per question) |
-| City Pages | Create `/pdi-checklist-hyderabad`, `/pdi-checklist-bangalore` etc. |
 | FAQ Schema | Add JSON-LD FAQ schema targeting the "Questions" keyword list |
 | Image Alt Tags | Use `new car pdi checklist`, `car delivery inspection form` etc. |
 

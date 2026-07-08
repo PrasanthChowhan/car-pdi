@@ -1,6 +1,6 @@
 ***
 title: "feat: PDI Web App Core"
-status: proposed
+status: done
 created: 2026-07-07
 updated: 2026-07-07
 type: feat
