@@ -5,10 +5,8 @@ import { CATEGORIES } from '../../lib/checklistData';
 import LoadingSpinner from '../common/LoadingSpinner';
 import ChecklistItemRow from '../inspection/ChecklistItemRow';
 import OverviewPhotosPanel from '../inspection/OverviewPhotosPanel';
-import DealBreakersPanel from '../inspection/DealBreakersPanel';
 import { 
   AlertTriangle, 
-  ShieldAlert,
   ArrowRight, 
   ArrowLeft, 
   ChevronRight, 
@@ -39,7 +37,7 @@ export default function InspectionPage() {
     hydrateStore,
     setVehicle
   } = useInspectionStore();
-  const [selectedCategory, setSelectedCategory] = useState('deal-breakers');
+  const [selectedCategory, setSelectedCategory] = useState('overview');
   const tabsListRef = useRef<HTMLDivElement>(null);
 
   const [tyreDOTs, setTyreDOTs] = useState({ FL: '', FR: '', RL: '', RR: '', SP: '' });
@@ -129,9 +127,8 @@ export default function InspectionPage() {
     );
   }
 
-  // Filter categories and prepend "Deal-Breakers" and "At a Glance"
+  // Filter categories and prepend "At a Glance"
   const filteredCategories = [
-    { id: 'deal-breakers', label: 'Deal-Breakers' },
     { id: 'overview', label: 'At a Glance' },
     ...CATEGORIES.filter((cat) => {
       if (cat.id === 'ev') return vehicle.isEV;
@@ -264,7 +261,6 @@ export default function InspectionPage() {
           {filteredCategories.map((cat) => {
             const isActive = selectedCategory === cat.id;
             const isOverview = cat.id === 'overview';
-            const isDealBreakers = cat.id === 'deal-breakers';
             const capturedCount = isOverview ? Object.keys(overviewPhotos || {}).length : 0;
             const catItems = Object.values(items).filter((i) => i.categoryId === cat.id);
             const catPending = catItems.filter((i) => i.status === 'pending').length;
@@ -292,9 +288,7 @@ export default function InspectionPage() {
                 }}
               >
                 <span>{cat.label}</span>
-                {isDealBreakers ? (
-                  <ShieldAlert size={14} style={{ color: isActive ? 'inherit' : 'var(--color-semantic-error)' }} />
-                ) : isOverview ? (
+                {isOverview ? (
                   capturedCount === 9 ? (
                     <CheckCircle2 size={14} style={{ color: 'var(--color-semantic-success)' }} />
                   ) : (
@@ -365,7 +359,7 @@ export default function InspectionPage() {
       </div>
 
       {/* Category Actions Bar (NO redundant label, aligned cleanly) */}
-      {selectedCategory !== 'overview' && selectedCategory !== 'deal-breakers' && (
+      {selectedCategory !== 'overview' && (
         <div className="quick-action-bar">
           <div style={{ display: 'flex', gap: '8px' }}>
             {activeCategoryPending > 0 && (
@@ -412,9 +406,7 @@ export default function InspectionPage() {
       )}
 
       {/* Checklist Items Container */}
-      {selectedCategory === 'deal-breakers' ? (
-        <DealBreakersPanel />
-      ) : selectedCategory === 'overview' ? (
+      {selectedCategory === 'overview' ? (
         <OverviewPhotosPanel />
       ) : (
         <div className="checklist-container">
