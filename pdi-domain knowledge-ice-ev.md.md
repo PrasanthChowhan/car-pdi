@@ -8,6 +8,20 @@ This checklist works for both ICE (petrol/diesel/CNG) and EVs, with extra sectio
 
 ---
 
+## 0. Absolute Deal-Breakers (Dealer Red Flags)
+
+**Before you even start the physical inspection, watch out for these massive red flags from the dealership. If you experience these, strongly consider walking away. NEVER buy a car from a dealer exhibiting these behaviors.**
+
+- **Refusing the PDI:** The biggest red flag. If the dealer refuses to let you perform a PDI, denies access to the stockyard, or claims "company policy" forbids it, **walk away**. They are hiding something (transit damage, demo car, old stock). You are fully entitled to inspect before registration.
+- **Demanding Full Payment Before PDI:** Never pay the full amount before you have personally inspected the car and are satisfied. Only the booking amount should be paid beforehand. Dealers create artificial urgency ("pay now to unlock the car/start registration"); do not fall for it.
+- **Forcing Evening/Dark Inspections:** The dealer insists you do the PDI in the evening, at night, or in a dimly lit basement/showroom. This is a classic tactic to hide paint defects, repaints, and panel misalignments. **Insist on daytime, open natural light.**
+- **"Locked" Features or Restricted Access:** The dealer claims the infotainment system is "locked," or you cannot test the sunroof, or they block you from using an OBD scanner. They may be hiding underlying error codes or faulty electronics.
+- **Evasive About the VIN:** The dealer hesitates or refuses to share the Vehicle Identification Number (VIN) or engine number before you arrive. They may be trying to slip you a much older manufactured car.
+- **Refusing Third-Party Mechanics:** If you want to bring a trusted mechanic for a second opinion and the dealer prohibits it, it's a huge warning sign.
+- **Rushing You:** Creating high-pressure situations to force a quick sign-off and blind payment. Take your time. Your peace of mind is worth more than a small discount or a rushed delivery.
+
+---
+
 ## 1. Mindset and Preparation
 
 **Goal:** Protect your hard‑earned money by catching scams and defects *before* the car becomes legally yours.

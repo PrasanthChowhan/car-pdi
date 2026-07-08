@@ -67,6 +67,21 @@ export default function SetupForm({ onSubmit, isSubmitting }: SetupFormProps) {
               <div>• <strong>Natural Daylight:</strong> Always inspect outdoors. Showroom spotlights can hide minor paint issues or scratches.</div>
               <div>• <strong>Tools to Bring:</strong> Flashlight, tyre pressure gauge, OBD-II scanner, phone camera, and a second pair of eyes (friend/family).</div>
             </div>
+
+            <div style={{ marginTop: '8px', paddingTop: '16px', borderTop: '1px dashed var(--color-hairline-strong)' }}>
+              <h4 style={{ color: 'var(--color-semantic-error)', fontSize: '13px', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px', margin: '0 0 12px 0' }}>
+                <AlertTriangle size={14} />
+                Absolute Deal-Breakers (Walk Away)
+              </h4>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '10px', fontSize: '13px', color: 'var(--color-body)', lineHeight: 1.5 }}>
+                <div>🚫 <strong>Refusal of PDI:</strong> Never accept "company policy" excuses. No PDI = No purchase.</div>
+                <div>💰 <strong>Full Payment Demand:</strong> Never pay fully before inspecting. Only pay booking amount.</div>
+                <div>🌑 <strong>Night/Dark Inspections:</strong> Do not inspect in dimly lit areas or at night.</div>
+                <div>🔒 <strong>Locked Features:</strong> "Locked" screens or refusing OBD scans usually hide faults.</div>
+                <div>📄 <strong>Evasive on VIN:</strong> Hesitation to share VIN beforehand means they might switch cars.</div>
+                <div>👨‍🔧 <strong>Refusing Mechanics:</strong> Prohibiting a third-party mechanic inspection is a massive red flag.</div>
+              </div>
+            </div>
           </div>
         )}
       </div>
