@@ -55,32 +55,20 @@ export default function SetupForm({ onSubmit, isSubmitting }: SetupFormProps) {
         
         {showPrep && (
           <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)', borderTop: '1px solid var(--color-hairline-soft)', textAlign: 'left' }}>
-            <div style={{ display: 'flex', gap: '12px', backgroundColor: 'rgba(207, 45, 86, 0.05)', borderLeft: '3px solid var(--color-semantic-error)', padding: '12px 16px', borderRadius: '0 var(--rounded-md) var(--rounded-md) 0' }}>
-              <AlertTriangle size={18} style={{ color: 'var(--color-semantic-error)', flexShrink: 0, marginTop: '2px' }} />
+            <div style={{ display: 'flex', gap: '12px', backgroundColor: 'rgba(245, 78, 0, 0.05)', borderLeft: '3px solid var(--color-primary)', padding: '12px 16px', borderRadius: '0 var(--rounded-md) var(--rounded-md) 0' }}>
+              <AlertTriangle size={18} style={{ color: 'var(--color-primary)', flexShrink: 0, marginTop: '2px' }} />
               <p className="body-sm" style={{ color: 'var(--color-ink)', margin: 0, lineHeight: 1.5 }}>
-                <strong>Critical Rule:</strong> Verify every single detail before signing final paperwork or making final payments to ensure the vehicle has no defects.
+                <strong>Critical Rule:</strong> Inspect the vehicle and verify details before signing final paperwork, making final payments, or registering the car in your name.
               </p>
             </div>
             
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '12px', fontSize: '13.5px', color: 'var(--color-body)', lineHeight: 1.5 }}>
-              <div>• <strong>Inspect at Stockyard:</strong> Perform PDI before registration. Once the car is registered in your name, resolving issues becomes much harder.</div>
-              <div>• <strong>Natural Daylight:</strong> Always inspect outdoors. Showroom spotlights can hide minor paint issues or scratches.</div>
-              <div>• <strong>Tools to Bring:</strong> Flashlight, tyre pressure gauge, OBD-II scanner, phone camera, and a second pair of eyes (friend/family).</div>
-            </div>
-
-            <div style={{ marginTop: '8px', paddingTop: '16px', borderTop: '1px dashed var(--color-hairline-strong)' }}>
-              <h4 style={{ color: 'var(--color-semantic-error)', fontSize: '13px', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px', margin: '0 0 12px 0' }}>
-                <AlertTriangle size={14} />
-                Absolute Deal-Breakers (Walk Away)
-              </h4>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '10px', fontSize: '13px', color: 'var(--color-body)', lineHeight: 1.5 }}>
-                <div>🚫 <strong>Refusal of PDI:</strong> Never accept "company policy" excuses. No PDI = No purchase.</div>
-                <div>💰 <strong>Full Payment Demand:</strong> Never pay fully before inspecting. Only pay booking amount.</div>
-                <div>🌑 <strong>Night/Dark Inspections:</strong> Do not inspect in dimly lit areas or at night.</div>
-                <div>🔒 <strong>Locked Features:</strong> "Locked" screens or refusing OBD scans usually hide faults.</div>
-                <div>📄 <strong>Evasive on VIN:</strong> Hesitation to share VIN beforehand means they might switch cars.</div>
-                <div>👨‍🔧 <strong>Refusing Mechanics:</strong> Prohibiting a third-party mechanic inspection is a massive red flag.</div>
-              </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '12px', fontSize: '13px', color: 'var(--color-body)', lineHeight: 1.5 }}>
+              <div>🚫 <strong>No PDI, No Pay:</strong> Walk away if the dealer refuses a PDI, demands full payment before inspection, or rushes you. Once registered, resolving defects is extremely difficult.</div>
+              <div>☀️ <strong>Natural Daylight:</strong> Always inspect outdoors. Showroom spotlights are angled to hide paint defects, scratches, and panel repaints.</div>
+              <div>🆔 <strong>VIN Verification:</strong> Match the physical chassis VIN (usually on a tag under the windshield or on the driver door pillar) with your invoice to ensure no car-switching.</div>
+              <div>⏲️ <strong>Verify Odometer:</strong> The odometer must be under 50–100 km. Higher readings suggest it was used as a test drive vehicle or abused in transit.</div>
+              <div>📅 <strong>Tire DOT Check:</strong> Check the 4-digit code (WWYY) on the tire sidewalls to ensure the tires are not significantly older than the vehicle manufacturing date.</div>
+              <div>🛠️ <strong>Bring Essentials:</strong> Pack a bright flashlight, a tyre pressure gauge, a phone camera to log defects, and a friend/family member for a second set of eyes.</div>
             </div>
           </div>
         )}
