@@ -1,0 +1,28 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="Privacy Policy — Car PDI Checklist" description="Privacy Policy for the Car PDI Checklist app. Learn how we keep your inspection data secure and local.">
+  <div style="text-align: center; margin-bottom: var(--spacing-xl);">
+    <h1 class="display-lg" style="margin-bottom: var(--spacing-xs);">Privacy Policy</h1>
+    <p class="body-md" style="color: var(--color-muted); max-width: 480px; margin: 0 auto;">How we keep your inspection data secure and local.</p>
+  </div>
+
+  <div class="card" style="display: flex; flex-direction: column; gap: var(--spacing-md);">
+    <p class="body-md" style="margin: 0;"><strong>Last updated: {new Date().toLocaleDateString()}</strong></p>
+    
+    <p class="body-md" style="margin: 0;">At <strong>Car PDI Checklist (PDI Assistant)</strong>, we understand that privacy is paramount when dealing with your personal vehicle purchase. We have designed our web application with a "privacy-first" and "local-first" architecture to ensure your data stays with you.</p>
+    
+    <h2 class="title-md">1. Data Collection & Local Storage</h2>
+    <p class="body-md" style="margin: 0;">Our application operates as a Progressive Web App (PWA). All the data you enter into the checklist—including your vehicle's Make, Model, Vehicle Identification Number (VIN), and the status of your inspection items—is stored <strong>locally on your device</strong> using your browser's IndexedDB and LocalStorage.</p>
+    <p class="body-md" style="margin: 0;">We <strong>do not</strong> transmit, upload, or store your inspection data or VIN on any external servers. Your generated PDF reports are created entirely on your device.</p>
+
+    <h2 class="title-md">2. Analytics and Tracking</h2>
+    <p class="body-md" style="margin: 0;">To improve our checklist and understand which features (such as the EV vs ICE modules) are most useful, we may use privacy-friendly, anonymized analytics. This data is strictly aggregated and does not contain any personally identifiable information (PII) or specific vehicle details (like your VIN).</p>
+
+    <h2 class="title-md">3. Offline Capability</h2>
+    <p class="body-md" style="margin: 0;">Because dealership stockyards often have poor network reception, our app is built to work completely offline. This further guarantees that no data is being transmitted while you perform your critical vehicle inspection.</p>
+
+    <h2 class="title-md">4. Changes to This Policy</h2>
+    <p class="body-md" style="margin: 0;">We may update this privacy policy from time to time to reflect changes in our app's features. We encourage you to review this page periodically.</p>
+  </div>
+</Layout>
