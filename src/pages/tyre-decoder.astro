@@ -11,7 +11,36 @@ import Layout from '../layouts/Layout.astro';
     <p class="body-md" style="margin: 0;">Look for the <strong>DOT</strong> marking on your tyre's sidewall. Enter the <strong>last 4 digits</strong> (e.g., 5107, 2322) to decode the manufacturing week and year.</p>
     
     <div style="display: flex; flex-direction: column; gap: var(--spacing-xs);">
-      <label for="dot-input" class="title-sm" style="color: var(--color-ink);">Last 4 digits of DOT code</label>
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <label for="dot-input" class="title-sm" style="color: var(--color-ink);">Last 4 digits of DOT code</label>
+        <button id="toggle-visual-btn" type="button" style="display: flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; color: var(--color-primary); background: none; border: none; cursor: pointer; padding: 4px 8px; border-radius: var(--rounded-pill); transition: all 0.2s ease;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          Where to look
+          <svg id="visual-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+      </div>
+
+      <div id="visual-container" style="display: none; justify-content: center; align-items: center; padding: 16px 0; background-color: var(--color-canvas); border-radius: var(--rounded-md); border: 1px solid var(--color-hairline); margin-bottom: 8px; animation: fadeIn 0.3s ease;">
+        <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="100" cy="100" r="90" stroke="var(--color-ink)" stroke-width="12" stroke-dasharray="10 4" fill="none" opacity="0.8"/>
+          <circle cx="100" cy="100" r="70" stroke="var(--color-hairline-strong)" stroke-width="2" fill="none"/>
+          <circle cx="100" cy="100" r="50" stroke="var(--color-ink)" stroke-width="4" fill="none"/>
+          <circle cx="100" cy="100" r="10" fill="var(--color-ink)"/>
+          
+          <circle cx="100" cy="65" r="5" fill="var(--color-hairline-strong)"/>
+          <circle cx="100" cy="135" r="5" fill="var(--color-hairline-strong)"/>
+          <circle cx="65" cy="100" r="5" fill="var(--color-hairline-strong)"/>
+          <circle cx="135" cy="100" r="5" fill="var(--color-hairline-strong)"/>
+          
+          <path d="M 160 100 A 60 60 0 0 1 150 130" stroke="var(--color-hairline-strong)" stroke-width="1" fill="none" />
+          <rect x="135" y="115" width="45" height="18" rx="4" fill="var(--color-canvas)" stroke="var(--color-primary)" stroke-width="2" transform="rotate(-30 157 124)" />
+          <text x="142" y="129" font-size="9" font-weight="bold" fill="var(--color-primary)" transform="rotate(-30 157 124)" style="animation: pulse 2s infinite;">DOT 2425</text>
+          
+          <path d="M 140 145 L 150 135" stroke="var(--color-primary)" stroke-width="1.5" stroke-dasharray="2 2" />
+          <text x="135" y="155" font-size="10" fill="var(--color-muted)">Look here on sidewall</text>
+        </svg>
+      </div>
+
       <input 
         type="tel" 
         id="dot-input" 
@@ -131,6 +160,24 @@ import Layout from '../layouts/Layout.astro';
   input.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
       decodeDot(input.value.trim());
+    }
+  });
+
+  const toggleVisualBtn = document.getElementById('toggle-visual-btn') as HTMLButtonElement;
+  const visualContainer = document.getElementById('visual-container') as HTMLDivElement;
+  const visualChevron = document.getElementById('visual-chevron') as unknown as SVGElement;
+  let showVisual = false;
+
+  toggleVisualBtn.addEventListener('click', () => {
+    showVisual = !showVisual;
+    if (showVisual) {
+      visualContainer.style.display = 'flex';
+      toggleVisualBtn.style.backgroundColor = 'rgba(245, 78, 0, 0.1)';
+      visualChevron.innerHTML = '<polyline points="18 15 12 9 6 15"></polyline>';
+    } else {
+      visualContainer.style.display = 'none';
+      toggleVisualBtn.style.backgroundColor = 'transparent';
+      visualChevron.innerHTML = '<polyline points="6 9 12 15 18 9"></polyline>';
     }
   });
 </script>
