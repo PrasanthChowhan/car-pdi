@@ -1,0 +1,136 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="Tyre DOT Date Decoder — Car PDI Checklist" description="Instantly decode the DOT code on your car's tyres to find out exactly when they were manufactured.">
+  <div style="text-align: center; margin-bottom: var(--spacing-xl);">
+    <h1 class="display-lg" style="margin-bottom: var(--spacing-xs);">Tyre DOT Date Decoder</h1>
+    <p class="body-md" style="color: var(--color-muted); max-width: 480px; margin: 0 auto;">Check the manufacturing date of your tyres to ensure they are fresh.</p>
+  </div>
+
+  <div class="card" style="display: flex; flex-direction: column; gap: var(--spacing-md); max-width: 500px; margin: 0 auto;">
+    <p class="body-md" style="margin: 0;">Look for the <strong>DOT</strong> marking on your tyre's sidewall. Enter the <strong>last 4 digits</strong> (e.g., 5107, 2322) to decode the manufacturing week and year.</p>
+    
+    <div style="display: flex; flex-direction: column; gap: var(--spacing-xs);">
+      <label for="dot-input" class="title-sm" style="color: var(--color-ink);">Last 4 digits of DOT code</label>
+      <input 
+        type="tel" 
+        id="dot-input" 
+        placeholder="e.g. 3423" 
+        maxlength="4" 
+        style="font-family: var(--font-mono); letter-spacing: 2px; font-size: 20px;"
+      />
+    </div>
+
+    <button id="decode-btn" class="button-primary" style="width: 100%;">
+      Decode Date
+    </button>
+    
+    <div id="result-container" style="display: none; margin-top: var(--spacing-sm); text-align: center; padding: var(--spacing-md); background-color: var(--color-canvas-soft); border-radius: var(--rounded-md); border: 1px solid var(--color-hairline);">
+      <div id="result-icon" style="margin-bottom: var(--spacing-xs);">
+        <!-- Icon injected via JS -->
+      </div>
+      <h3 id="result-title" class="title-md" style="margin-bottom: var(--spacing-xs);"></h3>
+      <p id="result-desc" class="body-sm" style="margin: 0; color: var(--color-muted);"></p>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  const input = document.getElementById('dot-input') as HTMLInputElement;
+  const btn = document.getElementById('decode-btn') as HTMLButtonElement;
+  const resultContainer = document.getElementById('result-container') as HTMLDivElement;
+  const resultTitle = document.getElementById('result-title') as HTMLHeadingElement;
+  const resultDesc = document.getElementById('result-desc') as HTMLParagraphElement;
+  const resultIcon = document.getElementById('result-icon') as HTMLDivElement;
+
+  function decodeDot(code: string) {
+    if (!/^\d{4}$/.test(code)) {
+      showResult("Invalid Input", "Please enter exactly 4 digits.", "error");
+      return;
+    }
+
+    const weekStr = code.substring(0, 2);
+    const yearStr = code.substring(2, 4);
+
+    const week = parseInt(weekStr, 10);
+    const year = parseInt(yearStr, 10);
+
+    if (week < 1 || week > 53) {
+      showResult("Invalid Week", `The week number (${weekStr}) is out of range (01-53).`, "error");
+      return;
+    }
+
+    const fullYear = 2000 + year; // Assumes post-2000 tyre
+    
+    // Calculate approximate dates
+    const daysOffset = (week - 1) * 7;
+    const startDate = new Date(fullYear, 0, 1 + daysOffset);
+    const endDate = new Date(fullYear, 0, 1 + daysOffset + 6);
+    const midWeek = new Date(fullYear, 0, 1 + daysOffset + 3);
+    
+    const monthName = midWeek.toLocaleDateString('en-US', { month: 'long' });
+    const dateOptions: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric' };
+    const dateRange = `${startDate.toLocaleDateString('en-US', dateOptions)} to ${endDate.toLocaleDateString('en-US', dateOptions)}`;
+    
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    
+    // Quick freshness check
+    const ageYears = currentYear - fullYear;
+    let freshness = "";
+    let status: 'success' | 'warning' | 'error' = 'success';
+    
+    if (ageYears > 5) {
+      freshness = `Manufactured around ${monthName} (${dateRange}). These tyres are over 5 years old. Consider replacing them soon.`;
+      status = 'warning';
+    } else if (fullYear > currentYear) {
+       showResult("Invalid Year", `The year (${fullYear}) is in the future.`, "error");
+       return;
+    } else if (ageYears === 0) {
+      freshness = `Manufactured around ${monthName} (${dateRange}). These tyres are fresh from this year!`;
+      status = 'success';
+    } else {
+      freshness = `Manufactured around ${monthName} (${dateRange}). These tyres are approximately ${ageYears} year(s) old.`;
+      status = 'success';
+    }
+
+    showResult(
+      `Week ${week}, ${fullYear} (${monthName})`,
+      freshness,
+      status
+    );
+  }
+
+  function showResult(title: string, desc: string, status: 'success' | 'error' | 'warning') {
+    resultContainer.style.display = 'block';
+    resultTitle.textContent = title;
+    resultDesc.textContent = desc;
+
+    if (status === 'error') {
+      resultContainer.style.borderColor = 'var(--color-semantic-error)';
+      resultContainer.style.backgroundColor = 'rgba(207, 45, 86, 0.05)';
+      resultIcon.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-semantic-error)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>`;
+      resultTitle.style.color = 'var(--color-semantic-error)';
+    } else if (status === 'warning') {
+      resultContainer.style.borderColor = '#c08532';
+      resultContainer.style.backgroundColor = 'rgba(192, 133, 50, 0.05)';
+      resultIcon.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c08532" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>`;
+      resultTitle.style.color = '#c08532';
+    } else {
+      resultContainer.style.borderColor = 'var(--color-semantic-success)';
+      resultContainer.style.backgroundColor = 'rgba(31, 138, 101, 0.05)';
+      resultIcon.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-semantic-success)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`;
+      resultTitle.style.color = 'var(--color-semantic-success)';
+    }
+  }
+
+  btn.addEventListener('click', () => {
+    decodeDot(input.value.trim());
+  });
+
+  input.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      decodeDot(input.value.trim());
+    }
+  });
+</script>
