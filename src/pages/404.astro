@@ -1,0 +1,18 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="404: Page Not Found — Car PDI Checklist" description="The page you are looking for does not exist.">
+  <div style="text-align: center; margin-bottom: var(--spacing-xl); padding: var(--spacing-xxl) 0;">
+    <div style="display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px; border-radius: var(--rounded-full); background-color: rgba(245, 78, 0, 0.1); color: var(--color-primary); margin-bottom: var(--spacing-lg);">
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+    </div>
+    <h1 class="display-lg" style="margin-bottom: var(--spacing-sm);">404</h1>
+    <h2 class="title-md" style="margin-bottom: var(--spacing-lg); color: var(--color-ink);">Page Not Found</h2>
+    <p class="body-md" style="color: var(--color-muted); max-width: 480px; margin: 0 auto var(--spacing-xl) auto;">
+      We couldn't find the page you're looking for. It might have been moved, deleted, or perhaps the URL was mistyped.
+    </p>
+    <a href="/" class="button-primary" style="text-decoration: none;">
+      Return to Home
+    </a>
+  </div>
+</Layout>
