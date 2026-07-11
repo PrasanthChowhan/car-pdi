@@ -99,32 +99,26 @@ export default function TyreDOTDecoder({ initialNote, onApply }: TyreDOTDecoderP
           display: 'flex', 
           justifyContent: 'center', 
           alignItems: 'center', 
-          padding: '16px 0',
+          padding: '8px',
           backgroundColor: 'var(--color-canvas)',
           borderRadius: 'var(--rounded-md)',
           border: '1px solid var(--color-hairline)',
           marginBottom: '8px',
           animation: 'fadeIn 0.3s ease'
         }}>
-          <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="100" cy="100" r="90" stroke="var(--color-ink)" strokeWidth="12" strokeDasharray="10 4" fill="none" opacity="0.8"/>
-            <circle cx="100" cy="100" r="70" stroke="var(--color-hairline-strong)" strokeWidth="2" fill="none"/>
-            <circle cx="100" cy="100" r="50" stroke="var(--color-ink)" strokeWidth="4" fill="none"/>
-            <circle cx="100" cy="100" r="10" fill="var(--color-ink)"/>
-            {/* Dots array simulating rim spokes */}
-            <circle cx="100" cy="65" r="5" fill="var(--color-hairline-strong)"/>
-            <circle cx="100" cy="135" r="5" fill="var(--color-hairline-strong)"/>
-            <circle cx="65" cy="100" r="5" fill="var(--color-hairline-strong)"/>
-            <circle cx="135" cy="100" r="5" fill="var(--color-hairline-strong)"/>
-            
-            {/* DOT code area */}
-            <path d="M 160 100 A 60 60 0 0 1 150 130" stroke="var(--color-hairline-strong)" strokeWidth="1" fill="none" />
-            <rect x="135" y="115" width="45" height="18" rx="4" fill="var(--color-canvas)" stroke="var(--color-primary)" strokeWidth="2" transform="rotate(-30 157 124)" />
-            <text x="142" y="129" fontSize="9" fontWeight="bold" fill="var(--color-primary)" transform="rotate(-30 157 124)" style={{ animation: 'pulse 2s infinite' }}>DOT 2425</text>
-            
-            <path d="M 140 145 L 150 135" stroke="var(--color-primary)" strokeWidth="1.5" strokeDasharray="2 2" />
-            <text x="135" y="155" fontSize="10" fill="var(--color-muted)">Look here on sidewall</text>
-          </svg>
+          <div style={{ position: 'relative', width: '100%', overflow: 'hidden', borderRadius: 'var(--rounded-sm)' }}>
+            <picture>
+              <source srcSet="/tyre%20dot.avif" type="image/avif" />
+              <source srcSet="/tyre%20dot.webp" type="image/webp" />
+              <img 
+                src="/tyre%20dot.png" 
+                alt="Where to look for DOT code on tyre sidewall" 
+                style={{ width: '100%', height: 'auto', display: 'block', objectFit: 'cover' }} 
+                loading="lazy"
+                decoding="async"
+              />
+            </picture>
+          </div>
         </div>
       )}
 
