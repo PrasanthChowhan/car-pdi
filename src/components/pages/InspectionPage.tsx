@@ -14,14 +14,10 @@ import {
   CheckSquare, 
   RefreshCw, 
   CheckCircle2,
-  HelpCircle,
-  Info,
-  AlertCircle,
-  Disc,
-  Binary
+  HelpCircle
 } from 'lucide-react';
-import { decodeIndianVIN } from '../../lib/decoderUtils';
 import TyreDOTDecoder from '../common/TyreDOTDecoder';
+import VINDecoder from '../common/VINDecoder';
 
 export default function InspectionPage() {
   const navigate = useNavigate();
@@ -42,6 +38,28 @@ export default function InspectionPage() {
   const tabsListRef = useRef<HTMLDivElement>(null);
 
   const [showLeftScrollBtn, setShowLeftScrollBtn] = useState(false);
+  const [showRightScrollBtn, setShowRightScrollBtn] = useState(false);
+
+  const checkScroll = () => {
+    if (tabsListRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = tabsListRef.current;
+      setShowLeftScrollBtn(scrollLeft > 0);
+      setShowRightScrollBtn(scrollLeft < scrollWidth - clientWidth - 1);
+    }
+  };
+
+  useEffect(() => {
+    checkScroll();
+    window.addEventListener('resize', checkScroll);
+    return () => window.removeEventListener('resize', checkScroll);
+  }, []);
+
+  const scrollTabs = (direction: 'left' | 'right') => {
+    if (tabsListRef.current) {
+      const scrollAmount = 200;
+      tabsListRef.current.scrollBy({ left: direction === 'left' ? -scrollAmount : scrollAmount, behavior: 'smooth' });
+    }
+  };
 
   useEffect(() => {
     hydrateStore();
@@ -194,6 +212,7 @@ export default function InspectionPage() {
         <div 
           ref={tabsListRef}
           className="no-scrollbar"
+          onScroll={checkScroll}
           style={{ 
             display: 'flex', 
             overflowX: 'auto', 
@@ -357,84 +376,19 @@ export default function InspectionPage() {
         <div className="checklist-container">
           {/* Documents Section VIN Tool Card */}
           {selectedCategory === 'documents' && (
-            <div className="card animate-fadeIn" style={{ display: 'flex', flexDirection: 'column', gap: '12px', padding: '16px', marginBottom: 'var(--spacing-md)', textAlign: 'left', backgroundColor: 'var(--color-canvas-soft)', border: '1px solid var(--color-hairline-strong)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', borderBottom: '1px solid var(--color-hairline)', paddingBottom: '8px' }}>
-                <Binary size={18} style={{ color: 'var(--color-primary)' }} />
-                <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-ink)' }} className="caption-uppercase">Forensic VIN / Chassis Decoder</span>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                <label htmlFor="pdi-vin" style={{ fontSize: '10px', color: 'var(--color-muted)', fontWeight: 600 }} className="caption-uppercase">VIN / Chassis Number</label>
-                <input
-                  type="text"
-                  id="pdi-vin"
-                  maxLength={19}
-                  value={vehicle.vin || ''}
-                  onChange={(e) => setVehicle({ ...vehicle, vin: e.target.value.toUpperCase() })}
-                  placeholder="Enter 17 or 19-digit Chassis Number..."
-                  style={{ textTransform: 'uppercase', fontFamily: 'var(--font-mono)', letterSpacing: '1px', minHeight: '36px', height: '36px', fontSize: '13px' }}
-                />
-              </div>
-
-              {vehicle.vin && vehicle.vin.trim().length >= 3 && (() => {
-                const decoded = decodeIndianVIN(vehicle.vin);
-                if (!decoded.isValid) return null;
-
-                let statusColor = 'var(--color-muted)';
-                let bgColor = 'rgba(128, 125, 114, 0.03)';
-                let borderColor = 'var(--color-hairline-strong)';
-                let Icon = Info;
-
-                if (decoded.status === 'fresh') {
-                  statusColor = 'var(--color-semantic-success)';
-                  bgColor = 'rgba(31, 138, 101, 0.03)';
-                  borderColor = 'var(--color-semantic-success)';
-                  Icon = CheckCircle2;
-                } else if (decoded.status === 'caution') {
-                  statusColor = '#d08000';
-                  bgColor = 'rgba(208, 128, 0, 0.03)';
-                  borderColor = '#d08000';
-                  Icon = AlertTriangle;
-                } else if (decoded.status === 'flagged') {
-                  statusColor = 'var(--color-semantic-error)';
-                  bgColor = 'rgba(207, 45, 86, 0.03)';
-                  borderColor = 'var(--color-semantic-error)';
-                  Icon = AlertCircle;
-                }
-
-                return (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '4px' }}>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', fontSize: '12px', backgroundColor: 'rgba(0,0,0,0.02)', padding: '8px', borderRadius: 'var(--rounded-md)' }}>
-                      <div><strong>Brand:</strong> {decoded.manufacturer} ({decoded.country})</div>
-                      {decoded.year && <div><strong>MFG:</strong> {decoded.month ? `${decoded.month} ` : ''}{decoded.year}</div>}
-                      {decoded.ageMonths !== null && <div><strong>Age:</strong> {decoded.ageMonths} months old</div>}
-                    </div>
-                    
-                    <div style={{ display: 'flex', gap: '6px', alignItems: 'flex-start', padding: '8px', backgroundColor: bgColor, border: `1px solid ${borderColor}`, borderRadius: 'var(--rounded-md)' }}>
-                      <Icon size={14} style={{ color: statusColor, flexShrink: 0, marginTop: '2px' }} />
-                      <p style={{ fontSize: '11.5px', margin: 0, color: 'var(--color-body)', lineHeight: 1.3 }}>{decoded.message}</p>
-                    </div>
-
-                    <button
-                      type="button"
-                      className="button-primary"
-                      onClick={() => {
-                        updateItemStatus('doc-vin-paper', 'pass');
-                        updateItemNote('doc-vin-paper', `Chassis number verified: ${decoded.vin}`);
-                        
-                        const ageStatus = decoded.status === 'fresh' ? 'pass' : (decoded.status === 'flagged' ? 'flagged' : 'pending');
-                        updateItemStatus('doc-stock-age', ageStatus);
-                        updateItemNote('doc-stock-age', `Decoded VIN: ${decoded.manufacturer} (${decoded.country}), MFG Date: ${decoded.month ? `${decoded.month} ` : ''}${decoded.year} (Age: ${decoded.ageMonths}m old). Message: ${decoded.message}`);
-                        
-                        alert('Applied decoded details to paper match & stock age checklist items!');
-                      }}
-                      style={{ height: '32px', minHeight: '32px', padding: '0 10px', fontSize: '11.5px', alignSelf: 'flex-start', marginTop: '2px' }}
-                    >
-                      Apply to VIN Checklists
-                    </button>
-                  </div>
-                );
-              })()}
-            </div>
+            <VINDecoder 
+              vehicle={vehicle}
+              setVehicle={setVehicle}
+              onApply={(vinNote, vinStatus, ageNote, ageStatus) => {
+                updateItemStatus('doc-vin-paper', vinStatus);
+                updateItemNote('doc-vin-paper', vinNote);
+                
+                updateItemStatus('doc-stock-age', ageStatus);
+                updateItemNote('doc-stock-age', ageNote);
+                
+                alert('Applied decoded details to paper match & stock age checklist items!');
+              }}
+            />
           )}
 
           {/* Tyres Section DOT Tool Card */}

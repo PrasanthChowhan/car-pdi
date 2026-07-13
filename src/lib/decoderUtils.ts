@@ -6,10 +6,6 @@ export interface VINDecodeResult {
   manufacturer: string;
   country: string;
   year: number | null;
-  month: string | null;
-  monthNum: number | null; // 1-12
-  ageMonths: number | null;
-  status: 'fresh' | 'caution' | 'flagged' | 'unknown';
   message: string;
 }
 
@@ -31,21 +27,6 @@ const VIN_YEAR_MAP: Record<string, number> = {
   '1': 2031, '2': 2032, '3': 2033, '4': 2034, '5': 2035, '6': 2036
 };
 
-// Standard month maps
-const MONTH_NAMES = [
-  'January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December'
-];
-
-// Standard A-M month mapping (skips I, O, Q)
-const MONTH_MAP_AM: Record<string, number> = {
-  A: 1, B: 2, C: 3, D: 4, E: 5, F: 6, G: 7, H: 8, J: 9, K: 10, L: 11, M: 12
-};
-
-// Tata / Mahindra month mapping (skips I, O, Q, L, M)
-const MONTH_MAP_AP: Record<string, number> = {
-  A: 1, B: 2, C: 3, D: 4, E: 5, F: 6, G: 7, H: 8, J: 9, K: 10, N: 11, P: 12
-};
 
 /**
  * Decodes an Indian Vehicle Identification Number (chassis number)
@@ -59,10 +40,6 @@ export function decodeIndianVIN(rawVin: string): VINDecodeResult {
     manufacturer: 'Unknown Manufacturer',
     country: 'Unknown',
     year: null,
-    month: null,
-    monthNum: null,
-    ageMonths: null,
-    status: 'unknown',
     message: 'VIN must be 17 or 19 characters long.'
   };
 
@@ -141,68 +118,10 @@ export function decodeIndianVIN(rawVin: string): VINDecodeResult {
 
   result.year = decodedYear;
 
-  // 3. Decode Month (Brand specific)
-  let monthNum: number | null = null;
-
-  if (brand === 'Maruti Suzuki') {
-    const monthChar = vin.charAt(10);
-    monthNum = MONTH_MAP_AM[monthChar] || null;
-  } else if (brand === 'Tata Motors' || brand === 'Mahindra & Mahindra') {
-    const monthChar = vin.charAt(11);
-    monthNum = MONTH_MAP_AP[monthChar] || null;
-  } else if (brand === 'Hyundai' || brand === 'Kia') {
-    if (vin.length === 19) {
-      const monthChar = vin.charAt(18); // 19th character
-      monthNum = MONTH_MAP_AM[monthChar] || null;
-    }
-  } else if (brand === 'Honda') {
-    const monthChar = vin.charAt(8); // 9th character
-    monthNum = MONTH_MAP_AM[monthChar] || null;
-  } else if (brand === 'Skoda / Volkswagen') {
-    const monthChar = vin.charAt(3); // 4th character
-    monthNum = MONTH_MAP_AM[monthChar] || MONTH_MAP_AP[monthChar] || null;
-  }
-
-  if (monthNum !== null) {
-    result.monthNum = monthNum;
-    result.month = MONTH_NAMES[monthNum - 1];
-  }
-
-  // 4. Calculate Age & Status
-  if (result.year && result.monthNum) {
-    const now = new Date();
-    const currentYear = now.getFullYear();
-    const currentMonth = now.getMonth() + 1; // 1-indexed
-
-    const age = (currentYear - result.year) * 12 + (currentMonth - result.monthNum);
-    result.ageMonths = age;
-
-    if (age < 0) {
-      result.status = 'caution';
-      result.message = `Future production date decoded (${result.month} ${result.year}). Please double-check VIN input.`;
-    } else if (age <= 3) {
-      result.status = 'fresh';
-      result.message = `Vehicle is freshly manufactured (${age} month${age === 1 ? '' : 's'} old). Safe to proceed.`;
-    } else if (age <= 6) {
-      result.status = 'fresh';
-      result.message = `Vehicle is standard age (${age} months old). Safe to proceed.`;
-    } else if (age <= 12) {
-      result.status = 'caution';
-      result.message = `⚠️ Warning: Vehicle is ${age} months old. Inspect closely for yard storage wear, rust, battery, and tyres. Ask for discounts!`;
-    } else {
-      result.status = 'flagged';
-      result.message = `🚨 Defect Risk: Extreme stockyard age (${age} months old). Thoroughly inspect paint, rubber beadings, fluids, and rodent damage. Ask for massive discount or vehicle replacement.`;
-    }
-  } else if (result.year) {
-    result.status = 'unknown';
-    if (brand === 'Hyundai' || brand === 'Kia') {
-      result.message = `Model Year: ${result.year}. To decode month, please input the full 19-character Indian chassis number instead of 17.`;
-    } else {
-      result.message = `Model Year: ${result.year}. Manufacturing month is not standardized in the VIN string. Check the B-pillar compliance plate.`;
-    }
+  if (result.year) {
+    result.message = `Model Year: ${result.year}. Check the B-pillar compliance plate for exact manufacturing month.`;
   } else {
-    result.status = 'unknown';
-    result.message = `VIN decoded from country: ${result.country}. Year/Month codes could not be automatically determined. Check B-pillar plate.`;
+    result.message = `VIN decoded from country: ${result.country}. Year codes could not be automatically determined.`;
   }
 
   return result;
