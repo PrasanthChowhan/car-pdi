@@ -3,6 +3,7 @@ export interface ChecklistItemTemplate {
   categoryId: string;
   label: string;
   description?: string; // Optional beginner-friendly hint or explanation
+  extendedDescription?: string; // Detailed breakdown for complex items
 }
 
 export interface Category {
@@ -42,30 +43,33 @@ export const OVERVIEW_VIEWS: OverviewView[] = [
 ];
 
 export const CHECKLIST_TEMPLATES: ChecklistItemTemplate[] = [
-  // Documents & Billing
   { 
     id: 'doc-invoice-price', 
     categoryId: 'documents', 
     label: 'Check if the base car price on your bill matches the official website price',
-    description: 'Why: Sometimes dealers quietly add extra money to the starting price, making you pay more.'
+    description: 'Why: Sometimes dealers quietly add extra money to the starting price, making you pay more.',
+    extendedDescription: 'Dealers sometimes inflate the "Ex-Showroom" price on the quotation sheet. Always open the manufacturer\'s official website on your phone and compare the exact variant price. If they don\'t match, the dealer is trying to pocket the difference.'
   },
   { 
     id: 'doc-rto-fees', 
     categoryId: 'documents', 
     label: 'Check if road tax and registration fees match official government rates',
-    description: 'Why: Dealers sometimes overcharge for taxes. Always ask for the official government receipt.'
+    description: 'Why: Dealers sometimes overcharge for taxes. Always ask for the official government receipt.',
+    extendedDescription: 'Road Tax (RTO) is a strict percentage set by the government. Dealers often overcharge by ₹3,000 to ₹10,000 and label it "RTO Processing". You have the right to ask for the official RTO receipt and demand a refund for any excess amount charged.'
   },
   { 
     id: 'doc-insurance', 
     categoryId: 'documents', 
     label: 'Check insurance details (car value is correct, full bumper-to-bumper cover included)',
-    description: 'Why: Making sure your car is fully covered at its actual value saves you money if there is an accident.'
+    description: 'Why: Making sure your car is fully covered at its actual value saves you money if there is an accident.',
+    extendedDescription: 'Insurance terms are tricky: "IDV" is your car\'s declared value—if the car is totaled, this is what you get paid. Dealers often lower IDV to make the premium look cheap. "Zero-Depreciation" means bumper-to-bumper cover (you pay almost nothing for plastic parts if they break). "RTI" (Return to Invoice) pays you the full original on-road price if the car is stolen or totaled. Ensure these are checked!'
   },
   { 
     id: 'doc-extra-charges', 
     categoryId: 'documents', 
     label: 'Look for "handling" or "logistics" charges on the bill and ask to remove them',
-    description: 'Why: These extra fees are not legally allowed. Dealers sometimes add them just for extra profit.'
+    description: 'Why: These extra fees are not legally allowed. Dealers sometimes add them just for extra profit.',
+    extendedDescription: 'The "ex-showroom" price already includes factory-to-dealer transport and dealer profit. Dealers may illegally add ₹5,000 to ₹25,000 disguised as "Logistics", "Incidental", "Stockyard", "Depot Charges", "Documentation Fees", "Miscellaneous Post-Sale", or "RTO Smoothing" fees. They may also try to force you to buy an "Essential Accessory Kit" which is 100% optional. If you see these, ask for a written justification on their letterhead. Usually, they will remove it immediately to avoid complaints to the manufacturer or RTO.'
   },
   { 
     id: 'doc-spelling', 
@@ -89,13 +93,15 @@ export const CHECKLIST_TEMPLATES: ChecklistItemTemplate[] = [
     id: 'doc-engine-paper', 
     categoryId: 'documents', 
     label: 'Check that the engine number on the engine itself matches your papers perfectly',
-    description: 'Why: This proves the engine in your car is the one the government has on record for you.'
+    description: 'Why: This proves the engine in your car is the one the government has on record for you.',
+    extendedDescription: 'The engine number is usually stamped on the metal engine block itself. You might need to shine a flashlight to see it, or ask the dealer to point it out. It MUST match the number on your Form 22 and insurance document exactly.'
   },
   { 
     id: 'doc-stock-age', 
     categoryId: 'documents', 
     label: 'Check the car\'s build date to make sure it hasn\'t been sitting at the dealer for too long',
-    description: 'Why: Cars sitting outdoors for months can develop paint issues, rust, or weak batteries.'
+    description: 'Why: Cars sitting outdoors for months can develop paint issues, rust, or weak batteries.',
+    extendedDescription: 'Every car has a 17-character VIN (serial number) visible on the bottom corner of the windshield or the driver\'s door frame. You can type this VIN into our app\'s VIN Decoder, and it will tell you exactly what month and year the car was built. If it is more than 3-4 months old, thoroughly check the battery and paint!'
   },
   { 
     id: 'doc-must-have-check', 
@@ -103,8 +109,6 @@ export const CHECKLIST_TEMPLATES: ChecklistItemTemplate[] = [
     label: 'Make sure you get all papers: Bill, Insurance, Pollution paper, Manual, and Warranty cards',
     description: 'Why: Parts like the battery and tyres have their own warranty cards. You need these to claim free repairs.'
   },
-
-  // Identity & Odometer
   { 
     id: 'id-specs', 
     categoryId: 'identity', 
@@ -115,13 +119,15 @@ export const CHECKLIST_TEMPLATES: ChecklistItemTemplate[] = [
     id: 'id-odo', 
     categoryId: 'identity', 
     label: 'Check the mileage meter (it should ideally be under 50 km, definitely under 100 km)',
-    description: 'Why: If it has been driven a lot, it might have been used as a test-drive car for other people.'
+    description: 'Why: If it has been driven a lot, it might have been used as a test-drive car for other people.',
+    extendedDescription: 'It is normal for a brand new car to have 10-50 kilometers on the meter. This comes from testing at the factory and driving it onto transport trucks. However, anything over 100 km is a red flag—it means the dealer might have used it as a test-drive vehicle or driven it from a far away stockyard.'
   },
   { 
     id: 'id-wear', 
     categoryId: 'identity', 
     label: 'Look for signs of use inside: dirty seats, worn-out foot pedals, or dirty tires',
-    description: 'Why: This helps confirm the car is truly brand new and not a cleaned-up old or returned car.'
+    description: 'Why: This helps confirm the car is truly brand new and not a cleaned-up old or returned car.',
+    extendedDescription: 'Look closely at the rubber foot pedals (accelerator and brake). On a truly new car, the rubber should look fresh and matte. If it looks shiny, worn down, or has dirt packed into the grooves, the car has been driven a lot.'
   },
   { 
     id: 'id-records', 
@@ -129,8 +135,6 @@ export const CHECKLIST_TEMPLATES: ChecklistItemTemplate[] = [
     label: 'Take photos of the car\'s ID plates, engine numbers, and the mileage meter for your records',
     description: 'Why: These photos act as proof of the car\'s condition when you received it, just in case.'
   },
-
-  // Exterior & Paint
   { 
     id: 'ext-light-check', 
     categoryId: 'exterior', 
@@ -141,7 +145,8 @@ export const CHECKLIST_TEMPLATES: ChecklistItemTemplate[] = [
     id: 'ext-paint-flaws', 
     categoryId: 'exterior', 
     label: 'Check the whole car for paint scratches, dull spots, or areas where the color doesn\'t match',
-    description: 'Why: Uneven paint or color differences mean the car might have been damaged and quickly repainted by the dealer.'
+    description: 'Why: Uneven paint or color differences mean the car might have been damaged and quickly repainted by the dealer.',
+    extendedDescription: 'How to check: Look at the car from an angle, not straight on. If a panel was repainted by the dealer, it might look slightly duller or have an "orange peel" bumpy texture compared to the smooth factory paint. Also check the black rubber window seals for accidental paint overspray.'
   },
   { 
     id: 'ext-high-risk-areas', 
@@ -153,7 +158,8 @@ export const CHECKLIST_TEMPLATES: ChecklistItemTemplate[] = [
     id: 'ext-panel-gaps-verify', 
     categoryId: 'exterior', 
     label: 'Make sure the gaps between the doors, hood, and body are even everywhere',
-    description: 'Why: Weird or uneven gaps usually mean a part was replaced or the car had a small accident during delivery.'
+    description: 'Why: Weird or uneven gaps usually mean a part was replaced or the car had a small accident during delivery.',
+    extendedDescription: 'Try this trick: Slide your finger along the gap between the front door and the car body on the left side. Then do the exact same thing on the right side. The gap should feel exactly the same size. If one side is much wider, the door was removed or the car was in a crash.'
   },
   { 
     id: 'ext-doors-operation', 
@@ -167,8 +173,6 @@ export const CHECKLIST_TEMPLATES: ChecklistItemTemplate[] = [
     label: 'Check that the rubber seals around the doors and windows are soft and firmly in place',
     description: 'Why: Loose or dry rubber seals will let rain water leak into your car and cause loud wind noise on the highway.'
   },
-
-  // Tyres, Wheels & Brakes
   { 
     id: 'tyre-spec-match', 
     categoryId: 'tyres', 
@@ -179,13 +183,15 @@ export const CHECKLIST_TEMPLATES: ChecklistItemTemplate[] = [
     id: 'tyre-mfg-date', 
     categoryId: 'tyres', 
     label: 'Check the date printed on the tires to make sure they are new (not more than 6 months old)',
-    description: 'Why: Rubber goes bad as it gets old. Old tires can crack easily and are unsafe for driving fast.'
+    description: 'Why: Rubber goes bad as it gets old. Old tires can crack easily and are unsafe for driving fast.',
+    extendedDescription: 'Every tyre has a 4-digit code printed in a small oval on its side. For example, "3223" means the tyre was made in the 32nd week of 2023. If the date is more than a year old, tell the dealer you want fresh tyres. Rubber degrades even when just sitting in the sun.'
   },
   { 
     id: 'tyre-physical-check', 
     categoryId: 'tyres', 
     label: 'Look closely at all tires for any cuts, bubbles on the side, or nails stuck in them',
-    description: 'Why: Damage to the side of a tire cannot be fixed and means you need a completely new tire.'
+    description: 'Why: Damage to the side of a tire cannot be fixed and means you need a completely new tire.',
+    extendedDescription: 'If a car hit a deep pothole while being transported, the tyre sidewall might have a "bubble" (it looks like a small balloon popping out). This means the internal structure is broken and the tyre could explode at high speeds. It must be replaced immediately.'
   },
   { 
     id: 'tyre-rims-rash', 
@@ -209,10 +215,9 @@ export const CHECKLIST_TEMPLATES: ChecklistItemTemplate[] = [
     id: 'tyre-pressure-adjust', 
     categoryId: 'tyres', 
     label: 'Ask the dealer to set the tire air pressure to the normal driving level',
-    description: 'Why: Cars are shipped with too much air in the tires to protect them. Driving like this will make the ride very bumpy.'
+    description: 'Why: Cars are shipped with too much air in the tires to protect them. Driving like this will make the ride very bumpy.',
+    extendedDescription: 'To prevent tires from going flat during months of shipping, factories pump them up to 45-50 PSI. Dealers often forget to lower this back to the normal 32-35 PSI during delivery. Driving with over-inflated tires is bouncy, uncomfortable, and dangerous for braking.'
   },
-
-  // Glass & Lights
   { 
     id: 'glass-cracks', 
     categoryId: 'glass_lights', 
@@ -223,7 +228,8 @@ export const CHECKLIST_TEMPLATES: ChecklistItemTemplate[] = [
     id: 'lights-fogging', 
     categoryId: 'glass_lights', 
     label: 'Look inside the headlights and taillights for water drops, fog, or broken plastic clips',
-    description: 'Why: Water inside the lights means they are not sealed properly and will stop working very soon.'
+    description: 'Why: Water inside the lights means they are not sealed properly and will stop working very soon.',
+    extendedDescription: 'A tiny bit of mist in the corners of a headlight on a rainy day might be normal. However, if you see actual water droplets dripping down or a puddle forming inside the clear plastic, the factory seal is broken and the entire light unit needs to be replaced under warranty.'
   },
   { 
     id: 'lights-test', 
@@ -237,8 +243,6 @@ export const CHECKLIST_TEMPLATES: ChecklistItemTemplate[] = [
     label: 'Gently push on the side mirrors and roof rails to make sure they are attached firmly',
     description: 'Why: Loose parts outside the car can vibrate annoyingly or even fly off while driving on the highway.'
   },
-
-  // Engine & Fluids (ICE-Specific)
   { 
     id: 'eng-clean', 
     categoryId: 'engine', 
@@ -249,7 +253,8 @@ export const CHECKLIST_TEMPLATES: ChecklistItemTemplate[] = [
     id: 'eng-fluids-levels', 
     categoryId: 'engine', 
     label: 'Check that all liquid levels are full: engine oil, colorful engine coolant, brake fluid, and wiper water',
-    description: 'Why: Low oil or engine coolant can ruin your engine very quickly. Dirty oil means the car might have been driven a lot.'
+    description: 'Why: Low oil or engine coolant can ruin your engine very quickly. Dirty oil means the car might have been driven a lot.',
+    extendedDescription: 'How to check: The engine oil is checked using the yellow or orange ring-pull dipstick. Coolant is the brightly colored (pink or green) liquid inside a clear plastic tank—it should be between the MIN and MAX lines. If anything is completely empty, refuse the car.'
   },
   { 
     id: 'eng-wiring-check', 
@@ -273,21 +278,22 @@ export const CHECKLIST_TEMPLATES: ChecklistItemTemplate[] = [
     id: 'eng-exhaust-smoke', 
     categoryId: 'engine', 
     label: 'Look at the tailpipe when starting the car. There should be no thick black, blue, or white smoke',
-    description: 'Why: Thick colored smoke coming from the back is a major warning sign that the engine has internal damage.'
+    description: 'Why: Thick colored smoke coming from the back is a major warning sign that the engine has internal damage.',
+    extendedDescription: 'Different smoke colors mean different problems: Black smoke means the engine is burning too much fuel. Blue smoke means the engine is burning its own oil (a very bad sign for a new car). Thick white smoke (like clouds) means engine coolant is leaking into the engine. Water droplets are normal, colored smoke is not!'
   },
   { 
     id: 'eng-drips', 
     categoryId: 'engine', 
     label: 'After running the car for a few minutes, look under the engine for any fresh liquid drips on the floor',
-    description: 'Why: Fresh drops on the ground mean something is loose and leaking when the engine is running.'
+    description: 'Why: Fresh drops on the ground mean something is loose and leaking when the engine is running.',
+    extendedDescription: 'Important note: If you see clear water dripping from the middle of the car, don\'t panic! That is just harmless water condensation from the AC. But if you see dark oil, green/pink coolant, or smell fuel dripping, that is a major defect.'
   },
-
-  // Battery & High-Voltage (EV-Specific)
   {
     id: 'ev-battery-health',
     categoryId: 'ev',
     label: 'Ask for the battery health report and ensure there are no warning lights on the dashboard',
-    description: 'Why: Electric cars parked for a long time with zero battery can get permanently damaged. A health report proves it is fine.'
+    description: 'Why: Electric cars parked for a long time with zero battery can get permanently damaged. A health report proves it is fine.',
+    extendedDescription: 'Ask the dealer for the SoH (State of Health) diagnostic printout. It should ideally be 100%. If an EV sits in a stockyard for months with a 0% charge, the battery cells take permanent damage. This report is your proof that you are receiving a brand-new, healthy battery.'
   },
   { 
     id: 'ev-port-check', 
@@ -317,13 +323,15 @@ export const CHECKLIST_TEMPLATES: ChecklistItemTemplate[] = [
     id: 'ev-regen-braking',
     categoryId: 'ev',
     label: 'Test the automatic braking (when you let off the gas pedal) to make sure it slows the car down smoothly',
-    description: 'Why: This feature helps charge your battery while driving. It should feel smooth and not jerky.'
+    description: 'Why: This feature helps charge your battery while driving. It should feel smooth and not jerky.',
+    extendedDescription: 'In an EV, taking your foot off the accelerator should make the car feel like it is braking. This is called Regenerative Braking—the electric motor runs backwards to charge the battery. If the car coasts freely without slowing down at all (and the setting is turned on), the system is faulty.'
   },
   {
     id: 'ev-thermal-mgmt',
     categoryId: 'ev',
     label: 'Turn on the AC to the coldest setting and see if the driving range on the screen drops drastically',
-    description: 'Why: A huge drop in range just by turning on the AC might mean the battery cooling system is not working efficiently.'
+    description: 'Why: A huge drop in range just by turning on the AC might mean the battery cooling system is not working efficiently.',
+    extendedDescription: 'In an EV, the AC runs off the main battery. It is normal for the range to drop slightly (like 10-20km) when you turn on the AC. However, if turning on the AC causes the range meter to suddenly plummet by 20% or more, there might be a fault in the battery\'s thermal management system.'
   },
   {
     id: 'ev-warranty-docs',
@@ -331,8 +339,6 @@ export const CHECKLIST_TEMPLATES: ChecklistItemTemplate[] = [
     label: 'Make sure you get the special 8-year warranty paper for the main battery',
     description: 'Why: The battery is the most expensive part of the car. You absolutely need the physical warranty card for it.'
   },
-
-  // Interior & Cabin
   { 
     id: 'int-general', 
     categoryId: 'interior', 
@@ -343,7 +349,8 @@ export const CHECKLIST_TEMPLATES: ChecklistItemTemplate[] = [
     id: 'int-water-leak', 
     categoryId: 'interior', 
     label: 'Lift the floor mats and touch the carpet underneath to make sure it is completely dry',
-    description: 'Why: Wet carpets mean water leaked into the car, which causes bad smells and dangerous electrical problems.'
+    description: 'Why: Wet carpets mean water leaked into the car, which causes bad smells and dangerous electrical problems.',
+    extendedDescription: 'If the carpets are wet, it usually means the AC drain tube is clogged from the factory, or the rubber seals around the windshield weren\'t glued properly. Water inside a car will eventually cause severe electrical shorts.'
   },
   { 
     id: 'int-seats-move', 
@@ -369,8 +376,6 @@ export const CHECKLIST_TEMPLATES: ChecklistItemTemplate[] = [
     label: 'Turn on the AC and smell the air for any bad, moldy, or stale odors',
     description: 'Why: A bad smell usually means mold is growing inside the AC system and needs to be cleaned.'
   },
-
-  // Electronics & AC
   { 
     id: 'elec-instrument', 
     categoryId: 'electronics', 
@@ -411,10 +416,9 @@ export const CHECKLIST_TEMPLATES: ChecklistItemTemplate[] = [
     id: 'elec-obd-scanner', 
     categoryId: 'electronics', 
     label: '(Optional) Have a mechanic plug in a scanner to check for hidden computer errors',
-    description: 'Why: Sometimes dealers hide warning lights by turning them off temporarily. A scanner reads the deep computer memory.'
+    description: 'Why: Sometimes dealers hide warning lights by turning them off temporarily. A scanner reads the deep computer memory.',
+    extendedDescription: 'An OBD (On-Board Diagnostics) scanner is a small device mechanics plug in under the steering wheel to read the car\'s computer. It can reveal hidden error codes that the dealer might have temporarily erased from the dashboard screen.'
   },
-
-  // Road Test & Drive
   { 
     id: 'road-response', 
     categoryId: 'road_test', 
@@ -437,7 +441,8 @@ export const CHECKLIST_TEMPLATES: ChecklistItemTemplate[] = [
     id: 'road-brake-feel', 
     categoryId: 'road_test', 
     label: 'Press the brakes—they should feel tight, and the car should stop straight without vibrating',
-    description: 'Why: If the brake pedal shakes or pulses, the brake discs are damaged and need to be replaced.'
+    description: 'Why: If the brake pedal shakes or pulses, the brake discs are damaged and need to be replaced.',
+    extendedDescription: 'If you feel the brake pedal vibrating or "pulsing" up and down when you brake gently, the metal brake discs are warped. (Note: If you brake very hard on a slippery surface, a vibration is just the ABS safety system working normally, but it shouldn\'t happen on a dry road during a normal stop).'
   },
   { 
     id: 'road-suspension', 
@@ -451,8 +456,6 @@ export const CHECKLIST_TEMPLATES: ChecklistItemTemplate[] = [
     label: 'Check that changing gears (manual or automatic) feels smooth and easy, without heavy jerks',
     description: 'Why: Hard or jerky gear changes point to a serious problem with the transmission system.'
   },
-
-  // Accessories & Keys
   { 
     id: 'acc-verify', 
     categoryId: 'accessories', 
@@ -475,7 +478,8 @@ export const CHECKLIST_TEMPLATES: ChecklistItemTemplate[] = [
     id: 'acc-all-keys', 
     categoryId: 'accessories', 
     label: 'Make sure you receive two sets of keys, and test that both of them can lock and start the car',
-    description: 'Why: Smart keys are very expensive to replace. Make sure both keys actually work with your car.'
+    description: 'Why: Smart keys are very expensive to replace. Make sure both keys actually work with your car.',
+    extendedDescription: 'A single modern smart key (key fob) costs between ₹5,000 and ₹15,000 to replace. If the dealer tells you "we will give you the second key later," do not sign the delivery papers until they put that promise in writing!'
   },
 ];
 

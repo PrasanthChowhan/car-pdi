@@ -176,6 +176,14 @@ export default function ChecklistItemRow({ item, updateStatus, updateNote, updat
               {description}
             </span>
           )}
+          {template?.extendedDescription && !isPassed && (
+            <details style={{ marginTop: '4px' }}>
+              <summary style={{ fontSize: '12px', color: 'var(--color-primary)', cursor: 'pointer', fontWeight: 500 }}>Read More & Examples</summary>
+              <div style={{ marginTop: '6px', fontSize: '12.5px', color: 'var(--color-body)', backgroundColor: 'var(--color-surface)', padding: '10px', borderRadius: 'var(--rounded-md)', border: '1px solid var(--color-hairline)', lineHeight: 1.5 }}>
+                {template.extendedDescription}
+              </div>
+            </details>
+          )}
         </div>
 
         {/* Comment Icon (Passed notes toggler) */}
