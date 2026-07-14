@@ -25,7 +25,7 @@ export default function ActiveSessionPanel({ vehicle, items, onResume, onStartFr
         </p>
       </div>
 
-      <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-lg)' }}>
+      <div id="active-session-card" className="card" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-lg)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '12px', borderBottom: '1px solid var(--color-hairline)', paddingBottom: 'var(--spacing-base)' }}>
           <div style={{ textAlign: 'left' }}>
             <h3 className="title-md" style={{ color: 'var(--color-ink)', marginBottom: '4px' }}>

@@ -9,7 +9,7 @@ import SetupForm from '../setup/SetupForm';
 
 export default function SetupPage() {
   const navigate = useNavigate();
-  const { vehicle, items, isHydrated, setVehicle, setItems, resetInspection, hydrateStore } = useInspectionStore();
+  const { vehicle, items, isHydrated, setVehicle, setItems, resetInspection, hydrateStore, startDemoInspection } = useInspectionStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -76,6 +76,10 @@ export default function SetupPage() {
     <SetupForm
       onSubmit={handleSetupSubmit}
       isSubmitting={isSubmitting}
+      onTryDemo={() => {
+        startDemoInspection();
+        navigate('/inspection');
+      }}
     />
   );
 }

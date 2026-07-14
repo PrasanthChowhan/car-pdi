@@ -26,6 +26,10 @@ export interface AppState {
   items: Record<string, ChecklistItem>;
   overviewPhotos?: Record<string, string>; // Maps view ID to photoId (UUID in blobStore)
   metadata?: Record<string, string>;       // Maps metadata ID to string value (e.g. dealerName, signatures)
+  hasSeenTutorial?: boolean;
+  hasDismissedChecklistHint?: boolean;
+  hasDismissedTyreHint?: boolean;
+  isDemoMode?: boolean;
 }
 
 const STATE_KEY = 'pdi_app_state';

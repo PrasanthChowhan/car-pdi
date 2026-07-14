@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { decodeTyreDOT } from '../../lib/decoderUtils';
 import { Disc, Info, ChevronDown, ChevronUp } from 'lucide-react';
+import { useInspectionStore } from '../../store/useInspectionStore';
+import HintBanner from './HintBanner';
 
 interface TyreDOTDecoderProps {
   initialNote?: string;
@@ -8,6 +10,7 @@ interface TyreDOTDecoderProps {
 }
 
 export default function TyreDOTDecoder({ initialNote, onApply }: TyreDOTDecoderProps) {
+  const { hasDismissedTyreHint, setHasDismissedTyreHint } = useInspectionStore();
   const [tyreDOTs, setTyreDOTs] = useState({ FL: '', FR: '', RL: '', RR: '', SP: '' });
   const [showVisual, setShowVisual] = useState(false);
 
@@ -120,6 +123,13 @@ export default function TyreDOTDecoder({ initialNote, onApply }: TyreDOTDecoderP
             </picture>
           </div>
         </div>
+      )}
+
+      {!hasDismissedTyreHint && (
+        <HintBanner
+          message="💡 Tip: Look for the 4-digit number (WWYY) on the tyre's outer sidewall (e.g. '1224' for Week 12 of 2024)."
+          onDismiss={() => setHasDismissedTyreHint(true)}
+        />
       )}
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(70px, 1fr))', gap: '8px' }}>

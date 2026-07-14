@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import TyreDOTDecoder from '../common/TyreDOTDecoder';
 import VINDecoder from '../common/VINDecoder';
+import HintBanner from '../common/HintBanner';
 
 export default function InspectionPage() {
   const navigate = useNavigate();
@@ -32,7 +33,9 @@ export default function InspectionPage() {
     passAllCategoryItems,
     resetCategoryItems,
     hydrateStore,
-    setVehicle
+    setVehicle,
+    hasDismissedChecklistHint,
+    setHasDismissedChecklistHint
   } = useInspectionStore();
   const [selectedCategory, setSelectedCategory] = useState('overview');
   const tabsListRef = useRef<HTMLDivElement>(null);
@@ -195,6 +198,13 @@ export default function InspectionPage() {
           <div style={{ height: '100%', width: `${progressPercent}%`, backgroundColor: 'var(--color-primary)', transition: 'width 0.3s ease' }}></div>
         </div>
       </div>
+
+      {!hasDismissedChecklistHint && (
+        <HintBanner
+          message="💡 Tip: Tap the circular check mark to Pass an item, or the warning triangle to Flag defects and add photos/notes."
+          onDismiss={() => setHasDismissedChecklistHint(true)}
+        />
+      )}
 
       {/* Horizontal Tabs with Fades */}
       <div className="category-tabs-container">

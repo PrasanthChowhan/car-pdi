@@ -492,6 +492,7 @@ export default function SummaryPage() {
       {/* Action Dashboard Buttons */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: 'var(--spacing-xxl)' }}>
         <button 
+          id="download-pdf-btn"
           className="button-primary" 
           onClick={handleGeneratePDF}
           disabled={generating}
@@ -533,7 +534,7 @@ export default function SummaryPage() {
       )}
 
       {/* Flagged Items Detail List */}
-      {flagged > 0 && (
+      {flagged > 0 ? (
         <div style={{ textAlign: 'left', marginTop: 'var(--spacing-xl)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: 'var(--spacing-md)', borderBottom: '1px solid var(--color-hairline)', paddingBottom: '8px' }}>
             <ShieldAlert size={20} style={{ color: 'var(--color-semantic-error)' }} />
@@ -569,6 +570,23 @@ export default function SummaryPage() {
               </div>
             ))}
           </div>
+        </div>
+      ) : (
+        <div style={{
+          textAlign: 'center',
+          padding: '40px 20px',
+          border: '1px dashed var(--color-hairline-strong)',
+          borderRadius: 'var(--rounded-md)',
+          color: 'var(--color-muted)',
+          backgroundColor: 'var(--color-canvas-soft)',
+          marginTop: 'var(--spacing-xl)',
+          marginBottom: 'var(--spacing-xl)'
+        }}>
+          <ShieldCheck size={36} style={{ color: 'var(--color-semantic-success)', marginBottom: '12px' }} />
+          <h4 className="title-md" style={{ margin: '0 0 6px 0', color: 'var(--color-ink)', fontWeight: 600 }}>No Defects Flagged Yet</h4>
+          <p className="body-sm" style={{ margin: 0, color: 'var(--color-muted)', lineHeight: 1.5 }}>
+            Flag items as defects (using the warning triangle 🚩) during your stockyard inspection to compile them here for your final PDF report.
+          </p>
         </div>
       )}
     </div>

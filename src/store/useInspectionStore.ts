@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import type { AppState, VehicleInfo, ChecklistItem } from '../lib/storage';
 import { saveAppState, loadAppState, clearAppState, clearAllBlobs, deleteImageBlob } from '../lib/storage';
+import { CHECKLIST_TEMPLATES } from '../lib/checklistData';
 
 interface InspectionStore extends AppState {
   isHydrated: boolean;
@@ -15,6 +16,14 @@ interface InspectionStore extends AppState {
   resetCategoryItems: (categoryId: string) => Promise<void>;
   resetInspection: () => Promise<void>;
   hydrateStore: () => Promise<void>;
+  setHasSeenTutorial: (seen: boolean) => void;
+  setHasDismissedChecklistHint: (dismissed: boolean) => void;
+  setHasDismissedTyreHint: (dismissed: boolean) => void;
+  isDemoMode: boolean;
+  setDemoMode: (enabled: boolean) => void;
+  startDemoInspection: () => void;
+  tutorialStep: number;
+  setTutorialStep: (step: number) => void;
 }
 
 // Debounce helper to prevent excessive I/O writes during rapid user actions (like typing)
@@ -43,34 +52,39 @@ const debouncedSaveAppState = debounce((state: AppState) => {
   });
 }, 1000);
 
+const getAppStateForSaving = (state: any): AppState => ({
+  version: 1,
+  vehicle: state.vehicle,
+  items: state.items,
+  overviewPhotos: state.overviewPhotos,
+  metadata: state.metadata,
+  hasSeenTutorial: state.hasSeenTutorial,
+  hasDismissedChecklistHint: state.hasDismissedChecklistHint,
+  hasDismissedTyreHint: state.hasDismissedTyreHint,
+  isDemoMode: state.isDemoMode,
+});
+
 export const useInspectionStore = create<InspectionStore>((set, get) => ({
   version: 1,
   vehicle: null,
   items: {},
   overviewPhotos: {},
   metadata: {},
+  hasSeenTutorial: undefined,
+  hasDismissedChecklistHint: undefined,
+  hasDismissedTyreHint: undefined,
+  isDemoMode: false,
   isHydrated: false,
+  tutorialStep: 0,
 
   setVehicle: (vehicle) => {
     set({ vehicle });
-    debouncedSaveAppState({
-      version: 1,
-      vehicle,
-      items: get().items,
-      overviewPhotos: get().overviewPhotos,
-      metadata: get().metadata,
-    });
+    debouncedSaveAppState(getAppStateForSaving(get()));
   },
 
   setItems: (items) => {
     set({ items });
-    debouncedSaveAppState({
-      version: 1,
-      vehicle: get().vehicle,
-      items,
-      overviewPhotos: get().overviewPhotos,
-      metadata: get().metadata,
-    });
+    debouncedSaveAppState(getAppStateForSaving(get()));
   },
 
   updateItemStatus: (id, status) => {
@@ -89,14 +103,8 @@ export const useInspectionStore = create<InspectionStore>((set, get) => ({
         },
       };
 
-      const updatedState = {
-        version: 1,
-        vehicle: state.vehicle,
-        items: updatedItems,
-        overviewPhotos: state.overviewPhotos,
-        metadata: state.metadata,
-      };
-      debouncedSaveAppState(updatedState);
+      const updatedState = { ...state, items: updatedItems };
+      debouncedSaveAppState(getAppStateForSaving(updatedState));
       return { items: updatedItems };
     });
   },
@@ -111,14 +119,8 @@ export const useInspectionStore = create<InspectionStore>((set, get) => ({
         [id]: { ...item, note },
       };
 
-      const updatedState = {
-        version: 1,
-        vehicle: state.vehicle,
-        items: updatedItems,
-        overviewPhotos: state.overviewPhotos,
-        metadata: state.metadata,
-      };
-      debouncedSaveAppState(updatedState);
+      const updatedState = { ...state, items: updatedItems };
+      debouncedSaveAppState(getAppStateForSaving(updatedState));
       return { items: updatedItems };
     });
   },
@@ -133,14 +135,8 @@ export const useInspectionStore = create<InspectionStore>((set, get) => ({
         [id]: { ...item, photoId },
       };
 
-      const updatedState = {
-        version: 1,
-        vehicle: state.vehicle,
-        items: updatedItems,
-        overviewPhotos: state.overviewPhotos,
-        metadata: state.metadata,
-      };
-      debouncedSaveAppState(updatedState);
+      const updatedState = { ...state, items: updatedItems };
+      debouncedSaveAppState(getAppStateForSaving(updatedState));
       return { items: updatedItems };
     });
   },
@@ -155,14 +151,8 @@ export const useInspectionStore = create<InspectionStore>((set, get) => ({
         delete updatedPhotos[key];
       }
 
-      const updatedState = {
-        version: 1,
-        vehicle: state.vehicle,
-        items: state.items,
-        overviewPhotos: updatedPhotos,
-        metadata: state.metadata,
-      };
-      debouncedSaveAppState(updatedState);
+      const updatedState = { ...state, overviewPhotos: updatedPhotos };
+      debouncedSaveAppState(getAppStateForSaving(updatedState));
       return { overviewPhotos: updatedPhotos };
     });
   },
@@ -174,14 +164,8 @@ export const useInspectionStore = create<InspectionStore>((set, get) => ({
         [key]: value,
       };
 
-      const updatedState = {
-        version: 1,
-        vehicle: state.vehicle,
-        items: state.items,
-        overviewPhotos: state.overviewPhotos,
-        metadata: updatedMetadata,
-      };
-      debouncedSaveAppState(updatedState);
+      const updatedState = { ...state, metadata: updatedMetadata };
+      debouncedSaveAppState(getAppStateForSaving(updatedState));
       return { metadata: updatedMetadata };
     });
   },
@@ -203,14 +187,8 @@ export const useInspectionStore = create<InspectionStore>((set, get) => ({
       });
       if (!changed) return state;
 
-      const updatedState = {
-        version: 1,
-        vehicle: state.vehicle,
-        items: updatedItems,
-        overviewPhotos: state.overviewPhotos,
-        metadata: state.metadata,
-      };
-      debouncedSaveAppState(updatedState);
+      const updatedState = { ...state, items: updatedItems };
+      debouncedSaveAppState(getAppStateForSaving(updatedState));
       return { items: updatedItems };
     });
   },
@@ -239,19 +217,13 @@ export const useInspectionStore = create<InspectionStore>((set, get) => ({
     if (changed) {
       set({ items: updatedItems });
       debouncedSaveAppState.cancel(); // Cancel any pending auto-saves
-      await saveAppState({
-        version: 1,
-        vehicle: state.vehicle,
-        items: updatedItems,
-        overviewPhotos: state.overviewPhotos,
-        metadata: state.metadata,
-      });
+      await saveAppState(getAppStateForSaving(get()));
     }
   },
 
   resetInspection: async () => {
     debouncedSaveAppState.cancel(); // Cancel any pending auto-saves to prevent race condition write-back
-    set({ vehicle: null, items: {}, overviewPhotos: {}, metadata: {} });
+    set({ vehicle: null, items: {}, overviewPhotos: {}, metadata: {}, hasSeenTutorial: undefined, isDemoMode: false });
     await clearAppState();
     await clearAllBlobs();
   },
@@ -273,6 +245,10 @@ export const useInspectionStore = create<InspectionStore>((set, get) => ({
           items: cachedState.items,
           overviewPhotos: cachedState.overviewPhotos || {},
           metadata: cachedState.metadata || {},
+          hasSeenTutorial: cachedState.hasSeenTutorial,
+          hasDismissedChecklistHint: cachedState.hasDismissedChecklistHint,
+          hasDismissedTyreHint: cachedState.hasDismissedTyreHint,
+          isDemoMode: cachedState.isDemoMode || false,
           isHydrated: true,
         });
       } else {
@@ -282,5 +258,96 @@ export const useInspectionStore = create<InspectionStore>((set, get) => ({
       console.error('Failed to hydrate inspection store:', error);
       set({ isHydrated: true });
     }
+  },
+
+  setHasSeenTutorial: (seen) => {
+    set({ hasSeenTutorial: seen });
+    saveAppState(getAppStateForSaving(get())).catch((error) => {
+      console.error('Failed to save tutorial status:', error);
+    });
+  },
+
+  setHasDismissedChecklistHint: (dismissed) => {
+    set({ hasDismissedChecklistHint: dismissed });
+    saveAppState(getAppStateForSaving(get())).catch((error) => {
+      console.error('Failed to save checklist hint status:', error);
+    });
+  },
+
+  setHasDismissedTyreHint: (dismissed) => {
+    set({ hasDismissedTyreHint: dismissed });
+    saveAppState(getAppStateForSaving(get())).catch((error) => {
+      console.error('Failed to save tyre hint status:', error);
+    });
+  },
+
+  setDemoMode: (enabled) => {
+    set({ isDemoMode: enabled });
+    saveAppState(getAppStateForSaving(get())).catch((error) => {
+      console.error('Failed to save demo mode status:', error);
+    });
+  },
+
+  startDemoInspection: () => {
+    // Clear any existing inspection state
+    debouncedSaveAppState.cancel();
+    
+    // Set Demo Vehicle details (Tesla Model Y)
+    const demoVehicle: VehicleInfo = {
+      make: 'Tesla',
+      model: 'Model Y (Demo)',
+      vin: 'DE1234567890MO',
+      isEV: true
+    };
+    
+    // Build initial checklist items
+    const demoItems: Record<string, ChecklistItem> = {};
+    
+    // 1. Add all EV checklist templates
+    CHECKLIST_TEMPLATES.forEach((template) => {
+      // Skip ICE-specific checks
+      if (template.categoryId === 'engine') {
+        return;
+      }
+      
+      demoItems[template.id] = {
+        id: template.id,
+        categoryId: template.categoryId,
+        label: template.label,
+        status: 'pending'
+      };
+    });
+    
+    // 2. Pre-pass a few items to simulate progress!
+    const prePassedIds = [
+      'doc-invoice-price',
+      'doc-rto-fees',
+      'ident-odometer',
+      'ident-keys'
+    ];
+    
+    prePassedIds.forEach((id) => {
+      if (demoItems[id]) {
+        demoItems[id].status = 'pass';
+        demoItems[id].note = 'Verified and correct (Pre-filled Demo)';
+      }
+    });
+    
+    set({
+      vehicle: demoVehicle,
+      items: demoItems,
+      overviewPhotos: {},
+      metadata: {},
+      isDemoMode: true,
+      hasSeenTutorial: true // Skip welcome sheet in demo mode
+    });
+    
+    saveAppState(getAppStateForSaving(get())).catch((error) => {
+      console.error('Failed to save demo state:', error);
+    });
+  },
+
+  setTutorialStep: (step) => {
+    set({ tutorialStep: step });
   },
 }));
