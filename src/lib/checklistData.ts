@@ -46,436 +46,436 @@ export const CHECKLIST_TEMPLATES: ChecklistItemTemplate[] = [
   { 
     id: 'doc-invoice-price', 
     categoryId: 'documents', 
-    label: 'Verify ex-showroom price on invoice matches manufacturer official website',
-    description: 'Why: Dealers may sneak in inflated ex-showroom prices above the official MSRP, especially on popular models, costing you thousands extra.'
+    label: 'Check if the base car price on your bill matches the official website price',
+    description: 'Why: Sometimes dealers quietly add extra money to the starting price, making you pay more.'
   },
   { 
     id: 'doc-rto-fees', 
     categoryId: 'documents', 
-    label: 'Verify RTO tax, road tax, and registration fees against government sources',
-    description: 'Why: Dealers frequently overcharge for road tax and registration, pocketing the difference. Always cross-check against the official government receipt.'
+    label: 'Check if road tax and registration fees match official government rates',
+    description: 'Why: Dealers sometimes overcharge for taxes. Always ask for the official government receipt.'
   },
   { 
     id: 'doc-insurance', 
     categoryId: 'documents', 
-    label: 'Verify insurance details (correct IDV, zero-dep/RTI add-ons, NCB if transferred)',
-    description: 'Why: Dealers markup insurance policies up to 50%. Ensuring IDV matches car cost and zero-depreciation is active prevents massive out-of-pocket claims.'
+    label: 'Check insurance details (car value is correct, full bumper-to-bumper cover included)',
+    description: 'Why: Making sure your car is fully covered at its actual value saves you money if there is an accident.'
   },
   { 
     id: 'doc-extra-charges', 
     categoryId: 'documents', 
-    label: 'Check for illegal handling/logistics charges, and ask to remove them',
-    description: 'Why: Logistics/handling fees are officially declared illegal by courts and governments. Dealers add them as hidden profit margins.'
+    label: 'Look for "handling" or "logistics" charges on the bill and ask to remove them',
+    description: 'Why: These extra fees are not legally allowed. Dealers sometimes add them just for extra profit.'
   },
   { 
     id: 'doc-spelling', 
     categoryId: 'documents', 
-    label: 'Confirm your name and address are spelled 100% correctly on all documents',
-    description: 'Why: A single spelling mistake on registration forms, tax invoices, or insurance documents can void insurance claims or delay registration.'
+    label: 'Make sure your name and address are spelled perfectly on all papers',
+    description: 'Why: A small spelling mistake can cause big problems with your insurance or car registration later.'
   },
   { 
     id: 'doc-specs-paper', 
     categoryId: 'documents', 
-    label: 'Verify model, variant, engine/chassis number match between invoice, insurance, and Form 22',
-    description: 'Why: Ensures the dealer does not register or insure a lower trim level by mistake, or deliver a variant different from what you paid for.'
+    label: 'Check that the car model and features on the papers match exactly what you ordered',
+    description: 'Why: This makes sure you are actually getting the exact car and features you paid for.'
   },
   { 
     id: 'doc-vin-paper', 
     categoryId: 'documents', 
-    label: 'Physical VIN (chassis number) matches paperwork exactly',
-    description: 'Why: If a single digit is mismatched, the car is legally not yours, and registration or insurance claims will be rejected.'
+    label: 'Check that the car\'s unique ID number (VIN) on the car matches your papers perfectly',
+    description: 'Why: If even one number is wrong, the car isn\'t legally yours and you could face insurance issues.'
   },
   { 
     id: 'doc-engine-paper', 
     categoryId: 'documents', 
-    label: 'Physical engine number or motor ID matches paperwork exactly',
-    description: 'Why: Confirms that the physical engine block installed in the car is the same one registered on government databases, preventing legal issues.'
+    label: 'Check that the engine number on the engine itself matches your papers perfectly',
+    description: 'Why: This proves the engine in your car is the one the government has on record for you.'
   },
   { 
     id: 'doc-stock-age', 
     categoryId: 'documents', 
-    label: 'Decode VIN to verify manufacturing date and ensure it is not old stock',
-    description: 'Why: Dealers push older inventory that has sat in open stockyards, suffering from paint oxidation, rusty brakes, and deep battery discharge.'
+    label: 'Check the car\'s build date to make sure it hasn\'t been sitting at the dealer for too long',
+    description: 'Why: Cars sitting outdoors for months can develop paint issues, rust, or weak batteries.'
   },
   { 
     id: 'doc-must-have-check', 
     categoryId: 'documents', 
-    label: 'Verify presence of Invoice, Sales Cert, Insurance, PUC, Manual, Service Book, and separate Warranties',
-    description: 'Why: Third-party accessories (like batteries or tyres) have separate warranties from manufacturers. You need these physical cards to claim warranty.'
+    label: 'Make sure you get all papers: Bill, Insurance, Pollution paper, Manual, and Warranty cards',
+    description: 'Why: Parts like the battery and tyres have their own warranty cards. You need these to claim free repairs.'
   },
 
   // Identity & Odometer
   { 
     id: 'id-specs', 
     categoryId: 'identity', 
-    label: 'Verify engine type, transmission, safety kit (airbags), screen size, and wheels match booking',
-    description: 'Why: Prevents variant bait-and-switch discrepancies (e.g., getting steel wheels instead of alloys or fewer airbags than booking specs).'
+    label: 'Check that the car has the right features (like screen size, wheels, type of seats) as ordered',
+    description: 'Why: Make sure they didn\'t accidentally give you a cheaper version of the car.'
   },
   { 
     id: 'id-odo', 
     categoryId: 'identity', 
-    label: 'Check odometer (ideal < 50 km, acceptable < 100 km, over 100 km is a red flag)',
-    description: 'Why: High mileage (>100 km) suggests the vehicle was used as a test-drive car, dealer demo, or driven roughly between stockyards.'
+    label: 'Check the mileage meter (it should ideally be under 50 km, definitely under 100 km)',
+    description: 'Why: If it has been driven a lot, it might have been used as a test-drive car for other people.'
   },
   { 
     id: 'id-wear', 
     categoryId: 'identity', 
-    label: 'Look for signs of use: worn pedals, scuffed seats, front stone chips, or dirty tyre treads',
-    description: 'Why: Confirms the car is brand new and not a refurbished demonstration unit or customer return that was cleaned up.'
+    label: 'Look for signs of use inside: dirty seats, worn-out foot pedals, or dirty tires',
+    description: 'Why: This helps confirm the car is truly brand new and not a cleaned-up old or returned car.'
   },
   { 
     id: 'id-records', 
     categoryId: 'identity', 
-    label: 'Take backup photos of physical VIN plates, engine/motor numbers, and odometer readings',
-    description: 'Why: Serves as absolute proof of the vehicle\'s original condition and identity should any discrepancies arise after you drive home.'
+    label: 'Take photos of the car\'s ID plates, engine numbers, and the mileage meter for your records',
+    description: 'Why: These photos act as proof of the car\'s condition when you received it, just in case.'
   },
 
   // Exterior & Paint
   { 
     id: 'ext-light-check', 
     categoryId: 'exterior', 
-    label: 'Inspect outdoors in bright natural daylight (showroom lighting hides paint defects)',
-    description: 'Why: Angled showroom spotlights are strategically placed to mask minor scratches, swirl marks, or repainted sections.'
+    label: 'Look at the car outside in natural sunlight (showroom lights can hide scratches)',
+    description: 'Why: Bright, angled lights inside the showroom are designed to make the car look perfect and hide minor flaws.'
   },
   { 
     id: 'ext-paint-flaws', 
     categoryId: 'exterior', 
-    label: 'Check panels for paint scratches, color shade mismatches, overspray, or orange-peel textures',
-    description: 'Why: Mismatched paint shades or rough overspray on rubber sealings indicate the panel was damaged and repainted in the dealer workshop.'
+    label: 'Check the whole car for paint scratches, dull spots, or areas where the color doesn\'t match',
+    description: 'Why: Uneven paint or color differences mean the car might have been damaged and quickly repainted by the dealer.'
   },
   { 
     id: 'ext-high-risk-areas', 
     categoryId: 'exterior', 
-    label: 'Carefully check bumper corners, roof edges, door edges, mirror covers, and handles',
-    description: 'Why: These are the high-contact areas most likely to hit metal ramps or straps during truck loading and transit.'
+    label: 'Look closely at the corners of bumpers, roof edges, door handles, and mirrors',
+    description: 'Why: These spots stick out the most and are easily scratched or dented while being transported on trucks.'
   },
   { 
     id: 'ext-panel-gaps-verify', 
     categoryId: 'exterior', 
-    label: 'Verify panel gaps are uniform and consistent left-to-right (no parts sticking out/sunk)',
-    description: 'Why: Uneven gaps between panels indicate poor factory quality control or a panel that was replaced and misaligned after a yard accident.'
+    label: 'Make sure the gaps between the doors, hood, and body are even everywhere',
+    description: 'Why: Weird or uneven gaps usually mean a part was replaced or the car had a small accident during delivery.'
   },
   { 
     id: 'ext-doors-operation', 
     categoryId: 'exterior', 
-    label: 'Verify doors, hood, and boot open/close smoothly with a solid thud and no grinding noises',
-    description: 'Why: Hard opening or grinding indicates bent hinges or body misalignment, which leads to cabin rattles and water leaks.'
+    label: 'Open and close all doors, the hood, and the trunk to make sure they move smoothly',
+    description: 'Why: Doors that are hard to close might be misaligned, which can cause rattling noises or water leaks later.'
   },
   { 
     id: 'ext-beading-seals', 
     categoryId: 'exterior', 
-    label: 'Check rubber door/window beadings are intact, soft, and properly seated',
-    description: 'Why: Dry-rotted or loose rubber beadings let rainwater leak into the cabin and cause high cabin wind-noise levels at highway speeds.'
+    label: 'Check that the rubber seals around the doors and windows are soft and firmly in place',
+    description: 'Why: Loose or dry rubber seals will let rain water leak into your car and cause loud wind noise on the highway.'
   },
 
   // Tyres, Wheels & Brakes
   { 
     id: 'tyre-spec-match', 
     categoryId: 'tyres', 
-    label: 'Verify tyre brand, size (e.g. 195/60 R16), and type (tubeless/run-flat) match brochure specs',
-    description: 'Why: Dealers sometimes swap premium tyre brands with cheaper alternatives before delivery. Verify all four wheels.'
+    label: 'Check that all tires are from a good brand and match the size mentioned in the brochure',
+    description: 'Why: Sometimes dealers swap good tires for cheaper ones before giving you the car.'
   },
   { 
     id: 'tyre-mfg-date', 
     categoryId: 'tyres', 
-    label: 'Check tyre manufacturing week/year on sidewalls (e.g. 2425) - must be recent and matching',
-    description: 'Why: Rubber degrades with age even when sitting. Mismatched or old stock tyres (>6-12 months old) are prone to early cracks and high-speed blowouts.'
+    label: 'Check the date printed on the tires to make sure they are new (not more than 6 months old)',
+    description: 'Why: Rubber goes bad as it gets old. Old tires can crack easily and are unsafe for driving fast.'
   },
   { 
     id: 'tyre-physical-check', 
     categoryId: 'tyres', 
-    label: 'Inspect all tyres for cuts, bubbles, sidewall damage, or embedded nails',
-    description: 'Why: Sidewall structural bubbles cannot be repaired and require full tyre replacement. This happens from rough loading on trucks.'
+    label: 'Look closely at all tires for any cuts, bubbles on the side, or nails stuck in them',
+    description: 'Why: Damage to the side of a tire cannot be fixed and means you need a completely new tire.'
   },
   { 
     id: 'tyre-rims-rash', 
     categoryId: 'tyres', 
-    label: 'Check alloy wheels/rims for curb rash, scratches, bends, or cracks',
-    description: 'Why: Bends or cracks in alloys compromise tyre air seals. Curb rash indicates the vehicle hit a concrete block during yard transit.'
+    label: 'Check the metal wheels (alloys) for any scratches, bends, or cracks',
+    description: 'Why: Scratched wheels mean the car might have hit a curb while being moved around at the dealership.'
   },
   { 
     id: 'tyre-spare', 
     categoryId: 'tyres', 
-    label: 'Verify spare wheel is present (or check for puncture inflator/sealant kit if vehicle has no spare)',
-    description: 'Why: Many modern cars (especially EVs) omit a spare tyre. Ensure you receive the official compressor and sealant kit instead.'
+    label: 'Make sure the spare tire is present (or the puncture repair kit if your car doesn\'t come with a spare)',
+    description: 'Why: Many new cars don\'t have a spare tire. If so, make sure you get the special air pump and repair kit.'
   },
   { 
     id: 'tyre-tools', 
     categoryId: 'tyres', 
-    label: 'Verify presence of jack, spanner, towing hook, and wheel lock key (if applicable)',
-    description: 'Why: Standard tools are frequently missing or misplaced during dealer cleaning, leaving you stranded during a roadside puncture.'
+    label: 'Check that the jack and tools to change a tire are in the trunk',
+    description: 'Why: These basic tools are sometimes missing, leaving you stuck if you get a flat tire on the road.'
   },
   { 
     id: 'tyre-pressure-adjust', 
     categoryId: 'tyres', 
-    label: 'Have dealer adjust tyres to correct pressure (transport pressure is usually high)',
-    description: 'Why: Vehicles ship at 45-50 PSI to prevent tyre flat-spots during transit. Driving at this pressure causes a harsh ride and braking issues.'
+    label: 'Ask the dealer to set the tire air pressure to the normal driving level',
+    description: 'Why: Cars are shipped with too much air in the tires to protect them. Driving like this will make the ride very bumpy.'
   },
 
   // Glass & Lights
   { 
     id: 'glass-cracks', 
     categoryId: 'glass_lights', 
-    label: 'Check windscreen, side windows, rear windshield, and sunroof for chips or deep scratches',
-    description: 'Why: Tiny windshield chips expand into massive cracks under thermal shock (hot sun or cold AC). Sunroof glass scratches leak water.'
+    label: 'Check all windows, windshield, and sunroof very closely for small chips or deep scratches',
+    description: 'Why: A tiny chip on the glass can quickly spread into a massive crack when parked in the hot sun.'
   },
   { 
     id: 'lights-fogging', 
     categoryId: 'glass_lights', 
-    label: 'Inspect lamp housings for cracks, broken clips, and moisture or fogging inside',
-    description: 'Why: Water inside headlight housings shorts the high-voltage LED arrays. Moisture indicates a cracked seal that requires complete replacement.'
+    label: 'Look inside the headlights and taillights for water drops, fog, or broken plastic clips',
+    description: 'Why: Water inside the lights means they are not sealed properly and will stop working very soon.'
   },
   { 
     id: 'lights-test', 
     categoryId: 'glass_lights', 
-    label: 'Test headlights (high/low), DRLs, indicators, brake/reverse/fog lights, and hazards',
-    description: 'Why: Inoperative lights are safety hazards and point to blown fuses, wiring faults, or loose bulb sockets.'
+    label: 'Turn on and test all lights: headlights (bright and dim), turn signals, brake lights, and hazard lights',
+    description: 'Why: Broken lights are dangerous. If they don\'t turn on, it could be a simple bulb or a bigger wiring problem.'
   },
   { 
     id: 'glass-fittings', 
     categoryId: 'glass_lights', 
-    label: 'Check ORVM housings, roof rails, and plastic cladding for secure, flush fitment',
-    description: 'Why: Loose external trim panels or mirrors rattle at speed and can fly off on highways, presenting a safety hazard.'
+    label: 'Gently push on the side mirrors and roof rails to make sure they are attached firmly',
+    description: 'Why: Loose parts outside the car can vibrate annoyingly or even fly off while driving on the highway.'
   },
 
   // Engine & Fluids (ICE-Specific)
   { 
     id: 'eng-clean', 
     categoryId: 'engine', 
-    label: 'Engine bay is clean, free of oil/coolant leaks, and excessive mud',
-    description: 'Why: A dirty, muddy engine bay indicates the car was parked in water-clogged yards or used for unauthorized test drives.'
+    label: 'Pop the hood and check that the engine area is clean and has no oil leaks or excessive mud',
+    description: 'Why: A very dirty or muddy engine means the car might have been parked in deep water or driven carelessly.'
   },
   { 
     id: 'eng-fluids-levels', 
     categoryId: 'engine', 
-    label: 'Check fluid levels: engine oil (dipstick), coolant reservoir, brake fluid, and windshield washer',
-    description: 'Why: Low oil or coolant levels cause immediate engine overheating. Discolored oil suggests engine wear or testing usage.'
+    label: 'Check that all liquid levels are full: engine oil, colorful engine coolant, brake fluid, and wiper water',
+    description: 'Why: Low oil or engine coolant can ruin your engine very quickly. Dirty oil means the car might have been driven a lot.'
   },
   { 
     id: 'eng-wiring-check', 
     categoryId: 'engine', 
-    label: 'Look for tangled or cut wires, non-OEM clamps, tape, or signs of rodent bite',
-    description: 'Why: Rodents nesting in open stockyards often chew through wiring harnesses, leading to complex electrical failures later.'
+    label: 'Look for cut wires, loose tape, or signs that a rat might have chewed the cables',
+    description: 'Why: Rats love to chew on car wires when cars are parked outside for too long, causing huge electrical problems.'
   },
   {
     id: 'eng-fuel-exhaust-leak',
     categoryId: 'engine',
-    label: 'Check for raw fuel smells (inside/outside cabin) and exhaust alignment',
-    description: 'Why: Strong fuel smells indicate loose fuel lines or injector leaks, which are severe fire hazards.'
+    label: 'Smell for strong gasoline odors inside or outside the car',
+    description: 'Why: A strong smell of petrol or diesel means fuel is leaking, which is extremely dangerous and can cause a fire.'
   },
   { 
     id: 'eng-ignition', 
     categoryId: 'engine', 
-    label: 'Engine starts quickly, idles stably, with no metallic knocks or abnormal vibration',
-    description: 'Why: Hard starting or rough idle indicates spark plug failure, bad fuel, or engine cylinder issues.'
+    label: 'Start the car—it should start instantly, run smoothly, and make no weird clanking noises',
+    description: 'Why: If it struggles to start or shakes a lot, there might be a problem with the engine or bad fuel.'
   },
   { 
     id: 'eng-exhaust-smoke', 
     categoryId: 'engine', 
-    label: 'Observe exhaust on startup for excessive black, blue, or white smoke',
-    description: 'Why: Blue smoke means engine oil leak; white smoke suggests internal coolant leak (head gasket failure); black smoke means poor combustion.'
+    label: 'Look at the tailpipe when starting the car. There should be no thick black, blue, or white smoke',
+    description: 'Why: Thick colored smoke coming from the back is a major warning sign that the engine has internal damage.'
   },
   { 
     id: 'eng-drips', 
     categoryId: 'engine', 
-    label: 'Inspect engine bay floor and underbody for fresh leaks/drips after running the engine',
-    description: 'Why: Running the engine builds oil/coolant pressure. Fresh drips on the floor indicate loose gaskets or hose connections.'
+    label: 'After running the car for a few minutes, look under the engine for any fresh liquid drips on the floor',
+    description: 'Why: Fresh drops on the ground mean something is loose and leaking when the engine is running.'
   },
 
   // Battery & High-Voltage (EV-Specific)
   {
     id: 'ev-battery-health',
     categoryId: 'ev',
-    label: 'Check battery State of Health (SoH) and verify no high-voltage warning lights are active',
-    description: 'Why: EV batteries sitting at 0% charge in stockyards degrade quickly. A diagnostic health report ensures maximum battery life.'
+    label: 'Ask for the battery health report and ensure there are no warning lights on the dashboard',
+    description: 'Why: Electric cars parked for a long time with zero battery can get permanently damaged. A health report proves it is fine.'
   },
   { 
     id: 'ev-port-check', 
     categoryId: 'ev', 
-    label: 'Charging port lid opens smoothly and internal socket pins are clean/undamaged',
-    description: 'Why: Bent or corroded pins in the charging socket prevent fast DC charging or generate heating faults during AC charge sessions.'
+    label: 'Open the charging flap to ensure it moves smoothly and the charging pins inside are clean',
+    description: 'Why: Bent or dirty pins will stop your car from charging properly at public fast chargers.'
   },
   { 
     id: 'ev-cables-bag', 
     categoryId: 'ev', 
-    label: 'Charging cable is present, clean, undamaged, and inside its carrying bag',
-    description: 'Why: EV portable chargers are high-cost components (up to $500/₹30,000) that can be stolen or misplaced in dealership storage.'
+    label: 'Check that the portable home charging cable is in the trunk, looks new, and comes in its bag',
+    description: 'Why: These chargers are very expensive. Sometimes they get lost or swapped at the dealership.'
   },
   {
     id: 'ev-charging-demo',
     categoryId: 'ev',
-    label: 'Request a live charging demonstration; confirm the handshakes and charging start without errors',
-    description: 'Why: Verifies that the internal charger and cooling fans work under active load and communicate properly with charging guns.'
+    label: 'Ask the dealer to plug the car in to show you that it starts charging without any errors',
+    description: 'Why: This proves that the car\'s internal charging system actually works before you take it home.'
   },
   {
     id: 'ev-range-verify',
     categoryId: 'ev',
-    label: 'Verify displayed range is consistent with battery SoC %; watch range stability on road test',
-    description: 'Why: Wild drops in estimated range over a short drive point to defective battery cells or uncalibrated battery management systems.'
+    label: 'Check the remaining range on the screen to see if it makes sense based on the battery percentage',
+    description: 'Why: If the battery says 100% but the range is very low, there might be a problem with the battery system.'
   },
   {
     id: 'ev-regen-braking',
     categoryId: 'ev',
-    label: 'Verify regenerative braking controls and check transition smoothness during road test',
-    description: 'Why: Ensures the EV recovers deceleration energy correctly and transitions smoothly between hydraulic pads and motor braking.'
+    label: 'Test the automatic braking (when you let off the gas pedal) to make sure it slows the car down smoothly',
+    description: 'Why: This feature helps charge your battery while driving. It should feel smooth and not jerky.'
   },
   {
     id: 'ev-thermal-mgmt',
     categoryId: 'ev',
-    label: 'Check battery cooling/heating systems operation and verify AC range impact',
-    description: 'Why: Battery thermal management is critical for EV safety. Excessive range drops when turning on AC suggest system inefficiency.'
+    label: 'Turn on the AC to the coldest setting and see if the driving range on the screen drops drastically',
+    description: 'Why: A huge drop in range just by turning on the AC might mean the battery cooling system is not working efficiently.'
   },
   {
     id: 'ev-warranty-docs',
     categoryId: 'ev',
-    label: 'Confirm battery warranty (8 years / X km) and BMS service documentation are hand-delivered',
-    description: 'Why: EV batteries are the most expensive part of the car. Having original, stamped warranty cards is non-negotiable for future claims.'
+    label: 'Make sure you get the special 8-year warranty paper for the main battery',
+    description: 'Why: The battery is the most expensive part of the car. You absolutely need the physical warranty card for it.'
   },
 
   // Interior & Cabin
   { 
     id: 'int-general', 
     categoryId: 'interior', 
-    label: 'Check seats, door pads, roof liner, dashboard, and carpets for stains, tears, or loose stitching',
-    description: 'Why: Detailing chemicals or yard dirt can stain premium leather upholstery. Tears in roof liners are expensive to replace.'
+    label: 'Check all seats, the roof inside, and the dashboard for stains, rips, or scratches',
+    description: 'Why: Dirty tools or careless cleaning can easily stain light-colored seats or tear the fabric inside.'
   },
   { 
     id: 'int-water-leak', 
     categoryId: 'interior', 
-    label: 'Lift floor mats to check underneath for dampness, mud, or water stains (flooding sign)',
-    description: 'Why: Stagnant water under carpets causes rusted floorboard steel, moldy cabin air, and short circuits in bottom wiring harnesses.'
+    label: 'Lift the floor mats and touch the carpet underneath to make sure it is completely dry',
+    description: 'Why: Wet carpets mean water leaked into the car, which causes bad smells and dangerous electrical problems.'
   },
   { 
     id: 'int-seats-move', 
     categoryId: 'interior', 
-    label: 'Test all manual/electric seat adjustment controls for smooth, full range of motion',
-    description: 'Why: Seat motor gears can bind or catch. Manual slide tracks need proper lubrication to adjust smoothly.'
+    label: 'Move all seats forward, backward, up, and down to make sure the controls work smoothly',
+    description: 'Why: Seats that are hard to move might have broken tracks or stuck motors that need fixing.'
   },
   { 
     id: 'int-belts', 
     categoryId: 'interior', 
-    label: 'Verify all seat belts pull out smoothly, latch securely, and lock when jerked',
-    description: 'Why: Seatbelts are primary lifesavers. A jammed retractor or failed lock means the car is unsafe to drive.'
+    label: 'Pull all the seat belts, click them in, and give them a quick tug to make sure they lock properly',
+    description: 'Why: Seatbelts save lives. If one doesn\'t pull out smoothly or lock when pulled hard, the car is not safe.'
   },
   { 
     id: 'int-glovebox', 
     categoryId: 'interior', 
-    label: 'Verify glovebox (and cooled function), center storage, and armrests open/close properly',
-    description: 'Why: Broken alignment latches on compartments cause annoying cabin squeaks and won\'t lock when parked.'
+    label: 'Open and close the glovebox and center armrest to make sure they latch securely',
+    description: 'Why: Broken latches will make the glovebox stay open or rattle noisily while you drive.'
   },
   { 
     id: 'int-cabin-smell', 
     categoryId: 'interior', 
-    label: 'Check for musty smells or foul odors coming from the HVAC vents',
-    description: 'Why: Musty air conditioning smells indicate mold growth in the cabin filter or pooling water in the evaporator drain.'
+    label: 'Turn on the AC and smell the air for any bad, moldy, or stale odors',
+    description: 'Why: A bad smell usually means mold is growing inside the AC system and needs to be cleaned.'
   },
 
   // Electronics & AC
   { 
     id: 'elec-instrument', 
     categoryId: 'electronics', 
-    label: 'Warning lights show on ignition and all clear completely after starting the engine',
-    description: 'Why: Check engine, ABS, or airbag lights must turn off. Active lights point to critical sensor failures.'
+    label: 'Start the car and make sure all the warning lights on the driver\'s screen turn off',
+    description: 'Why: If lights like "Check Engine" or "Airbag" stay on after starting, there is a major problem with the car.'
   },
   { 
     id: 'elec-climate', 
     categoryId: 'electronics', 
-    label: 'AC/heater cooling is fast and strong, check blower speeds, vent directions, and modes',
-    description: 'Why: Faulty AC compressors or low refrigerant charge cause poor cooling. Blower fan defects make clicking sounds.'
+    label: 'Turn the AC up all the way—it should blow very cold air quickly from all the correct vents',
+    description: 'Why: A weak AC or strange clicking noises mean the system is faulty or low on cooling gas.'
   },
   { 
     id: 'elec-infotainment-test', 
     categoryId: 'electronics', 
-    label: 'Infotainment touchscreen is responsive, test Bluetooth, Apple CarPlay, and Android Auto',
-    description: 'Why: Infotainment units are complex computers. Screen lag, dead touch zones, or connection drops require full system replacement.'
+    label: 'Play with the main touch screen, connect your phone, and make sure it doesn\'t freeze or lag',
+    description: 'Why: The screen is a very expensive computer. If it\'s slow or freezes now, it will only get worse.'
   },
   { 
     id: 'elec-speakers-test', 
     categoryId: 'electronics', 
-    label: 'Check balance/fader to ensure all speakers (front, rear, tweeters) function',
-    description: 'Why: Blown speaker cones rattle at normal volumes. Incorrect factory wiring can leave some speakers disconnected.'
+    label: 'Play some music and check that sound is coming clearly from all the speakers',
+    description: 'Why: Sometimes speakers are blown out or disconnected from the factory by mistake.'
   },
   { 
     id: 'elec-controls-switches', 
     categoryId: 'electronics', 
-    label: 'Test all power windows (auto up/down), central locking, ORVM fold/adjust, and map/boot lights',
-    description: 'Why: Sticky windows suggest motor strain or misaligned tracks. Failed locks leave the car vulnerable to theft.'
+    label: 'Test every button you can find: windows, door locks, mirror adjusters, and inside lights',
+    description: 'Why: Buttons or window motors can be faulty. It\'s better to find out before you take the car home.'
   },
   { 
     id: 'elec-wipers-washer', 
     categoryId: 'electronics', 
-    label: 'Test front/rear wipers, washer spray, and all speed settings',
-    description: 'Why: Dry wiper rubber streaks or scratches the windshield. Clogged washer nozzles make driving in dirt unsafe.'
+    label: 'Test the windshield wipers and spray the washer fluid to make sure they wipe the glass clean',
+    description: 'Why: Old, hard wiper blades will scratch your brand new glass. Blocked sprayers are dangerous when driving in mud.'
   },
   { 
     id: 'elec-obd-scanner', 
     categoryId: 'electronics', 
-    label: 'Optional: Connect OBD-II scanner to verify there are no hidden diagnostic trouble codes (DTCs)',
-    description: 'Why: Dealerships can clear dashboard warning codes temporarily. An OBD scanner reads deep ECU registers for active history faults.'
+    label: '(Optional) Have a mechanic plug in a scanner to check for hidden computer errors',
+    description: 'Why: Sometimes dealers hide warning lights by turning them off temporarily. A scanner reads the deep computer memory.'
   },
 
   // Road Test & Drive
   { 
     id: 'road-response', 
     categoryId: 'road_test', 
-    label: 'Engine/Motor acceleration is smooth with no flat spots, hesitation, or jerking',
-    description: 'Why: Power delivery lag suggests transmission slippage, fuel injection faults, or motor calibration issues.'
+    label: 'While driving, press the gas pedal—the car should speed up smoothly without jerking',
+    description: 'Why: If the car stutters or struggles to speed up, there could be a problem with the engine or gearbox.'
   },
   { 
     id: 'road-steering-pull', 
     categoryId: 'road_test', 
-    label: 'At 60 km/h on a level road, car tracks straight and doesn\'t pull to the left/right',
-    description: 'Why: Wheel pulling indicates bad alignment, uneven tyre pressure, or suspension damage from yard transport impacts.'
+    label: 'On a straight, flat road, let go of the steering wheel slightly to see if the car pulls to one side',
+    description: 'Why: If the car drifts to the left or right, the wheel alignment is bad or the suspension was damaged.'
   },
   { 
     id: 'road-steering-noise', 
     categoryId: 'road_test', 
-    label: 'Turn steering fully left/right at low speed - check for metallic grinding or cracking noises',
-    description: 'Why: Grinding at full lock points to steering rack defects or damaged constant velocity (CV) joints.'
+    label: 'Turn the steering wheel all the way to the left and right while moving slowly to listen for noises',
+    description: 'Why: Grinding or clicking noises when turning mean the steering system has a major defect.'
   },
   { 
     id: 'road-brake-feel', 
     categoryId: 'road_test', 
-    label: 'Brake pedal feels firm and progressive, car brakes straight without vibration or shudder',
-    description: 'Why: Pedal shuddering under braking indicates warped brake rotors, which requires grinding or complete replacement.'
+    label: 'Press the brakes—they should feel tight, and the car should stop straight without vibrating',
+    description: 'Why: If the brake pedal shakes or pulses, the brake discs are damaged and need to be replaced.'
   },
   { 
     id: 'road-suspension', 
     categoryId: 'road_test', 
-    label: 'Drive over bumps - check for suspension squeaks, rattles, or loose metallic thuds',
-    description: 'Why: Squeaking points to dry rubber bushings; heavy metallic thuds indicate leaking shock absorbers or loose stabilizer links.'
+    label: 'Drive over a speed bump or rough road and listen for loud squeaks, rattles, or clunks',
+    description: 'Why: Loud metal noises over bumps usually mean the suspension parts are loose or broken.'
   },
   { 
     id: 'road-transmission', 
     categoryId: 'road_test', 
-    label: 'Verify gear shifts (manual/automatic) are smooth; test paddles or EV creep settings',
-    description: 'Why: Jerking during gear changes indicates low transmission oil or controller module faults.'
+    label: 'Check that changing gears (manual or automatic) feels smooth and easy, without heavy jerks',
+    description: 'Why: Hard or jerky gear changes point to a serious problem with the transmission system.'
   },
 
   // Accessories & Keys
   { 
     id: 'acc-verify', 
     categoryId: 'accessories', 
-    label: 'Check all promised accessories (mats, mud flaps, seat covers, dashcam, body kits) are installed',
-    description: 'Why: Ensure you get everything you paid for in your booking invoice. Dealers forget accessories in rush hours.'
+    label: 'Check that all extra items you paid for (floor mats, seat covers, dashcam) are actually inside the car',
+    description: 'Why: Dealers often forget to install extra accessories in the rush of delivering the car.'
   },
   { 
     id: 'acc-quality-oem', 
     categoryId: 'accessories', 
-    label: 'Ensure accessories are OEM/agreed brands and match the invoice specs without downgrades',
-    description: 'Why: Dealers sometimes install cheaper aftermarket components instead of genuine OEM kits while charging full price.'
+    label: 'Make sure the accessories are the original brand you agreed on, not cheap copies',
+    description: 'Why: Dealers sometimes secretly install cheaper, low-quality parts to save themselves money.'
   },
   { 
     id: 'acc-safety-kit', 
     categoryId: 'accessories', 
-    label: 'Verify presence of first-aid kit, warning triangle, and tyre inflator (if no spare)',
-    description: 'Why: Mandatory roadside safety equipment is often skipped by pre-delivery inspection teams.'
+    label: 'Make sure the emergency first-aid kit and the red warning triangle are in the trunk',
+    description: 'Why: This is basic safety gear you must have by law in case you break down on the road.'
   },
   { 
     id: 'acc-all-keys', 
     categoryId: 'accessories', 
-    label: 'Confirm presence of all keys (usually 2 remotes/fobs); verify each locks, unlocks, and starts',
-    description: 'Why: Smart keys cost up to $300/₹20,000 to replace. Ensure both keys are programmed to your engine immobilizer.'
+    label: 'Make sure you receive two sets of keys, and test that both of them can lock and start the car',
+    description: 'Why: Smart keys are very expensive to replace. Make sure both keys actually work with your car.'
   },
 ];
 
