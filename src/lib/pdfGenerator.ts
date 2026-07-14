@@ -3,31 +3,31 @@ import type { VehicleInfo, ChecklistItem } from './storage';
 import { loadImageBlob } from './storage';
 import { CATEGORIES, OVERVIEW_VIEWS } from './checklistData';
 
-// Helper to convert Blob to base64 Data URL
-function readBlobAsDataURL(blob: Blob): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      resolve(reader.result as string);
-    };
-    reader.onerror = () => {
-      reject(new Error('Failed to read blob as Data URL'));
-    };
-    reader.readAsDataURL(blob);
-  });
+interface LoadedImage {
+  element: HTMLImageElement;
+  width: number;
+  height: number;
+  objectUrl: string;
 }
 
-// Helper to check image dimensions to preserve aspect ratio in PDF
-function getImageDimensions(dataUrl: string): Promise<{ width: number; height: number }> {
-  return new Promise((resolve) => {
+// Helper to load Blob as an Image element without serializing to base64
+function loadBlobAsImage(blob: Blob): Promise<LoadedImage> {
+  return new Promise((resolve, reject) => {
+    const objectUrl = URL.createObjectURL(blob);
     const img = new Image();
     img.onload = () => {
-      resolve({ width: img.naturalWidth, height: img.naturalHeight });
+      resolve({
+        element: img,
+        width: img.naturalWidth || img.width || 4,
+        height: img.naturalHeight || img.height || 3,
+        objectUrl,
+      });
     };
     img.onerror = () => {
-      resolve({ width: 4, height: 3 }); // Default fallback aspect ratio
+      URL.revokeObjectURL(objectUrl);
+      reject(new Error('Failed to load blob as Image'));
     };
-    img.src = dataUrl;
+    img.src = objectUrl;
   });
 }
 
@@ -424,26 +424,26 @@ export async function generatePDIReport(
     doc.rect(x, y, colWidth, rowHeight, 'FD');
 
     if (photoId) {
+      let loadedImage: LoadedImage | null = null;
       try {
         const blob = await loadImageBlob(photoId);
         if (blob) {
-          const dataUrl = await readBlobAsDataURL(blob);
-          const imgSize = await getImageDimensions(dataUrl);
+          loadedImage = await loadBlobAsImage(blob);
           
           const maxW = colWidth - 2;
           const maxH = rowHeight - 8;
           
           let w = maxW;
-          let h = (imgSize.height * maxW) / imgSize.width;
+          let h = (loadedImage.height * maxW) / loadedImage.width;
           if (h > maxH) {
             h = maxH;
-            w = (imgSize.width * maxH) / imgSize.height;
+            w = (loadedImage.width * maxH) / loadedImage.height;
           }
           
           const imgX = x + (colWidth - w) / 2;
           const imgY = y + 1 + (maxH - h) / 2;
           
-          doc.addImage(dataUrl, 'JPEG', imgX, imgY, w, h);
+          doc.addImage(loadedImage.element, 'JPEG', imgX, imgY, w, h);
         }
       } catch (imgError) {
         console.error(`Failed to render overview photo ${view.id} in PDF`, imgError);
@@ -455,6 +455,12 @@ export async function generatePDIReport(
         doc.setFontSize(7.5);
         doc.setTextColor(cError[0], cError[1], cError[2]);
         doc.text('Render Error', x + colWidth / 2, y + (rowHeight - 8) / 2 + 2, { align: 'center' });
+      } finally {
+        if (loadedImage) {
+          URL.revokeObjectURL(loadedImage.objectUrl);
+          loadedImage.element.src = '';
+          loadedImage = null;
+        }
       }
     } else {
       // Draw placeholder
@@ -711,22 +717,22 @@ export async function generatePDIReport(
 
       // Photographic Attachment
       if (item.photoId) {
+        let loadedImage: LoadedImage | null = null;
         try {
           const blob = await loadImageBlob(item.photoId);
           if (blob) {
-            const dataUrl = await readBlobAsDataURL(blob);
-            const imgSize = await getImageDimensions(dataUrl);
+            loadedImage = await loadBlobAsImage(blob);
 
             // Scale calculations
             const maxImgWidth = 110; 
             const maxImgHeight = 72; 
             
             let imgWidth = maxImgWidth;
-            let imgHeight = (imgSize.height * maxImgWidth) / imgSize.width;
+            let imgHeight = (loadedImage.height * maxImgWidth) / loadedImage.width;
 
             if (imgHeight > maxImgHeight) {
               imgHeight = maxImgHeight;
-              imgWidth = (imgSize.width * maxImgHeight) / imgSize.height;
+              imgWidth = (loadedImage.width * maxImgHeight) / loadedImage.height;
             }
 
             // Check page break for image
@@ -737,7 +743,7 @@ export async function generatePDIReport(
             doc.rect(margin - 0.5, currentY - 0.5, imgWidth + 1, imgHeight + 1, 'D');
 
             // Draw Image
-            doc.addImage(dataUrl, 'JPEG', margin, currentY, imgWidth, imgHeight);
+            doc.addImage(loadedImage.element, 'JPEG', margin, currentY, imgWidth, imgHeight);
             currentY += imgHeight + 8;
           }
         } catch (imgError) {
@@ -749,6 +755,12 @@ export async function generatePDIReport(
           doc.text('[Error: Could not render image attachment]', margin + 5, currentY);
           currentY += 8;
           doc.setTextColor(cInk[0], cInk[1], cInk[2]);
+        } finally {
+          if (loadedImage) {
+            URL.revokeObjectURL(loadedImage.objectUrl);
+            loadedImage.element.src = '';
+            loadedImage = null;
+          }
         }
       }
 

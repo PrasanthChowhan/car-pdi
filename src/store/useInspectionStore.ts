@@ -17,7 +17,34 @@ interface InspectionStore extends AppState {
   hydrateStore: () => Promise<void>;
 }
 
+// Debounce helper to prevent excessive I/O writes during rapid user actions (like typing)
+function debounce<T extends (...args: any[]) => any>(fn: T, delay: number) {
+  let timeoutId: ReturnType<typeof setTimeout> | undefined;
+  const debounced = (...args: Parameters<T>) => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+    timeoutId = setTimeout(() => {
+      fn(...args);
+    }, delay);
+  };
+  debounced.cancel = () => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+      timeoutId = undefined;
+    }
+  };
+  return debounced;
+}
+
+const debouncedSaveAppState = debounce((state: AppState) => {
+  saveAppState(state).catch((error) => {
+    console.error('Failed to auto-save app state:', error);
+  });
+}, 1000);
+
 export const useInspectionStore = create<InspectionStore>((set, get) => ({
+  version: 1,
   vehicle: null,
   items: {},
   overviewPhotos: {},
@@ -26,8 +53,8 @@ export const useInspectionStore = create<InspectionStore>((set, get) => ({
 
   setVehicle: (vehicle) => {
     set({ vehicle });
-    // Eagerly sync to IDB
-    saveAppState({
+    debouncedSaveAppState({
+      version: 1,
       vehicle,
       items: get().items,
       overviewPhotos: get().overviewPhotos,
@@ -37,7 +64,8 @@ export const useInspectionStore = create<InspectionStore>((set, get) => ({
 
   setItems: (items) => {
     set({ items });
-    saveAppState({
+    debouncedSaveAppState({
+      version: 1,
       vehicle: get().vehicle,
       items,
       overviewPhotos: get().overviewPhotos,
@@ -61,12 +89,14 @@ export const useInspectionStore = create<InspectionStore>((set, get) => ({
         },
       };
 
-      saveAppState({
+      const updatedState = {
+        version: 1,
         vehicle: state.vehicle,
         items: updatedItems,
         overviewPhotos: state.overviewPhotos,
         metadata: state.metadata,
-      });
+      };
+      debouncedSaveAppState(updatedState);
       return { items: updatedItems };
     });
   },
@@ -81,12 +111,14 @@ export const useInspectionStore = create<InspectionStore>((set, get) => ({
         [id]: { ...item, note },
       };
 
-      saveAppState({
+      const updatedState = {
+        version: 1,
         vehicle: state.vehicle,
         items: updatedItems,
         overviewPhotos: state.overviewPhotos,
         metadata: state.metadata,
-      });
+      };
+      debouncedSaveAppState(updatedState);
       return { items: updatedItems };
     });
   },
@@ -101,12 +133,14 @@ export const useInspectionStore = create<InspectionStore>((set, get) => ({
         [id]: { ...item, photoId },
       };
 
-      saveAppState({
+      const updatedState = {
+        version: 1,
         vehicle: state.vehicle,
         items: updatedItems,
         overviewPhotos: state.overviewPhotos,
         metadata: state.metadata,
-      });
+      };
+      debouncedSaveAppState(updatedState);
       return { items: updatedItems };
     });
   },
@@ -121,12 +155,14 @@ export const useInspectionStore = create<InspectionStore>((set, get) => ({
         delete updatedPhotos[key];
       }
 
-      saveAppState({
+      const updatedState = {
+        version: 1,
         vehicle: state.vehicle,
         items: state.items,
         overviewPhotos: updatedPhotos,
         metadata: state.metadata,
-      });
+      };
+      debouncedSaveAppState(updatedState);
       return { overviewPhotos: updatedPhotos };
     });
   },
@@ -138,12 +174,14 @@ export const useInspectionStore = create<InspectionStore>((set, get) => ({
         [key]: value,
       };
 
-      saveAppState({
+      const updatedState = {
+        version: 1,
         vehicle: state.vehicle,
         items: state.items,
         overviewPhotos: state.overviewPhotos,
         metadata: updatedMetadata,
-      });
+      };
+      debouncedSaveAppState(updatedState);
       return { metadata: updatedMetadata };
     });
   },
@@ -164,12 +202,15 @@ export const useInspectionStore = create<InspectionStore>((set, get) => ({
         }
       });
       if (!changed) return state;
-      saveAppState({
+
+      const updatedState = {
+        version: 1,
         vehicle: state.vehicle,
         items: updatedItems,
         overviewPhotos: state.overviewPhotos,
         metadata: state.metadata,
-      });
+      };
+      debouncedSaveAppState(updatedState);
       return { items: updatedItems };
     });
   },
@@ -197,7 +238,9 @@ export const useInspectionStore = create<InspectionStore>((set, get) => ({
 
     if (changed) {
       set({ items: updatedItems });
+      debouncedSaveAppState.cancel(); // Cancel any pending auto-saves
       await saveAppState({
+        version: 1,
         vehicle: state.vehicle,
         items: updatedItems,
         overviewPhotos: state.overviewPhotos,
@@ -207,22 +250,36 @@ export const useInspectionStore = create<InspectionStore>((set, get) => ({
   },
 
   resetInspection: async () => {
+    debouncedSaveAppState.cancel(); // Cancel any pending auto-saves to prevent race condition write-back
     set({ vehicle: null, items: {}, overviewPhotos: {}, metadata: {} });
     await clearAppState();
     await clearAllBlobs();
   },
 
   hydrateStore: async () => {
-    const cachedState = await loadAppState();
-    if (cachedState) {
-      set({
-        vehicle: cachedState.vehicle,
-        items: cachedState.items,
-        overviewPhotos: cachedState.overviewPhotos || {},
-        metadata: cachedState.metadata || {},
-        isHydrated: true,
-      });
-    } else {
+    try {
+      const cachedState = await loadAppState();
+      if (cachedState) {
+        // Drop state if stored version is different from the code expectation
+        if (cachedState.version !== 1) {
+          console.warn('Hydration state version mismatch. Resetting local app state.');
+          await clearAppState();
+          set({ isHydrated: true });
+          return;
+        }
+        set({
+          version: 1,
+          vehicle: cachedState.vehicle,
+          items: cachedState.items,
+          overviewPhotos: cachedState.overviewPhotos || {},
+          metadata: cachedState.metadata || {},
+          isHydrated: true,
+        });
+      } else {
+        set({ isHydrated: true });
+      }
+    } catch (error) {
+      console.error('Failed to hydrate inspection store:', error);
       set({ isHydrated: true });
     }
   },

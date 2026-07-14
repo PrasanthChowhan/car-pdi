@@ -21,6 +21,7 @@ export interface ChecklistItem {
 }
 
 export interface AppState {
+  version: number;
   vehicle: VehicleInfo | null;
   items: Record<string, ChecklistItem>;
   overviewPhotos?: Record<string, string>; // Maps view ID to photoId (UUID in blobStore)

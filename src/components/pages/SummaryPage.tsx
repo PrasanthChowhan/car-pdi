@@ -112,6 +112,11 @@ export default function SummaryPage() {
   };
 
   const handleExportJSON = () => {
+    const proceed = window.confirm(
+      "Warning: Stored photos are NOT included in the raw JSON export. This export contains checklist answers and vehicle data only. Do you want to proceed?"
+    );
+    if (!proceed) return;
+
     try {
       const dataStr = JSON.stringify({ vehicle, items }, null, 2);
       const blob = new Blob([dataStr], { type: 'application/json' });

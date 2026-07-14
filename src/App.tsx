@@ -4,23 +4,26 @@ import InspectionPage from './components/pages/InspectionPage';
 import SummaryPage from './components/pages/SummaryPage';
 import Footer from './components/common/Footer';
 import Header from './components/common/Header';
+import { ErrorBoundary } from './components/common/ErrorBoundary';
 
 function App() {
   return (
-    <Router>
-      <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-        <Header />
-        <div style={{ flex: 1 }}>
-          <Routes>
-            <Route path="/setup" element={<SetupPage />} />
-            <Route path="/inspection" element={<InspectionPage />} />
-            <Route path="/summary" element={<SummaryPage />} />
-            <Route path="*" element={<Navigate to="/setup" replace />} />
-          </Routes>
+    <ErrorBoundary>
+      <Router>
+        <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+          <Header />
+          <div style={{ flex: 1 }}>
+            <Routes>
+              <Route path="/setup" element={<SetupPage />} />
+              <Route path="/inspection" element={<InspectionPage />} />
+              <Route path="/summary" element={<SummaryPage />} />
+              <Route path="*" element={<Navigate to="/setup" replace />} />
+            </Routes>
+          </div>
+          <Footer />
         </div>
-        <Footer />
-      </div>
-    </Router>
+      </Router>
+    </ErrorBoundary>
   );
 }
 
