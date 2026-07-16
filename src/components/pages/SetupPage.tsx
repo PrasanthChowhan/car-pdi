@@ -40,7 +40,12 @@ export default function SetupPage() {
   const handleStartFresh = async () => {
     const confirm = window.confirm('Are you sure you want to start a fresh inspection? All unsaved current progress will be lost.');
     if (confirm) {
-      await resetInspection();
+      try {
+        await resetInspection();
+      } catch (error) {
+        console.error('Failed to reset inspection:', error);
+        alert('Failed to clear old inspection data from browser. Database might be locked or blocked. Please reload and try again.');
+      }
     }
   };
 

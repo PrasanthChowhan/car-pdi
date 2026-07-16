@@ -1,8 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useInspectionStore } from '../../store/useInspectionStore';
 
 const Header: React.FC = () => {
   const [isToolsOpen, setIsToolsOpen] = useState(false);
   const toolsRef = useRef<HTMLDivElement>(null);
+  
+  const syncStatus = useInspectionStore((state) => state.syncStatus);
 
   // Close dropdown if clicking outside
   useEffect(() => {
@@ -37,6 +40,40 @@ const Header: React.FC = () => {
             <span style={{ fontSize: '10px', color: 'var(--color-muted)', fontWeight: 600, letterSpacing: '0.8px', textTransform: 'uppercase' }}>Car PDI Online</span>
           </div>
         </a>
+
+        {/* Sync Status Badge */}
+        <div style={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          gap: '6px', 
+          marginLeft: '12px', 
+          padding: '4px 8px', 
+          borderRadius: '4px', 
+          backgroundColor: 'var(--color-canvas-soft)', 
+          border: '1px solid var(--color-hairline)',
+          fontSize: '11px',
+          fontWeight: 500,
+          color: 'var(--color-body)'
+        }}>
+          <span style={{
+            display: 'inline-block',
+            width: '6px',
+            height: '6px',
+            borderRadius: '50%',
+            backgroundColor: syncStatus === 'saved' ? '#1f8a65' : syncStatus === 'saving' ? '#f54e00' : '#cf2d56',
+            animation: syncStatus === 'saving' ? 'pulse 1s infinite' : 'none'
+          }} />
+          <style>{`
+            @keyframes pulse {
+              0% { opacity: 0.4; }
+              50% { opacity: 1; }
+              100% { opacity: 0.4; }
+            }
+          `}</style>
+          <span style={{ fontSize: '10.5px', textTransform: 'uppercase', letterSpacing: '0.4px', fontWeight: 600, color: 'var(--color-muted)' }}>
+            {syncStatus === 'saved' ? 'Saved' : syncStatus === 'saving' ? 'Saving...' : 'Error'}
+          </span>
+        </div>
       </div>
       
       {/* Desktop Nav */}

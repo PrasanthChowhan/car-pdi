@@ -178,8 +178,13 @@ export default function SummaryPage() {
       'Are you sure you want to delete all inspection progress and stored photos? This cannot be undone.'
     );
     if (confirm) {
-      await resetInspection();
-      navigate('/setup');
+      try {
+        await resetInspection();
+        navigate('/setup');
+      } catch (error) {
+        console.error('Failed to reset inspection:', error);
+        alert('Failed to reset inspection. The database might be locked or blocked. Please reload and try again.');
+      }
     }
   };
 
@@ -432,6 +437,7 @@ export default function SummaryPage() {
               <input
                 id="dealerName"
                 type="text"
+                maxLength={100}
                 value={metadata?.dealerName || ''}
                 onChange={(e) => updateMetadata('dealerName', e.target.value)}
                 placeholder="Enter dealership name"
@@ -445,6 +451,7 @@ export default function SummaryPage() {
               <input
                 id="salesRep"
                 type="text"
+                maxLength={100}
                 value={metadata?.salesRep || ''}
                 onChange={(e) => updateMetadata('salesRep', e.target.value)}
                 placeholder="Enter sales representative name"
@@ -458,6 +465,7 @@ export default function SummaryPage() {
               <input
                 id="odometer"
                 type="text"
+                maxLength={10}
                 value={metadata?.odometer || ''}
                 onChange={(e) => {
                   const cleaned = e.target.value.replace(/[^0-9]/g, '');
@@ -498,6 +506,7 @@ export default function SummaryPage() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', animation: 'slideDown 0.2s ease' }}>
                   <textarea
                     rows={3}
+                    maxLength={1000}
                     value={metadata?.remediationCommitment || ''}
                     onChange={(e) => updateMetadata('remediationCommitment', e.target.value)}
                     placeholder="Describe specific dealer commitments, required parts replacement, timelines, and signatory representatives..."

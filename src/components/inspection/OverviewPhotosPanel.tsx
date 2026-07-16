@@ -166,7 +166,9 @@ function OverviewPhotoCard({ view, photoId, updatePhoto }: PhotoCardProps) {
       updatePhoto(view.id, newPhotoId);
     } catch (error: any) {
       console.error('Overview photo capture failed:', error);
-      if (error.name !== 'QuotaExceededError') {
+      if (error.name === 'QuotaExceededError') {
+        useInspectionStore.getState().setStorageError('quota_exceeded');
+      } else {
         alert('Photo capture failed. Please try again.');
       }
     } finally {

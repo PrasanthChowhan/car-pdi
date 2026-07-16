@@ -302,7 +302,12 @@ export async function generatePDIReport(
     doc.text('DEALERSHIP REMEDIATION COMMITMENT', margin, currentY);
     currentY += 4;
 
-    const wrappedCommitment = doc.splitTextToSize(metadata.remediationCommitment, contentWidth - 10);
+    let commitmentText = metadata.remediationCommitment.trim();
+    if (commitmentText.length > 1000) {
+      commitmentText = commitmentText.substring(0, 1000) + '... (truncated due to length)';
+    }
+
+    const wrappedCommitment = doc.splitTextToSize(commitmentText, contentWidth - 10);
     const boxHeight = (wrappedCommitment.length * 4.5) + 6;
 
     doc.setFillColor(cCanvasSoft[0], cCanvasSoft[1], cCanvasSoft[2]);
@@ -515,7 +520,11 @@ export async function generatePDIReport(
       let rowHeight = (wrappedLabel.length * 4.5) + 3;
       let wrappedNote: string[] = [];
       if (item.note && item.note.trim()) {
-        wrappedNote = doc.splitTextToSize(`Comment: ${item.note}`, contentWidth - 28);
+        let noteText = item.note.trim();
+        if (noteText.length > 500) {
+          noteText = noteText.substring(0, 500) + '... (truncated due to length)';
+        }
+        wrappedNote = doc.splitTextToSize(`Comment: ${noteText}`, contentWidth - 28);
         rowHeight += (wrappedNote.length * 3.8) + 2;
       }
       rowHeight = Math.max(8, rowHeight);
@@ -628,7 +637,11 @@ export async function generatePDIReport(
 
       // Shaded Notes block if present
       if (item.note && item.note.trim()) {
-        const wrappedNote = doc.splitTextToSize(`Inspector Note: "${item.note}"`, contentWidth - 10);
+        let noteText = item.note.trim();
+        if (noteText.length > 500) {
+          noteText = noteText.substring(0, 500) + '... (truncated due to length)';
+        }
+        const wrappedNote = doc.splitTextToSize(`Inspector Note: "${noteText}"`, contentWidth - 10);
         const blockHeight = (wrappedNote.length * 4) + 6;
         
         checkPageBreak(blockHeight + 5, defectHeaderLabel);

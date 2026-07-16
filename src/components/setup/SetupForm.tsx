@@ -112,6 +112,7 @@ export default function SetupForm({ onSubmit, isSubmitting, onTryDemo }: SetupFo
               type="text"
               id="make"
               required
+              maxLength={50}
               value={make}
               onChange={(e) => setMake(e.target.value)}
               placeholder="e.g. Tesla, Honda, Porsche"
@@ -124,6 +125,7 @@ export default function SetupForm({ onSubmit, isSubmitting, onTryDemo }: SetupFo
               type="text"
               id="model"
               required
+              maxLength={50}
               value={model}
               onChange={(e) => setModel(e.target.value)}
               placeholder="e.g. Model Y, Accord, Macan"

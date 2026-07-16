@@ -77,7 +77,9 @@ export default function ChecklistItemRow({ item, updateStatus, updateNote, updat
       updatePhoto(item.id, newPhotoId);
     } catch (error: any) {
       console.error('Photo capture failed:', error);
-      if (error.name !== 'QuotaExceededError') {
+      if (error.name === 'QuotaExceededError') {
+        useInspectionStore.getState().setStorageError('quota_exceeded');
+      } else {
         alert('Photo capture failed. Please try again.');
       }
     } finally {
@@ -225,6 +227,7 @@ export default function ChecklistItemRow({ item, updateStatus, updateNote, updat
           <textarea
             id={`note-${item.id}`}
             rows={2}
+            maxLength={500}
             value={item.note || ''}
             onChange={(e) => updateNote(item.id, e.target.value)}
             placeholder={isPassed ? 'Add verification details (e.g. tyre puncture kit present instead of spare tyre)...' : dynamicPlaceholder}

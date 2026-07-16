@@ -40,9 +40,6 @@ export async function saveAppState(state: AppState): Promise<void> {
     await set(STATE_KEY, state, stateStore);
   } catch (error: any) {
     console.error('Failed to save app state to IndexedDB', error);
-    if (error.name === 'QuotaExceededError') {
-      alert('Storage quota exceeded! Inspection progress cannot be saved. Please free up browser storage.');
-    }
     throw error;
   }
 }
@@ -61,6 +58,7 @@ export async function clearAppState(): Promise<void> {
     await del(STATE_KEY, stateStore);
   } catch (error) {
     console.error('Failed to clear app state from IndexedDB', error);
+    throw error;
   }
 }
 
@@ -70,9 +68,6 @@ export async function saveImageBlob(id: string, blob: Blob): Promise<void> {
     await set(id, blob, blobStore);
   } catch (error: any) {
     console.error('Failed to save image blob to IndexedDB', error);
-    if (error.name === 'QuotaExceededError') {
-      alert('Storage quota exceeded! Please complete inspection or export data.');
-    }
     throw error;
   }
 }
@@ -91,6 +86,7 @@ export async function deleteImageBlob(id: string): Promise<void> {
     await del(id, blobStore);
   } catch (error) {
     console.error('Failed to delete image blob from IndexedDB', error);
+    throw error;
   }
 }
 
@@ -99,7 +95,7 @@ export async function getAllBlobKeys(): Promise<string[]> {
     return await keys(blobStore) as string[];
   } catch (error) {
     console.error('Failed to get all image blob keys', error);
-    return [];
+    throw error;
   }
 }
 
@@ -108,5 +104,6 @@ export async function clearAllBlobs(): Promise<void> {
     await clear(blobStore);
   } catch (error) {
     console.error('Failed to clear all image blobs', error);
+    throw error;
   }
 }

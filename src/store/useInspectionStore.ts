@@ -1,10 +1,14 @@
 import { create } from 'zustand';
 import type { AppState, VehicleInfo, ChecklistItem } from '../lib/storage';
-import { saveAppState, loadAppState, clearAppState, clearAllBlobs, deleteImageBlob } from '../lib/storage';
+import { saveAppState, loadAppState, clearAppState, clearAllBlobs, deleteImageBlob, getAllBlobKeys } from '../lib/storage';
 import { CHECKLIST_TEMPLATES } from '../lib/checklistData';
 
 interface InspectionStore extends AppState {
   isHydrated: boolean;
+  syncStatus: 'saved' | 'saving' | 'error';
+  setSyncStatus: (status: 'saved' | 'saving' | 'error') => void;
+  storageError: 'quota_exceeded' | 'unknown' | null;
+  setStorageError: (error: 'quota_exceeded' | 'unknown' | null) => void;
   setVehicle: (vehicle: VehicleInfo | null) => void;
   setItems: (items: Record<string, ChecklistItem>) => void;
   updateItemStatus: (id: string, status: ChecklistItem['status']) => void;
@@ -47,10 +51,42 @@ function debounce<T extends (...args: any[]) => any>(fn: T, delay: number) {
 }
 
 const debouncedSaveAppState = debounce((state: AppState) => {
-  saveAppState(state).catch((error) => {
-    console.error('Failed to auto-save app state:', error);
-  });
+  saveAppState(state)
+    .then(() => {
+      useInspectionStore.getState().setSyncStatus('saved');
+    })
+    .catch((error) => {
+      console.error('Failed to auto-save app state:', error);
+      useInspectionStore.getState().setSyncStatus('error');
+      if (error.name === 'QuotaExceededError') {
+        useInspectionStore.getState().setStorageError('quota_exceeded');
+      } else {
+        useInspectionStore.getState().setStorageError('unknown');
+      }
+    });
 }, 1000);
+
+const triggerSaveWithStatus = (state: AppState) => {
+  useInspectionStore.getState().setSyncStatus('saving');
+  debouncedSaveAppState(state);
+};
+
+const saveAppStateWithStatus = async (state: AppState) => {
+  useInspectionStore.getState().setSyncStatus('saving');
+  try {
+    await saveAppState(state);
+    useInspectionStore.getState().setSyncStatus('saved');
+  } catch (error: any) {
+    console.error('Failed to save app state:', error);
+    useInspectionStore.getState().setSyncStatus('error');
+    if (error.name === 'QuotaExceededError') {
+      useInspectionStore.getState().setStorageError('quota_exceeded');
+    } else {
+      useInspectionStore.getState().setStorageError('unknown');
+    }
+    throw error;
+  }
+};
 
 const getAppStateForSaving = (state: any): AppState => ({
   version: 1,
@@ -76,18 +112,30 @@ export const useInspectionStore = create<InspectionStore>((set, get) => ({
   isDemoMode: false,
   isHydrated: false,
   tutorialStep: 0,
+  syncStatus: 'saved',
+  setSyncStatus: (syncStatus) => set({ syncStatus }),
+  storageError: null,
+  setStorageError: (storageError) => set({ storageError }),
 
   setVehicle: (vehicle) => {
     set({ vehicle });
-    debouncedSaveAppState(getAppStateForSaving(get()));
+    triggerSaveWithStatus(getAppStateForSaving(get()));
   },
 
   setItems: (items) => {
     set({ items });
-    debouncedSaveAppState(getAppStateForSaving(get()));
+    triggerSaveWithStatus(getAppStateForSaving(get()));
   },
 
   updateItemStatus: (id, status) => {
+    // Delete photo from IndexedDB if resetting checklist item status to pending
+    const item = get().items[id];
+    if (item && status === 'pending' && item.photoId) {
+      deleteImageBlob(item.photoId).catch((error) => {
+        console.error('Failed to delete photo on status reset:', error);
+      });
+    }
+
     set((state) => {
       const item = state.items[id];
       if (!item) return state;
@@ -104,7 +152,7 @@ export const useInspectionStore = create<InspectionStore>((set, get) => ({
       };
 
       const updatedState = { ...state, items: updatedItems };
-      debouncedSaveAppState(getAppStateForSaving(updatedState));
+      triggerSaveWithStatus(getAppStateForSaving(updatedState));
       return { items: updatedItems };
     });
   },
@@ -120,12 +168,20 @@ export const useInspectionStore = create<InspectionStore>((set, get) => ({
       };
 
       const updatedState = { ...state, items: updatedItems };
-      debouncedSaveAppState(getAppStateForSaving(updatedState));
+      triggerSaveWithStatus(getAppStateForSaving(updatedState));
       return { items: updatedItems };
     });
   },
 
   updateItemPhoto: (id, photoId) => {
+    // Delete old photo blob from IndexedDB if replaced or removed
+    const item = get().items[id];
+    if (item && item.photoId && item.photoId !== photoId) {
+      deleteImageBlob(item.photoId).catch((error) => {
+        console.error('Failed to delete replaced item photo:', error);
+      });
+    }
+
     set((state) => {
       const item = state.items[id];
       if (!item) return state;
@@ -136,12 +192,20 @@ export const useInspectionStore = create<InspectionStore>((set, get) => ({
       };
 
       const updatedState = { ...state, items: updatedItems };
-      debouncedSaveAppState(getAppStateForSaving(updatedState));
+      triggerSaveWithStatus(getAppStateForSaving(updatedState));
       return { items: updatedItems };
     });
   },
 
   updateOverviewPhoto: (key, photoId) => {
+    // Delete old photo blob from IndexedDB if replaced or removed
+    const oldPhotoId = get().overviewPhotos[key];
+    if (oldPhotoId && oldPhotoId !== photoId) {
+      deleteImageBlob(oldPhotoId).catch((error) => {
+        console.error('Failed to delete replaced overview photo:', error);
+      });
+    }
+
     set((state) => {
       const updatedPhotos = {
         ...state.overviewPhotos,
@@ -152,7 +216,7 @@ export const useInspectionStore = create<InspectionStore>((set, get) => ({
       }
 
       const updatedState = { ...state, overviewPhotos: updatedPhotos };
-      debouncedSaveAppState(getAppStateForSaving(updatedState));
+      triggerSaveWithStatus(getAppStateForSaving(updatedState));
       return { overviewPhotos: updatedPhotos };
     });
   },
@@ -165,7 +229,7 @@ export const useInspectionStore = create<InspectionStore>((set, get) => ({
       };
 
       const updatedState = { ...state, metadata: updatedMetadata };
-      debouncedSaveAppState(getAppStateForSaving(updatedState));
+      triggerSaveWithStatus(getAppStateForSaving(updatedState));
       return { metadata: updatedMetadata };
     });
   },
@@ -176,6 +240,12 @@ export const useInspectionStore = create<InspectionStore>((set, get) => ({
       let changed = false;
       Object.values(updatedItems).forEach((item) => {
         if (item.categoryId === categoryId && item.status === 'pending') {
+          // If we had a photoId, delete it on passAll to prevent leaks
+          if (item.photoId) {
+            deleteImageBlob(item.photoId).catch((error) => {
+              console.error('Failed to delete photo on passAll:', error);
+            });
+          }
           updatedItems[item.id] = {
             ...item,
             status: 'pass',
@@ -188,7 +258,7 @@ export const useInspectionStore = create<InspectionStore>((set, get) => ({
       if (!changed) return state;
 
       const updatedState = { ...state, items: updatedItems };
-      debouncedSaveAppState(getAppStateForSaving(updatedState));
+      triggerSaveWithStatus(getAppStateForSaving(updatedState));
       return { items: updatedItems };
     });
   },
@@ -217,13 +287,21 @@ export const useInspectionStore = create<InspectionStore>((set, get) => ({
     if (changed) {
       set({ items: updatedItems });
       debouncedSaveAppState.cancel(); // Cancel any pending auto-saves
-      await saveAppState(getAppStateForSaving(get()));
+      await saveAppStateWithStatus(getAppStateForSaving(get()));
     }
   },
 
   resetInspection: async () => {
     debouncedSaveAppState.cancel(); // Cancel any pending auto-saves to prevent race condition write-back
-    set({ vehicle: null, items: {}, overviewPhotos: {}, metadata: {}, hasSeenTutorial: undefined, isDemoMode: false });
+    set({ 
+      vehicle: null, 
+      items: {}, 
+      overviewPhotos: {}, 
+      metadata: {}, 
+      hasSeenTutorial: undefined, 
+      isDemoMode: false,
+      storageError: null
+    });
     await clearAppState();
     await clearAllBlobs();
   },
@@ -255,6 +333,33 @@ export const useInspectionStore = create<InspectionStore>((set, get) => ({
           isDemoMode: cachedState.isDemoMode || false,
           isHydrated: true,
         });
+
+        // Trigger garbage collection asynchronously
+        const referencedIds = new Set<string>();
+        if (cleanedItems) {
+          Object.values(cleanedItems).forEach((item: any) => {
+            if (item.photoId) referencedIds.add(item.photoId);
+          });
+        }
+        if (cachedState.overviewPhotos) {
+          Object.values(cachedState.overviewPhotos).forEach((photoId: any) => {
+            if (photoId) referencedIds.add(photoId);
+          });
+        }
+
+        getAllBlobKeys()
+          .then(async (keys) => {
+            for (const key of keys) {
+              if (!referencedIds.has(key)) {
+                console.log(`GC: Deleting orphaned photo blob: ${key}`);
+                await deleteImageBlob(key).catch((e) => console.error('GC failed to delete blob:', e));
+              }
+            }
+          })
+          .catch((error) => {
+            console.error('GC failed to get keys:', error);
+          });
+
       } else {
         set({ isHydrated: true });
       }
@@ -266,28 +371,28 @@ export const useInspectionStore = create<InspectionStore>((set, get) => ({
 
   setHasSeenTutorial: (seen) => {
     set({ hasSeenTutorial: seen });
-    saveAppState(getAppStateForSaving(get())).catch((error) => {
+    saveAppStateWithStatus(getAppStateForSaving(get())).catch((error) => {
       console.error('Failed to save tutorial status:', error);
     });
   },
 
   setHasDismissedChecklistHint: (dismissed) => {
     set({ hasDismissedChecklistHint: dismissed });
-    saveAppState(getAppStateForSaving(get())).catch((error) => {
+    saveAppStateWithStatus(getAppStateForSaving(get())).catch((error) => {
       console.error('Failed to save checklist hint status:', error);
     });
   },
 
   setHasDismissedTyreHint: (dismissed) => {
     set({ hasDismissedTyreHint: dismissed });
-    saveAppState(getAppStateForSaving(get())).catch((error) => {
+    saveAppStateWithStatus(getAppStateForSaving(get())).catch((error) => {
       console.error('Failed to save tyre hint status:', error);
     });
   },
 
   setDemoMode: (enabled) => {
     set({ isDemoMode: enabled });
-    saveAppState(getAppStateForSaving(get())).catch((error) => {
+    saveAppStateWithStatus(getAppStateForSaving(get())).catch((error) => {
       console.error('Failed to save demo mode status:', error);
     });
   },
@@ -346,7 +451,7 @@ export const useInspectionStore = create<InspectionStore>((set, get) => ({
       hasSeenTutorial: true // Skip welcome sheet in demo mode
     });
     
-    saveAppState(getAppStateForSaving(get())).catch((error) => {
+    saveAppStateWithStatus(getAppStateForSaving(get())).catch((error) => {
       console.error('Failed to save demo state:', error);
     });
   },
