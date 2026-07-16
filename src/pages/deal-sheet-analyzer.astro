@@ -1,0 +1,158 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { AlertTriangle, CheckCircle, HelpCircle } from 'lucide-react';
+---
+<Layout title="Deal Sheet Analyzer — Car PDI" description="Understand your car dealer's quote, know what to keep, what to negotiate, and what to safely remove.">
+  <div style="max-width: 800px; margin: 0 auto;">
+    <div style="text-align: center; margin-bottom: var(--spacing-xl);">
+      <div style="display: flex; justify-content: center; margin-bottom: var(--spacing-md);">
+        <span class="display-lg">📄</span>
+      </div>
+      <h1 class="display-lg" style="margin-bottom: var(--spacing-xs);">Deal Sheet Analyzer</h1>
+      <p class="body-md" style="color: var(--color-muted); max-width: 520px; margin: 0 auto;">Dealers often include unnecessary charges in their quotes. Learn what every line means, what you must pay, and what you can negotiate or reject.</p>
+    </div>
+
+    <!-- Section 1: Everything in the Quote -->
+    <div class="card" style="margin-bottom: var(--spacing-lg);">
+      <h2 class="title-lg" style="display: flex; align-items: center; gap: 8px; margin-bottom: var(--spacing-md);">
+        <HelpCircle size={24} color="var(--color-primary)" />
+        1. Decoding Your Deal Sheet
+      </h2>
+      <p class="body-md" style="color: var(--color-body); margin-bottom: var(--spacing-md);">Here is a plain English breakdown of typical items found on a car dealer's quote:</p>
+      
+      <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left;" class="body-sm">
+          <thead>
+            <tr style="border-bottom: 2px solid var(--color-hairline);">
+              <th style="padding: 12px; color: var(--color-ink);">Item on sheet</th>
+              <th style="padding: 12px; color: var(--color-ink);">Meaning in plain English</th>
+              <th style="padding: 12px; color: var(--color-ink);">Typical status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid var(--color-hairline-soft);">
+              <td style="padding: 12px; font-weight: 500;">MODEL (e.g. VF 6 Earth)</td>
+              <td style="padding: 12px; color: var(--color-body);">Variant of the car you’re picking</td>
+              <td style="padding: 12px; color: var(--color-muted);">You choose one variant</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--color-hairline-soft);">
+              <td style="padding: 12px; font-weight: 500;">EX‑SHOWROOM</td>
+              <td style="padding: 12px; color: var(--color-body);">Base price of the car fixed by manufacturer</td>
+              <td style="padding: 12px; color: var(--color-muted);">Mandatory</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--color-hairline-soft);">
+              <td style="padding: 12px; font-weight: 500;">TCS @ 1%</td>
+              <td style="padding: 12px; color: var(--color-body);">Tax Collected at Source on high‑value vehicle purchases</td>
+              <td style="padding: 12px; color: var(--color-muted);">Mandatory if applicable by law</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--color-hairline-soft);">
+              <td style="padding: 12px; font-weight: 500;">REG + TR + HP + FASTAG + PDI + CESS</td>
+              <td style="padding: 12px; color: var(--color-body);">Combined line for: RTO registration, temp registration, hypothecation marking, FASTag, pre‑delivery inspection, govt cess</td>
+              <td style="padding: 12px; color: var(--color-muted);">Mostly mandatory govt items, except PDI part is questionable</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--color-hairline-soft);">
+              <td style="padding: 12px; font-weight: 500;">INSURANCE (1+2)</td>
+              <td style="padding: 12px; color: var(--color-body);">Package like 1 year own‑damage + 2 or 3 year third‑party etc.</td>
+              <td style="padding: 12px; color: var(--color-muted);">Insurance is mandatory; buying from the dealer is optional</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--color-hairline-soft);">
+              <td style="padding: 12px; font-weight: 500;">BASIC ACCESSORIES</td>
+              <td style="padding: 12px; color: var(--color-body);">Dealer accessory kit (mats, mud flaps, perfume, door visors, etc.)</td>
+              <td style="padding: 12px; color: var(--color-muted);">Optional upsell, usually overpriced</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--color-hairline-soft);">
+              <td style="padding: 12px; font-weight: 500;">CERAMIC COATING</td>
+              <td style="padding: 12px; color: var(--color-body);">Paint protection / detailing done by dealer’s vendor</td>
+              <td style="padding: 12px; color: var(--color-muted);">Optional upsell, quality and pricing often poor vs detailers</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--color-hairline-soft);">
+              <td style="padding: 12px; font-weight: 500;">7.4 kW AC CHARGER</td>
+              <td style="padding: 12px; color: var(--color-body);">Home wallbox charger (faster AC charging at home)</td>
+              <td style="padding: 12px; color: var(--color-muted);">Optional; only worth it if price ≈ market cost</td>
+            </tr>
+            <tr>
+              <td style="padding: 12px; font-weight: 700; color: var(--color-primary);">GRAND TOTAL</td>
+              <td style="padding: 12px; color: var(--color-body); font-weight: 600;">Sum of all the above per variant</td>
+              <td style="padding: 12px; color: var(--color-ink); font-weight: 600;">This is what you want to negotiate down</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Section 2: Safely Ignore -->
+    <div class="card" style="margin-bottom: var(--spacing-lg); border-left: 4px solid var(--color-semantic-error);">
+      <h2 class="title-lg" style="display: flex; align-items: center; gap: 8px; margin-bottom: var(--spacing-md); color: var(--color-semantic-error);">
+        <AlertTriangle size={24} />
+        2. Things You Can Safely Reject or Negotiate
+      </h2>
+      <div style="display: flex; flex-direction: column; gap: var(--spacing-md);">
+        
+        <div>
+          <h3 class="title-md" style="color: var(--color-ink);">Basic Accessories</h3>
+          <p class="body-sm" style="color: var(--color-body); margin-top: 4px;">These kits are classic margin items; you can buy similar or better stuff online or at accessory shops far cheaper. Tell them you want <em>"no compulsory accessories package, 0 accessories in the quote"</em>.</p>
+        </div>
+
+        <div>
+          <h3 class="title-md" style="color: var(--color-ink);">Ceramic Coating</h3>
+          <p class="body-sm" style="color: var(--color-body); margin-top: 4px;">Dealer coatings are often done by third‑party detailers with average prep and inflated prices. For the same (or less) money, a good detailing studio will give you better surface prep, better coating and options.</p>
+        </div>
+
+        <div>
+          <h3 class="title-md" style="color: var(--color-ink);">PDI / Handling Fees</h3>
+          <p class="body-sm" style="color: var(--color-body); margin-top: 4px;">PDI is the dealer’s internal pre‑delivery check. Ask them for a breakup of the <code>REG+TR+HP+FASTAG+PDI+CESS</code> line; tell them you accept only government‑levied registration/road‑tax/FASTag/number plate charges, but want PDI/handling/logistics removed.</p>
+        </div>
+
+        <div>
+          <h3 class="title-md" style="color: var(--color-ink);">Hidden Logistics / Incidental Fees</h3>
+          <p class="body-sm" style="color: var(--color-body); margin-top: 4px;">If they say those are part of a combo line, insist they be removed. Logistics is already built into the ex‑showroom price in most cases.</p>
+        </div>
+
+        <div>
+          <h3 class="title-md" style="color: var(--color-ink);">7.4 kW AC Charger (EVs)</h3>
+          <p class="body-sm" style="color: var(--color-body); margin-top: 4px;">A decent 7.4 kW wallbox with standard installation in India usually totals about ₹40,000–₹70,000. If the dealer's quote doesn't clearly include installation, you can skip it and buy from third-party EV charger vendors.</p>
+        </div>
+
+        <div>
+          <h3 class="title-md" style="color: var(--color-ink);">Overpriced Dealer Insurance</h3>
+          <p class="body-sm" style="color: var(--color-body); margin-top: 4px;">You need insurance, but not necessarily from the dealer. Get online quotes for the same IDV and add‑ons, and either buy outside or ask the dealer to match.</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Section 3: Items to Keep -->
+    <div class="card" style="margin-bottom: var(--spacing-xl); border-left: 4px solid var(--color-semantic-success);">
+      <h2 class="title-lg" style="display: flex; align-items: center; gap: 8px; margin-bottom: var(--spacing-md); color: var(--color-semantic-success);">
+        <CheckCircle size={24} />
+        3. Items You Generally Keep
+      </h2>
+      <p class="body-md" style="color: var(--color-body); margin-bottom: var(--spacing-md);">These are the items you’ll almost certainly end up paying for somewhere:</p>
+      
+      <ul style="padding-left: var(--spacing-lg); color: var(--color-body); display: flex; flex-direction: column; gap: 8px;" class="body-md">
+        <li><strong>Ex‑showroom:</strong> The non‑negotiable base price.</li>
+        <li><strong>TCS @ 1%:</strong> Mandated for vehicles above certain thresholds.</li>
+        <li><strong>Registration, Road Tax, Number Plates, FASTag, Hypothecation, Statutory Cess:</strong> Genuinely required to register and legally drive the car.</li>
+        <li><strong>Insurance:</strong> Legally required to drive; you just choose the best source (dealer match or third-party).</li>
+      </ul>
+
+      <div style="background-color: var(--color-canvas); padding: var(--spacing-md); border-radius: var(--rounded-lg); margin-top: var(--spacing-md);">
+        <h4 class="title-sm" style="color: var(--color-ink); margin-bottom: 8px;">Your "Clean" Quote Should Look Like:</h4>
+        <ul style="padding-left: var(--spacing-lg); color: var(--color-body); margin: 0; display: flex; flex-direction: column; gap: 4px;" class="body-sm">
+          <li>✅ EX‑SHOWROOM</li>
+          <li>✅ TCS</li>
+          <li>✅ REG+TR+HP+FASTAG+CESS (with PDI/handling stripped out)</li>
+          <li>✅ INSURANCE (either from dealer at matched price, or marked as “self”)</li>
+          <li><em>Optional: 7.4 kW AC charger (if price/scope is competitive)</em></li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="text-align: center;">
+      <a href="/setup" class="button-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+        Start Your Inspection Now
+      </a>
+    </div>
+
+  </div>
+</Layout>

@@ -27,6 +27,7 @@ const Header: React.FC = () => {
       {/* Desktop Nav */}
       <div className="desktop-nav" style={{ display: 'none', alignItems: 'center', gap: 'var(--spacing-xl)' }}>
         <style>{`@media (min-width: 768px) { .desktop-nav { display: flex !important; } }`}</style>
+        <a href="/deal-sheet-analyzer" className="nav-link" style={{ color: 'var(--color-muted)', textDecoration: 'none' }}>Deal Sheet</a>
         <a href="/tyre-decoder" className="nav-link" style={{ color: 'var(--color-muted)', textDecoration: 'none' }}>Tyre Decoder</a>
         <a href="/stories" className="nav-link" style={{ color: 'var(--color-muted)', textDecoration: 'none' }}>Stories</a>
         <a href="/about-us" className="nav-link" style={{ color: 'var(--color-muted)', textDecoration: 'none' }}>About Us</a>
