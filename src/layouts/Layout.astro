@@ -9,6 +9,7 @@ interface Props {
 }
 
 const { title, description } = Astro.props;
+const canonicalUrl = new URL(Astro.url.pathname, 'https://carpdi.online').toString();
 ---
 <!doctype html>
 <html lang="en">
@@ -33,6 +34,7 @@ const { title, description } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />

@@ -2,6 +2,8 @@
 import '../index.css';
 import Header from '../components/common/Header.tsx';
 import Footer from '../components/common/Footer.tsx';
+
+const canonicalUrl = new URL(Astro.url.pathname, 'https://carpdi.online').toString();
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -19,6 +21,7 @@ import Footer from '../components/common/Footer.tsx';
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>PDI Assistant - Forensic-grade vehicle inspections</title>
   <meta name="description" content="Inspect your new car like a forensic expert. Use our guided, offline-capable pre-delivery inspection (PDI) checklist tool to find defects before taking delivery." />
+  <link rel="canonical" href={canonicalUrl} />
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
   <style>
     .split-grid {
