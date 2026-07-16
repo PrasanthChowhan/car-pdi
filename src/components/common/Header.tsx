@@ -25,15 +25,54 @@ const Header: React.FC = () => {
       </div>
       
       {/* Desktop Nav */}
-      <div className="desktop-nav" style={{ display: 'none', alignItems: 'center', gap: 'var(--spacing-xl)' }}>
-        <style>{`@media (min-width: 768px) { .desktop-nav { display: flex !important; } }`}</style>
-        <a href="/deal-sheet-analyzer" className="nav-link" style={{ color: 'var(--color-muted)', textDecoration: 'none' }}>Deal Sheet</a>
-        <a href="/tyre-decoder" className="nav-link" style={{ color: 'var(--color-muted)', textDecoration: 'none' }}>Tyre Decoder</a>
-        <a href="/stories" className="nav-link" style={{ color: 'var(--color-muted)', textDecoration: 'none' }}>Stories</a>
-        <a href="/about-us" className="nav-link" style={{ color: 'var(--color-muted)', textDecoration: 'none' }}>About Us</a>
-        <a href="/contact-us" className="nav-link" style={{ color: 'var(--color-muted)', textDecoration: 'none' }}>Contact Us</a>
-        <a href="/terms-conditions" className="nav-link" style={{ color: 'var(--color-muted)', textDecoration: 'none' }}>Terms</a>
-        <a href="/privacy-policy" className="nav-link" style={{ color: 'var(--color-muted)', textDecoration: 'none' }}>Privacy</a>
+      <div className="desktop-nav" style={{ display: 'none', alignItems: 'center', gap: 'var(--spacing-lg)' }}>
+        <style>{`
+          @media (min-width: 768px) { 
+            .desktop-nav { display: flex !important; } 
+          }
+          .nav-link {
+            font-size: 14px;
+            text-decoration: none;
+            transition: color 0.2s ease;
+          }
+          .nav-link:hover {
+            color: var(--color-primary) !important;
+          }
+        `}</style>
+        
+        {/* Core Utilities */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-md)' }}>
+          <a href="/deal-sheet-analyzer" className="nav-link" style={{ color: 'var(--color-ink)', fontWeight: 600 }}>Deal Sheet</a>
+          <a href="/tyre-decoder" className="nav-link" style={{ color: 'var(--color-ink)', fontWeight: 600 }}>Tyre Decoder</a>
+          <a href="/stories" className="nav-link" style={{ color: 'var(--color-ink)', fontWeight: 600 }}>Buyer Stories</a>
+        </div>
+        
+        {/* Visual Separator */}
+        <div style={{ width: '1px', height: '16px', backgroundColor: 'var(--color-hairline)' }}></div>
+        
+        {/* Info Links */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-md)' }}>
+          <a href="/about-us" className="nav-link" style={{ color: 'var(--color-muted)', fontWeight: 500 }}>About Us</a>
+          <a href="/contact-us" className="nav-link" style={{ color: 'var(--color-muted)', fontWeight: 500 }}>Contact Us</a>
+        </div>
+
+        {/* CTA Button */}
+        <a href="/" style={{
+          backgroundColor: 'var(--color-primary)',
+          color: 'var(--color-on-primary)',
+          textDecoration: 'none',
+          padding: '8px 16px',
+          borderRadius: 'var(--rounded-pill)',
+          fontSize: '13px',
+          fontWeight: 600,
+          transition: 'background-color 0.2s ease',
+          marginLeft: 'var(--spacing-xs)'
+        }}
+        onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'var(--color-primary-active)'}
+        onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'var(--color-primary)'}
+        >
+          Start Checklist
+        </a>
       </div>
 
     </nav>
