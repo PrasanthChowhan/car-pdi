@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
-import { HelpCircle, Menu, X } from 'lucide-react';
+import React from 'react';
 
 const Header: React.FC = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <nav style={{
@@ -30,6 +28,7 @@ const Header: React.FC = () => {
       <div className="desktop-nav" style={{ display: 'none', alignItems: 'center', gap: 'var(--spacing-xl)' }}>
         <style>{`@media (min-width: 768px) { .desktop-nav { display: flex !important; } }`}</style>
         <a href="/tyre-decoder" className="nav-link" style={{ color: 'var(--color-muted)', textDecoration: 'none' }}>Tyre Decoder</a>
+        <a href="/stories" className="nav-link" style={{ color: 'var(--color-muted)', textDecoration: 'none' }}>Stories</a>
         <a href="/about-us" className="nav-link" style={{ color: 'var(--color-muted)', textDecoration: 'none' }}>About Us</a>
         <a href="/contact-us" className="nav-link" style={{ color: 'var(--color-muted)', textDecoration: 'none' }}>Contact Us</a>
         <a href="/terms-conditions" className="nav-link" style={{ color: 'var(--color-muted)', textDecoration: 'none' }}>Terms</a>

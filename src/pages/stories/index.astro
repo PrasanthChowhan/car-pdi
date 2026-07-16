@@ -1,0 +1,114 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const stories = await getCollection('stories');
+const sortedStories = stories.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+const formatDate = (date: Date) => {
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+};
+---
+
+<Layout title="Buyer Stories — Car PDI Checklist" description="Real-world stories from car buyers who did pre-delivery inspections and saved themselves from dealership scams.">
+  <div style="text-align: center; margin-bottom: var(--spacing-xl);">
+    <h1 class="display-lg" style="margin-bottom: var(--spacing-xs);">Buyer Stories</h1>
+    <p class="body-md" style="color: var(--color-muted); max-width: 500px; margin: 0 auto;">
+      Real-world experiences from car buyers. Read how pre-delivery inspections saved thousands, or share your own story.
+    </p>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: var(--spacing-lg);">
+    {sortedStories.length === 0 ? (
+      <div class="card" style="text-align: center; padding: var(--spacing-xl); color: var(--color-muted);">
+        <p class="body-md">No stories published yet. Have one to share? Contact us below!</p>
+      </div>
+    ) : (
+      sortedStories.map((story) => (
+        <a href={`/stories/${story.id}`} class="story-card-link">
+          <div class="card story-card">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: var(--spacing-xs);">
+              <span class="story-meta">
+                By {story.data.author} &bull; {formatDate(story.data.date)}
+              </span>
+              {story.data.featured && (
+                <span class="featured-badge">Featured</span>
+              )}
+            </div>
+            <h2 class="title-md" style="color: var(--color-ink); margin: var(--spacing-xxs) 0 var(--spacing-xs) 0;">
+              {story.data.title}
+            </h2>
+            {story.data.excerpt && (
+              <p class="body-sm" style="color: var(--color-body); margin: 0; line-height: 1.5;">
+                {story.data.excerpt}
+              </p>
+            )}
+            <div style="display: flex; align-items: center; gap: 4px; color: var(--color-primary); font-weight: 600; font-size: 14px; margin-top: var(--spacing-xs);">
+              <span>Read full story</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14"></path>
+                <path d="m12 5 7 7-7 7"></path>
+              </svg>
+            </div>
+          </div>
+        </a>
+      ))
+    )}
+
+    {/* Share Your Story CTA Card */}
+    <div class="card" style="background-color: var(--color-canvas-soft); border-style: dashed; display: flex; flex-direction: column; gap: var(--spacing-sm); text-align: center; margin-top: var(--spacing-md);">
+      <h3 class="title-md" style="color: var(--color-ink);">Faced a Dealership Scam?</h3>
+      <p class="body-sm" style="color: var(--color-body); max-width: 480px; margin: 0 auto;">
+        Did a pre-delivery inspection save your delivery, or did a dealer attempt to stick you with an old demo car? Share your story with the community to help others avoid the same trap.
+      </p>
+      <div style="margin-top: var(--spacing-xxs);">
+        <a href="/contact-us" class="button-secondary" style="display: inline-block; text-decoration: none; padding: 10px 20px;">
+          Share Your Story
+        </a>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .story-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: transform 0.2s ease;
+  }
+  
+  .story-card-link:hover {
+    transform: translateY(-2.5px);
+  }
+  
+  .story-card {
+    transition: border-color 0.2s ease;
+  }
+  
+  .story-card-link:hover .story-card {
+    border-color: var(--color-primary);
+  }
+  
+  .story-meta {
+    font-size: 12px;
+    color: var(--color-muted);
+    font-weight: 500;
+    letter-spacing: 0.2px;
+  }
+
+  .featured-badge {
+    background-color: rgba(245, 78, 0, 0.1);
+    color: var(--color-primary);
+    padding: 2px 8px;
+    border-radius: var(--rounded-pill);
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+</style>

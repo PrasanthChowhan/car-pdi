@@ -10,6 +10,7 @@ export default function Footer() {
         </div>
         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 'var(--spacing-lg)' }}>
           <a href="/faq" className="body-sm" style={{ color: 'var(--color-muted)', textDecoration: 'none' }}>PDI Handbook & FAQs</a>
+          <a href="/stories" className="body-sm" style={{ color: 'var(--color-muted)', textDecoration: 'none' }}>Buyer Stories</a>
           <a href="/about-us" className="body-sm" style={{ color: 'var(--color-muted)', textDecoration: 'none' }}>About Us</a>
           <a href="/contact-us" className="body-sm" style={{ color: 'var(--color-muted)', textDecoration: 'none' }}>Contact Us</a>
           <a href="/terms-conditions" className="body-sm" style={{ color: 'var(--color-muted)', textDecoration: 'none' }}>Terms</a>
