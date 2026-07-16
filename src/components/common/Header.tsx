@@ -142,33 +142,6 @@ const Header: React.FC = () => {
 
           <a href="/stories" className="nav-link" style={{ color: 'var(--color-ink)', fontWeight: 600 }}>Buyer Stories</a>
         </div>
-        
-        {/* Visual Separator */}
-        <div style={{ width: '1px', height: '16px', backgroundColor: 'var(--color-hairline)' }}></div>
-        
-        {/* Info Links */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-md)' }}>
-          <a href="/about-us" className="nav-link" style={{ color: 'var(--color-muted)', fontWeight: 500 }}>About</a>
-          <a href="/contact-us" className="nav-link" style={{ color: 'var(--color-muted)', fontWeight: 500 }}>Contact</a>
-        </div>
-
-        {/* CTA Button */}
-        <a href="/" style={{
-          backgroundColor: 'var(--color-primary)',
-          color: 'var(--color-on-primary)',
-          textDecoration: 'none',
-          padding: '8px 16px',
-          borderRadius: 'var(--rounded-pill)',
-          fontSize: '13px',
-          fontWeight: 600,
-          transition: 'background-color 0.2s ease',
-          marginLeft: 'var(--spacing-xs)'
-        }}
-        onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'var(--color-primary-active)'}
-        onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'var(--color-primary)'}
-        >
-          Start Checklist
-        </a>
       </div>
 
     </nav>
