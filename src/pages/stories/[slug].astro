@@ -44,7 +44,7 @@ const formatDate = (date: Date) => {
         {story.data.title}
       </h1>
       <div style="color: var(--color-muted); font-size: 13px; font-weight: 500;">
-        Published on {formatDate(story.data.date)} &bull; By {story.data.author}
+        Published on {formatDate(story.data.date)} &bull; {story.data.author.toLowerCase() === 'my personal story' ? story.data.author : `By ${story.data.author}`}
       </div>
     </header>
 

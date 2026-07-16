@@ -33,7 +33,7 @@ const formatDate = (date: Date) => {
           <div class="card story-card">
             <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: var(--spacing-xs);">
               <span class="story-meta">
-                By {story.data.author} &bull; {formatDate(story.data.date)}
+                {story.data.author.toLowerCase() === 'my personal story' ? story.data.author : `By ${story.data.author}`} &bull; {formatDate(story.data.date)}
               </span>
               {story.data.featured && (
                 <span class="featured-badge">Featured</span>

@@ -1,6 +1,6 @@
 ---
 title: "How a Dealership Tried to Scam Me (and How I Stopped Them)"
-author: "PDI Assistant Founder"
+author: "My Personal Story"
 date: 2026-07-16
 excerpt: "The real-world story of how a pre-delivery inspection saved me from taking delivery of an old, heavily driven, and poorly maintained dealer demo car."
 featured: true
