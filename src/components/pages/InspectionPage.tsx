@@ -199,12 +199,6 @@ export default function InspectionPage() {
         </div>
       </div>
 
-      {!hasDismissedChecklistHint && (
-        <HintBanner
-          message="💡 Tip: Tap the circular check mark to Pass an item, or the warning triangle to Flag defects and add photos/notes."
-          onDismiss={() => setHasDismissedChecklistHint(true)}
-        />
-      )}
 
       {/* Horizontal Tabs with Fades */}
       <div className="category-tabs-container">

@@ -4,7 +4,6 @@ import InspectionPage from './components/pages/InspectionPage';
 import SummaryPage from './components/pages/SummaryPage';
 import Footer from './components/common/Footer';
 import Header from './components/common/Header';
-import WelcomeSheet from './components/common/WelcomeSheet';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 
 function App() {
@@ -13,7 +12,6 @@ function App() {
       <Router>
         <div className="app-layout">
           <Header />
-          <WelcomeSheet />
           <div style={{ flex: 1 }}>
             <Routes>
               <Route path="/setup" element={<SetupPage />} />

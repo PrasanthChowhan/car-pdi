@@ -1,0 +1,91 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { AlertTriangle, Shield, CheckCircle } from 'lucide-react';
+---
+<Layout title="The Deal-Breakers — Car PDI" description="Critical flaws to look for before signing any paperwork. If you find these, walk away or demand immediate remediation.">
+  <div style="max-width: 800px; margin: 0 auto;">
+    <div style="text-align: center; margin-bottom: var(--spacing-xl);">
+      <div style="display: flex; justify-content: center; margin-bottom: var(--spacing-md);">
+        <span class="display-lg">🚨</span>
+      </div>
+      <h1 class="display-lg" style="margin-bottom: var(--spacing-xs);">The Deal-Breakers</h1>
+      <p class="body-md" style="color: var(--color-muted); max-width: 520px; margin: 0 auto;">Critical flaws to look for before signing any paperwork. If you find these, you have every right to reject the car.</p>
+    </div>
+
+    <div class="card" style="display: flex; flex-direction: column; gap: var(--spacing-lg);">
+      
+      <div>
+        <h3 class="title-md" style="color: var(--color-semantic-error); display: flex; align-items: center; gap: 8px; margin-bottom: var(--spacing-xs);">
+          <AlertTriangle size={20} />
+          1. Refusal of PDI or Access
+        </h3>
+        <p class="body-md" style="color: var(--color-body); margin: 0;">
+          If the dealership strictly prohibits you from visiting the stockyard or explicitly denies a Pre-Delivery Inspection (PDI) before final payment, <strong>walk away</strong>. This is a massive red flag.
+        </p>
+      </div>
+
+      <hr style="border: 0; border-top: 1px solid var(--color-hairline-soft);" />
+
+      <div>
+        <h3 class="title-md" style="color: var(--color-ink); margin-bottom: var(--spacing-xs);">
+          2. Repainted Panels or Accident Damage
+        </h3>
+        <p class="body-md" style="color: var(--color-body); margin: 0;">
+          Inspect the car under natural daylight. Look for color mismatches between the bumpers and metal body panels, overspray on rubber seals, or uneven panel gaps. Transit accidents are common, and dealers often do quick patch-up jobs before delivery.
+        </p>
+      </div>
+
+      <hr style="border: 0; border-top: 1px solid var(--color-hairline-soft);" />
+
+      <div>
+        <h3 class="title-md" style="color: var(--color-ink); margin-bottom: var(--spacing-xs);">
+          3. Odometer Mismatch (> 100 km)
+        </h3>
+        <p class="body-md" style="color: var(--color-body); margin: 0;">
+          A brand new car should generally have fewer than 50-80 kilometers on the odometer. If it reads over 100km, the car might have been used as a test-drive vehicle or driven extensively from another city. Always demand an explanation.
+        </p>
+      </div>
+
+      <hr style="border: 0; border-top: 1px solid var(--color-hairline-soft);" />
+
+      <div>
+        <h3 class="title-md" style="color: var(--color-ink); margin-bottom: var(--spacing-xs);">
+          4. VIN / Manufacturing Year Discrepancy
+        </h3>
+        <p class="body-md" style="color: var(--color-body); margin: 0;">
+          Decode the 17-digit VIN stamped on the chassis. Ensure the manufacturing month and year match what the dealer promised. If you are paying for a 2026 model and the VIN reveals it was manufactured in mid-2025, do not accept the vehicle unless significant discounts are applied.
+        </p>
+      </div>
+
+      <hr style="border: 0; border-top: 1px solid var(--color-hairline-soft);" />
+
+      <div>
+        <h3 class="title-md" style="color: var(--color-ink); margin-bottom: var(--spacing-xs);">
+          5. Severe Rust or Underbody Damage
+        </h3>
+        <p class="body-md" style="color: var(--color-body); margin: 0;">
+          While mild surface rust on exhaust pipes or cast-iron parts can be normal, severe rust on the main chassis rails, suspension components, or signs of underbody scraping indicate poor storage conditions or transport mishandling.
+        </p>
+      </div>
+
+      <hr style="border: 0; border-top: 1px solid var(--color-hairline-soft);" />
+
+      <div>
+        <h3 class="title-md" style="color: var(--color-ink); margin-bottom: var(--spacing-xs);">
+          6. Fluid Leaks in the Engine Bay
+        </h3>
+        <p class="body-md" style="color: var(--color-body); margin: 0;">
+          Open the hood and check for any fresh oil, coolant, or brake fluid leaks. A brand new car should have a pristine, dry engine bay. Any fluid pooling on the skid plate is an absolute deal-breaker.
+        </p>
+      </div>
+
+    </div>
+
+    <div style="margin-top: var(--spacing-xl); text-align: center;">
+      <a href="/setup" class="button-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+        <Shield size={18} />
+        Start Your Inspection Now
+      </a>
+    </div>
+  </div>
+</Layout>

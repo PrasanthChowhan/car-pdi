@@ -239,10 +239,14 @@ export const useInspectionStore = create<InspectionStore>((set, get) => ({
           set({ isHydrated: true });
           return;
         }
+        const cleanedItems = cachedState.items ? { ...cachedState.items } : {};
+        if (cleanedItems['tutorial-practice']) {
+          delete cleanedItems['tutorial-practice'];
+        }
         set({
           version: 1,
           vehicle: cachedState.vehicle,
-          items: cachedState.items,
+          items: cleanedItems,
           overviewPhotos: cachedState.overviewPhotos || {},
           metadata: cachedState.metadata || {},
           hasSeenTutorial: cachedState.hasSeenTutorial,

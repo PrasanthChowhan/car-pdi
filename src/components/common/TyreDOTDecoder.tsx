@@ -126,12 +126,7 @@ export default function TyreDOTDecoder({ initialNote, onApply }: TyreDOTDecoderP
         </div>
       )}
 
-      {!hasDismissedTyreHint && (
-        <HintBanner
-          message="💡 Tip: Look for the 4-digit number (WWYY) on the tyre's outer sidewall (e.g. '1224' for Week 12 of 2024)."
-          onDismiss={() => setHasDismissedTyreHint(true)}
-        />
-      )}
+
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(70px, 1fr))', gap: '8px' }}>
         {(['FL', 'FR', 'RL', 'RR', 'SP'] as const).map((key) => (

@@ -1,0 +1,77 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Camera, Flashlight, CheckSquare, Users } from 'lucide-react';
+---
+<Layout title="What to Bring — Car PDI Checklist" description="A checklist of physical tools to bring to the dealership to conduct a thorough physical inspection.">
+  <div style="max-width: 800px; margin: 0 auto;">
+    <div style="text-align: center; margin-bottom: var(--spacing-xl);">
+      <div style="display: flex; justify-content: center; margin-bottom: var(--spacing-md);">
+        <span class="display-lg">🎒</span>
+      </div>
+      <h1 class="display-lg" style="margin-bottom: var(--spacing-xs);">What to Bring</h1>
+      <p class="body-md" style="color: var(--color-muted); max-width: 520px; margin: 0 auto;">A checklist of physical tools to bring to the dealership stockyard to conduct a thorough physical inspection.</p>
+    </div>
+
+    <div class="card" style="display: flex; flex-direction: column; gap: var(--spacing-lg);">
+      
+      <div style="display: flex; gap: var(--spacing-md); align-items: flex-start;">
+        <div style="background-color: var(--color-surface-strong); padding: 12px; border-radius: var(--rounded-full); color: var(--color-primary);">
+          <Flashlight size={24} />
+        </div>
+        <div>
+          <h3 class="title-md" style="color: var(--color-ink); margin-bottom: 4px;">Bright LED Flashlight</h3>
+          <p class="body-md" style="color: var(--color-body); margin: 0;">Stockyards are often poorly lit, or your inspection might happen indoors or in a basement. A powerful flashlight is essential to spot swirl marks, uneven paint, and leaks in the engine bay.</p>
+        </div>
+      </div>
+
+      <hr style="border: 0; border-top: 1px solid var(--color-hairline-soft);" />
+
+      <div style="display: flex; gap: var(--spacing-md); align-items: flex-start;">
+        <div style="background-color: var(--color-surface-strong); padding: 12px; border-radius: var(--rounded-full); color: var(--color-primary);">
+          <Camera size={24} />
+        </div>
+        <div>
+          <h3 class="title-md" style="color: var(--color-ink); margin-bottom: 4px;">Smartphone (Fully Charged)</h3>
+          <p class="body-md" style="color: var(--color-body); margin: 0;">You will need your phone not just to run our digital inspection checklist, but to take timestamped photos of any defects, the VIN plate, and the odometer reading before you leave the lot.</p>
+        </div>
+      </div>
+
+      <hr style="border: 0; border-top: 1px solid var(--color-hairline-soft);" />
+
+      <div style="display: flex; gap: var(--spacing-md); align-items: flex-start;">
+        <div style="background-color: var(--color-surface-strong); padding: 12px; border-radius: var(--rounded-full); color: var(--color-primary);">
+          <Users size={24} />
+        </div>
+        <div>
+          <h3 class="title-md" style="color: var(--color-ink); margin-bottom: 4px;">A Friend or Family Member</h3>
+          <p class="body-md" style="color: var(--color-body); margin: 0;">A second pair of eyes is invaluable. While you check the mechanicals and follow the app checklist, they can look for cosmetic flaws or test the interior electronics (like the AC, windows, and speakers).</p>
+        </div>
+      </div>
+
+      <hr style="border: 0; border-top: 1px solid var(--color-hairline-soft);" />
+
+      <div style="display: flex; gap: var(--spacing-md); align-items: flex-start;">
+        <div style="background-color: var(--color-surface-strong); padding: 12px; border-radius: var(--rounded-full); color: var(--color-primary);">
+          <span style="font-size: 24px; display: block; line-height: 1;">📝</span>
+        </div>
+        <div>
+          <h3 class="title-md" style="color: var(--color-ink); margin-bottom: 4px;">Booking Documents & Dealer Quotes</h3>
+          <p class="body-md" style="color: var(--color-body); margin: 0;">Bring the original booking receipt and any written promises (free accessories, corporate discounts) the sales rep made, so you can verify they are honored during the final handover.</p>
+        </div>
+      </div>
+
+      <hr style="border: 0; border-top: 1px solid var(--color-hairline-soft);" />
+
+      <div style="display: flex; gap: var(--spacing-md); align-items: flex-start;">
+        <div style="background-color: var(--color-surface-strong); padding: 12px; border-radius: var(--rounded-full); color: var(--color-primary);">
+          <span style="font-size: 24px; display: block; line-height: 1;">🧲</span>
+        </div>
+        <div>
+          <h3 class="title-md" style="color: var(--color-ink); margin-bottom: 4px;">Soft Cloth & Small Magnet (Optional)</h3>
+          <p class="body-md" style="color: var(--color-body); margin: 0;">Wrapping a magnet in a microfiber cloth and running it gently over suspicious panels can reveal if body filler (Bondo) was used to repair transit damage (the magnet will lose attraction over filler).</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</Layout>

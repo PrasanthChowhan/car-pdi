@@ -6,7 +6,6 @@ import { CATEGORIES, OVERVIEW_VIEWS } from '../../lib/checklistData';
 import { loadImageBlob } from '../../lib/storage';
 import LoadingSpinner from '../common/LoadingSpinner';
 import SummaryPhoto from '../summary/SummaryPhoto';
-import SignaturePad from '../summary/SignaturePad';
 import { decodeIndianVIN } from '../../lib/decoderUtils';
 import JSZip from 'jszip';
 
@@ -508,24 +507,6 @@ export default function SummaryPage() {
               )}
             </div>
           )}
-
-          {/* Signature Pads */}
-          <div style={{ borderTop: '1px solid var(--color-hairline)', paddingTop: 'var(--spacing-base)' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 'var(--spacing-md)' }}>
-              <SignaturePad
-                label="Buyer / Inspector Signature"
-                value={metadata?.sigCustomer}
-                onChange={(val) => updateMetadata('sigCustomer', val)}
-                onClear={() => updateMetadata('sigCustomer', '')}
-              />
-              <SignaturePad
-                label="Dealership Representative Signature"
-                value={metadata?.sigRepresentative}
-                onChange={(val) => updateMetadata('sigRepresentative', val)}
-                onClear={() => updateMetadata('sigRepresentative', '')}
-              />
-            </div>
-          </div>
         </div>
       </div>
 

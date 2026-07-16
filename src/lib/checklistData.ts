@@ -43,13 +43,6 @@ export const OVERVIEW_VIEWS: OverviewView[] = [
 ];
 
 export const CHECKLIST_TEMPLATES: ChecklistItemTemplate[] = [
-  {
-    id: 'tutorial-practice',
-    categoryId: 'identity',
-    label: '👉 Practice: Try tapping the red warning triangle to Flag this item, then write a quick note!',
-    description: 'Why: Logging notes and photos on defects helps compile them into your final PDF report.',
-    extendedDescription: 'Try clicking the warning triangle icon on the right side of this card to flag it as a defect. Once flagged, a note input will open below where you can type or select suggestions.'
-  },
   { 
     id: 'doc-invoice-price', 
     categoryId: 'documents', 

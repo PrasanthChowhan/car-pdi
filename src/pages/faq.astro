@@ -1,0 +1,166 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { FileText, Cpu, Shield, HelpCircle } from 'lucide-react';
+---
+<Layout title="PDI Handbook & FAQs — Car PDI Checklist" description="Comprehensive guide and frequently asked questions for performing a forensic-grade pre-delivery inspection on your new car.">
+  <style>
+    details {
+      background: var(--color-canvas-soft);
+      border: 1px solid var(--color-hairline);
+      border-radius: var(--rounded-md);
+      margin-bottom: var(--spacing-sm);
+      transition: all 0.2s ease;
+    }
+    details[open] {
+      background: var(--color-surface-card);
+      border-color: var(--color-primary);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    }
+    summary {
+      padding: var(--spacing-md);
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--color-ink);
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-sans);
+    }
+    summary::-webkit-details-marker {
+      display: none;
+    }
+    summary::after {
+      content: '+';
+      font-size: 24px;
+      line-height: 1;
+      color: var(--color-muted);
+      transition: transform 0.2s ease;
+    }
+    details[open] summary::after {
+      content: '−';
+      color: var(--color-primary);
+    }
+    .details-content {
+      padding: 0 var(--spacing-md) var(--spacing-md) var(--spacing-md);
+      color: var(--color-body);
+      line-height: 1.6;
+    }
+    .details-content p:last-child {
+      margin-bottom: 0;
+    }
+  </style>
+
+  <div style="max-width: 800px; margin: 0 auto; padding-bottom: var(--spacing-xxl);">
+    <div style="text-align: center; margin-bottom: var(--spacing-xl);">
+      <h1 class="display-lg" style="margin-bottom: var(--spacing-xs);">PDI Handbook & FAQs</h1>
+      <div style="display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: var(--spacing-sm);">
+        <HelpCircle size={20} style={{ color: 'var(--color-primary)' }} />
+        <p class="title-md" style="color: var(--color-ink); margin: 0;">Is a Pre-Delivery Inspection really necessary?</p>
+      </div>
+      <p class="body-md" style="color: var(--color-muted); max-width: 600px; margin: 8px auto 0 auto;">
+        Dealerships handle thousands of cars, and transit scuffs, repainted panels, and missing features are completely common. Before you sign final registration papers, you have every right to protect your hard-earned money. <strong>Here's exactly how.</strong>
+      </p>
+    </div>
+
+    <!-- PDI Handbook Section -->
+    <div style="margin-bottom: var(--spacing-xl);">
+      <h2 class="display-sm" style="color: var(--color-ink); margin-bottom: var(--spacing-md);">The Handbook</h2>
+      
+      <details>
+        <summary>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <FileText size={18} style={{ color: 'var(--color-primary)' }} />
+            Checklist & Reports for Gas & EVs
+          </div>
+        </summary>
+        <div class="details-content">
+          <p class="body-sm">
+            So, <strong>what is pdi in car</strong> purchase? The <strong>car pdi full form</strong> stands for Pre-Delivery Inspection. It represents the final, comprehensive inspection of a vehicle's cosmetics, electronics, and mechanics before the buyer accepts formal delivery. While every <strong>pre delivery inspection car dealership</strong> claims to perform this, transit scuffs, paint touch-ups, and assembly faults regularly slip through. Bringing your own <strong>pre delivery inspection car checklist</strong> is crucial. Our digital <strong>car pdi app india</strong> acts as your personal <strong>car pdi service</strong>, ensuring you inspect the vehicle under natural sunlight and protect your hard-earned capital.
+          </p>
+          <p class="body-sm" style="margin-top: 12px;">
+            Our interactive checklist operates as a detailed <strong>new car delivery checklist</strong> tailored for both ICE and electric cars. For electric vehicle buyers, the app activates an <strong>electric vehicle pre delivery inspection</strong> module. The specialized <strong>EV pdi checklist india</strong> helps you verify battery charge levels, charging accessories, port alignment, and software firmware, ensuring a complete <strong>new electric car delivery checklist</strong>. You can run this <strong>pwa car inspection tool</strong> as an offline <strong>car inspection app without internet</strong> right in the dealer's stockyard. Once finished, generate a detailed <strong>pre delivery inspection car pdf</strong> report, offering a <strong>new car delivery checklist pdf free download</strong> option directly on your device.
+          </p>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <Cpu size={18} style={{ color: 'var(--color-primary)' }} />
+            Decode Tyre Manufacturing Dates
+          </div>
+        </summary>
+        <div class="details-content">
+          <p class="body-sm">
+            A vital step in your <strong>new car pdi</strong> is verifying that the tyres are actually new. Dealerships sometimes swap out new tyres for older stock. Our built-in <strong>tyre decoder</strong> lets you enter the 4-digit DOT code found on the sidewall of any tyre (e.g., "3523") and instantly tells you the exact week and year it was manufactured. If the tyres are significantly older than the car's manufacturing date, that's a serious red flag.
+          </p>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <Shield size={18} style={{ color: 'var(--color-primary)' }} />
+            Buyer Protection & Deal-Breakers
+          </div>
+        </summary>
+        <div class="details-content">
+          <p class="body-sm">
+            Dealerships often push buyers to complete registration prior to physically examining the vehicle, but knowing <strong>how to avoid buying defective new car india</strong> is key to buyer safety. According to our <strong>car delivery inspection tips india</strong>, never pay the full amount or <strong>car pdi charges</strong> before you inspect. If you identify a <strong>new car defect before delivery</strong>, you can request immediate rectification or reject the vehicle. We also support <strong>used car pdi</strong> protocols for pre-owned vehicles. Utilizing a dedicated tool is the <strong>best car pdi service</strong> approach to avoid post-purchase nightmares.
+          </p>
+        </div>
+      </details>
+    </div>
+
+    <!-- FAQs Section -->
+    <div>
+      <h2 class="display-sm" style="color: var(--color-ink); margin-bottom: var(--spacing-md);">Frequently Asked Questions</h2>
+      
+      <details>
+        <summary>What is pdi in car and what is the full form?</summary>
+        <div class="details-content">
+          <p class="body-sm">
+            PDI stands for <strong>Pre-Delivery Inspection</strong>. It is a comprehensive physical and technical check of a new car before final registration and delivery. To understand <strong>what is car pdi check</strong> relevance, it ensures the vehicle is free of paint damage, mechanical defects, electrical glitches, and other manufacturing issues.
+          </p>
+        </div>
+      </details>
+
+      <details>
+        <summary>How to do car pdi and what to check in pdi of car?</summary>
+        <div class="details-content">
+          <p class="body-sm">
+            To learn <strong>how to do car pdi</strong>, always inspect the vehicle under natural daylight, check panel gaps, and test interior components. Wondering <strong>what to check in pdi of car</strong>? Ensure to review the electrical controls, sunroof, AC, engine bay fluids, odometer reading (should be &lt; 100km), and verify the chassis VIN number.
+          </p>
+        </div>
+      </details>
+
+      <details>
+        <summary>When to do pdi of car and who does pdi of car?</summary>
+        <div class="details-content">
+          <p class="body-sm">
+            The question of <strong>when to do pdi of car</strong> is vital: perform it at the stockyard or showroom <em>before</em> signing final papers or registering the car at the RTO. <strong>Who does pdi of car</strong>? While the dealership workshop completes a standard check, the buyer should always perform a secondary independent PDI to protect their interest.
+          </p>
+        </div>
+      </details>
+
+      <details>
+        <summary>What is pdi in car purchase & what to check before signing car delivery?</summary>
+        <div class="details-content">
+          <p class="body-sm">
+            In a standard <strong>what is pdi in car purchase</strong> breakdown, you must verify the vehicle is in perfect order. Knowing <strong>what to check before signing car delivery</strong> includes verifying all original tools, spare key presence, tire pressure, infotainment operation, and that the VIN year matches current specifications.
+          </p>
+        </div>
+      </details>
+
+      <details>
+        <summary>How to check pdi of new car and what to check for EV delivery inspection?</summary>
+        <div class="details-content">
+          <p class="body-sm">
+            To learn <strong>how to check pdi of new car</strong>, download our web app to follow a digital, item-by-item checklist. For an <strong>EV delivery inspection what to check</strong> parameters, make sure to inspect battery state of charge (SoC), charging ports, charging cables, electrical accessories, regenerative braking logs, and software system firmware for the ultimate <strong>electric car pdi india</strong> experience.
+          </p>
+        </div>
+      </details>
+    </div>
+  </div>
+</Layout>
