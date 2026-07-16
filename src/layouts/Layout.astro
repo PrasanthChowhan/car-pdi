@@ -13,6 +13,15 @@ const { title, description } = Astro.props;
 <!doctype html>
 <html lang="en">
   <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EC6KQNT9SQ"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-EC6KQNT9SQ');
+    </script>
     <meta charset="UTF-8" />
     <meta name="color-scheme" content="light" />
     <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
@@ -27,14 +36,14 @@ const { title, description } = Astro.props;
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://pdiassistant.com/" />
+    <meta property="og:url" content="https://carpdi.online/" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content="/pdi_og_preview.jpg" />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://pdiassistant.com/" />
+    <meta property="twitter:url" content="https://carpdi.online/" />
     <meta property="twitter:title" content={title} />
     <meta property="twitter:description" content={description} />
     <meta property="twitter:image" content="/pdi_og_preview.jpg" />

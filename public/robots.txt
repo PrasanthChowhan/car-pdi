@@ -1,0 +1,10 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Disallow caching or crawling of query parameters (optional but recommended for clean SEO indexing)
+Disallow: /*?
+
+# Host and Sitemap
+Host: https://carpdi.online
+Sitemap: https://carpdi.online/sitemap.xml
