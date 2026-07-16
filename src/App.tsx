@@ -11,7 +11,7 @@ function App() {
   return (
     <ErrorBoundary>
       <Router>
-        <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+        <div className="app-layout">
           <Header />
           <WelcomeSheet />
           <div style={{ flex: 1 }}>

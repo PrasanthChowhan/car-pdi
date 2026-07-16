@@ -2,21 +2,8 @@ import React from 'react';
 
 export default function Footer() {
   return (
-    <footer style={{
-      backgroundColor: 'var(--color-canvas)',
-      padding: '64px 48px',
-      borderTop: '1px solid var(--color-hairline)',
-      marginTop: 'auto'
-    }}>
-      <div style={{
-        maxWidth: '1200px',
-        margin: '0 auto',
-        display: 'flex',
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        justifyContent: 'space-between',
-        gap: '48px'
-      }}>
+    <footer className="app-footer">
+      <div className="app-footer-content">
         {/* Brand Column */}
         <div style={{ flex: '1 1 200px' }}>
           <div style={{ color: 'var(--color-ink)', fontWeight: 600, fontSize: '16px', marginBottom: '16px' }}>
@@ -41,17 +28,7 @@ export default function Footer() {
         </div>
       </div>
       
-      <div style={{
-        maxWidth: '1200px',
-        margin: '48px auto 0',
-        paddingTop: '24px',
-        borderTop: '1px solid var(--color-hairline-soft)',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        flexWrap: 'wrap',
-        gap: '16px'
-      }}>
+      <div className="app-footer-bottom">
         <div className="body-sm" style={{ color: 'var(--color-muted)' }}>
           © {new Date().getFullYear()} Car PDI Checklist. All rights reserved.
         </div>
