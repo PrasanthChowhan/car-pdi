@@ -31,6 +31,7 @@ export default function TyreDOTDecoder({ initialNote, onApply }: TyreDOTDecoderP
         SP: spMatch ? (spMatch[1] + (spMatch[2] ? spMatch[2].substring(2) : '')) : '',
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialNote]);
 
   const handleApply = () => {

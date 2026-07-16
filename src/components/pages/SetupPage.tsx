@@ -6,15 +6,36 @@ import type { ChecklistItem } from '../../lib/storage';
 import LoadingSpinner from '../common/LoadingSpinner';
 import ActiveSessionPanel from '../setup/ActiveSessionPanel';
 import SetupForm from '../setup/SetupForm';
+import { AlertTriangle } from 'lucide-react';
 
 export default function SetupPage() {
   const navigate = useNavigate();
   const { vehicle, items, isHydrated, setVehicle, setItems, resetInspection, hydrateStore, startDemoInspection } = useInspectionStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [storageWarning, setStorageWarning] = useState<string | null>(null);
 
   useEffect(() => {
     hydrateStore();
   }, [hydrateStore]);
+
+  useEffect(() => {
+    if (navigator.storage && navigator.storage.estimate) {
+      navigator.storage.estimate().then((estimate) => {
+        const usage = estimate.usage || 0;
+        const quota = estimate.quota || 1;
+        const percentUsed = (usage / quota) * 100;
+        const freeSpace = quota - usage;
+        const fiftyMB = 50 * 1024 * 1024; // 50MB limit
+
+        if (freeSpace < fiftyMB || percentUsed > 90) {
+          const freeMB = Math.round(freeSpace / (1024 * 1024));
+          setStorageWarning(`Warning: Low storage space detected! Only ${freeMB}MB of allocated browser storage is remaining. Please clean up files or complete previous inspections to prevent photo capture failures.`);
+        }
+      }).catch((err) => {
+        console.error('Failed to estimate storage quota:', err);
+      });
+    }
+  }, []);
 
   const handleStartFresh = async () => {
     const confirm = window.confirm('Are you sure you want to start a fresh inspection? All unsaved current progress will be lost.');
@@ -73,13 +94,33 @@ export default function SetupPage() {
   }
 
   return (
-    <SetupForm
-      onSubmit={handleSetupSubmit}
-      isSubmitting={isSubmitting}
-      onTryDemo={() => {
-        startDemoInspection();
-        navigate('/inspection');
-      }}
-    />
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
+      {storageWarning && (
+        <div style={{
+          backgroundColor: 'rgba(207, 45, 86, 0.05)',
+          border: '1px solid var(--color-semantic-error)',
+          padding: '12px 16px',
+          borderRadius: 'var(--rounded-md)',
+          textAlign: 'left',
+          maxWidth: '600px',
+          margin: '20px auto 0 auto',
+          display: 'flex',
+          gap: '12px',
+          alignItems: 'center',
+          color: 'var(--color-semantic-error)'
+        }}>
+          <AlertTriangle size={20} style={{ flexShrink: 0 }} />
+          <span style={{ fontSize: '13.5px', fontWeight: 500 }}>{storageWarning}</span>
+        </div>
+      )}
+      <SetupForm
+        onSubmit={handleSetupSubmit}
+        isSubmitting={isSubmitting}
+        onTryDemo={() => {
+          startDemoInspection();
+          navigate('/inspection');
+        }}
+      />
+    </div>
   );
 }

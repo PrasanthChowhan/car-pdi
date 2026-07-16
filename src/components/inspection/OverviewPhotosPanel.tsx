@@ -164,9 +164,11 @@ function OverviewPhotoCard({ view, photoId, updatePhoto }: PhotoCardProps) {
       }
 
       updatePhoto(view.id, newPhotoId);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Overview photo capture failed:', error);
-      alert('Photo capture failed. Please try again.');
+      if (error.name !== 'QuotaExceededError') {
+        alert('Photo capture failed. Please try again.');
+      }
     } finally {
       setLoading(false);
       if (cameraInputRef.current) cameraInputRef.current.value = '';
@@ -203,7 +205,7 @@ function OverviewPhotoCard({ view, photoId, updatePhoto }: PhotoCardProps) {
         transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
         overflow: 'hidden'
       }}
-      onClick={(e) => {
+      onClick={() => {
         // Do not trigger fileInput directly on card click to let user click the specific buttons
       }}
       onMouseOver={(e) => {

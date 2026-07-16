@@ -8,6 +8,7 @@ import LoadingSpinner from '../common/LoadingSpinner';
 import SummaryPhoto from '../summary/SummaryPhoto';
 import SignaturePad from '../summary/SignaturePad';
 import { decodeIndianVIN } from '../../lib/decoderUtils';
+import JSZip from 'jszip';
 
 function SummaryOverviewPhoto({ photoId }: { photoId: string }) {
   const [url, setUrl] = useState<string | null>(null);
@@ -61,6 +62,7 @@ export default function SummaryPage() {
     hydrateStore 
   } = useInspectionStore();
   const [generating, setGenerating] = useState(false);
+  const [exporting, setExporting] = useState(false);
   const [debugLog, setDebugLog] = useState<string | null>(null);
 
   useEffect(() => {
@@ -111,26 +113,64 @@ export default function SummaryPage() {
     }
   };
 
-  const handleExportJSON = () => {
-    const proceed = window.confirm(
-      "Warning: Stored photos are NOT included in the raw JSON export. This export contains checklist answers and vehicle data only. Do you want to proceed?"
-    );
-    if (!proceed) return;
-
+  const handleExportZIP = async () => {
+    setExporting(true);
     try {
-      const dataStr = JSON.stringify({ vehicle, items }, null, 2);
-      const blob = new Blob([dataStr], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
+      const zip = new JSZip();
+
+      // 1. Add JSON data
+      const dataStr = JSON.stringify({ vehicle, items, metadata }, null, 2);
+      zip.file('inspection_data.json', dataStr);
+
+      // Create photos folder
+      const photosFolder = zip.folder('photos');
+      if (photosFolder) {
+        // 2. Add checklist photos
+        for (const item of allItems) {
+          if (item.photoId) {
+            try {
+              const blob = await loadImageBlob(item.photoId);
+              if (blob) {
+                photosFolder.file(`item_${item.id}.jpg`, blob);
+              }
+            } catch (err) {
+              console.warn(`Failed to fetch blob for item photo ${item.photoId}:`, err);
+            }
+          }
+        }
+
+        // 3. Add overview photos
+        if (overviewPhotos) {
+          for (const [key, photoId] of Object.entries(overviewPhotos)) {
+            if (photoId) {
+              try {
+                const blob = await loadImageBlob(photoId);
+                if (blob) {
+                  photosFolder.file(`overview_${key}.jpg`, blob);
+                }
+              } catch (err) {
+                console.warn(`Failed to fetch blob for overview photo ${photoId}:`, err);
+              }
+            }
+          }
+        }
+      }
+
+      // Generate and download ZIP
+      const zipBlob = await zip.generateAsync({ type: 'blob' });
+      const url = URL.createObjectURL(zipBlob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `PDI_Data_${vehicle.make}_${vehicle.model}.json`;
+      a.download = `PDI_Data_${vehicle.make}_${vehicle.model}_${vehicle.vin || 'no-vin'}.zip`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Failed to export raw JSON data:', error);
-      alert('Failed to export raw JSON data.');
+      console.error('Failed to export ZIP file:', error);
+      alert('Failed to export ZIP file. Please try again.');
+    } finally {
+      setExporting(false);
     }
   };
 
@@ -505,11 +545,12 @@ export default function SummaryPage() {
         <div className="button-group-responsive" style={{ gap: '12px' }}>
           <button 
             className="button-secondary" 
-            onClick={handleExportJSON}
+            onClick={handleExportZIP}
+            disabled={exporting}
             style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', height: '48px' }}
           >
             <Download size={16} />
-            <span>Export JSON Data</span>
+            <span>{exporting ? 'Exporting ZIP...' : 'Export ZIP (with Photos)'}</span>
           </button>
 
           <button 

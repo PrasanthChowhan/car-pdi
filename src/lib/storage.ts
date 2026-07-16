@@ -38,8 +38,11 @@ const STATE_KEY = 'pdi_app_state';
 export async function saveAppState(state: AppState): Promise<void> {
   try {
     await set(STATE_KEY, state, stateStore);
-  } catch (error) {
+  } catch (error: any) {
     console.error('Failed to save app state to IndexedDB', error);
+    if (error.name === 'QuotaExceededError') {
+      alert('Storage quota exceeded! Inspection progress cannot be saved. Please free up browser storage.');
+    }
     throw error;
   }
 }

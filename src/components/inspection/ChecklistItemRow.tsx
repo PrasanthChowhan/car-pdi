@@ -75,9 +75,11 @@ export default function ChecklistItemRow({ item, updateStatus, updateNote, updat
       }
 
       updatePhoto(item.id, newPhotoId);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Photo capture failed:', error);
-      alert('Photo capture failed. Please try again.');
+      if (error.name !== 'QuotaExceededError') {
+        alert('Photo capture failed. Please try again.');
+      }
     } finally {
       setLoadingImage(false);
       if (cameraInputRef.current) cameraInputRef.current.value = '';
