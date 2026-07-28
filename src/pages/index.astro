@@ -3,7 +3,12 @@ import '../index.css';
 import Header from '../components/common/Header.tsx';
 import Footer from '../components/common/Footer.tsx';
 
-const canonicalUrl = new URL(Astro.url.pathname, 'https://carpdi.online').toString();
+// Normalize canonical URL: strip trailing slash except for the root path
+let cleanedPath = Astro.url.pathname;
+if (cleanedPath.length > 1 && cleanedPath.endsWith('/')) {
+  cleanedPath = cleanedPath.slice(0, -1);
+}
+const canonicalUrl = new URL(cleanedPath, 'https://carpdi.online').toString();
 ---
 <!DOCTYPE html>
 <html lang="en">
