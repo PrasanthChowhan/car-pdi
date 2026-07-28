@@ -84,7 +84,7 @@ export default function SetupForm({ onSubmit, isSubmitting, onTryDemo }: SetupFo
         
         {showPrep && (
           <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)', borderTop: '1px solid var(--color-hairline-soft)', textAlign: 'left' }}>
-            <div style={{ display: 'flex', gap: '12px', backgroundColor: 'rgba(245, 78, 0, 0.05)', borderLeft: '3px solid var(--color-primary)', padding: '12px 16px', borderRadius: '0 var(--rounded-md) var(--rounded-md) 0' }}>
+            <div style={{ display: 'flex', gap: '12px', backgroundColor: 'var(--color-canvas-soft)', border: '1px solid var(--color-primary)', padding: '12px 16px', borderRadius: 'var(--rounded-md)' }}>
               <AlertTriangle size={18} style={{ color: 'var(--color-primary)', flexShrink: 0, marginTop: '2px' }} />
               <p className="body-sm" style={{ color: 'var(--color-ink)', margin: 0, lineHeight: 1.5 }}>
                 <strong>Critical Rule:</strong> Inspect the vehicle and verify details before signing final paperwork, making final payments, or registering the car in your name.

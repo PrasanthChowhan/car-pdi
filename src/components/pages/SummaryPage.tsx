@@ -33,7 +33,7 @@ function SummaryOverviewPhoto({ photoId }: { photoId: string }) {
     };
   }, [photoId]);
 
-  if (!url) return <span style={{ fontSize: '9px', color: 'var(--color-muted)' }}>Loading...</span>;
+  if (!url) return <span style={{ fontSize: '11px', color: 'var(--color-muted)' }}>Loading...</span>;
 
   return <img src={url} alt="Overview photo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />;
 }
@@ -222,7 +222,7 @@ export default function SummaryPage() {
       {/* Vehicle Identity Card */}
       <div className="card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 'var(--spacing-base)', textAlign: 'left', marginBottom: 'var(--spacing-lg)' }}>
         <div style={{ flex: 1, minWidth: '220px' }}>
-          <span className="caption-uppercase" style={{ color: 'var(--color-muted)', fontSize: '10px' }}>Vehicle Details</span>
+          <span className="caption-uppercase" style={{ color: 'var(--color-muted)' }}>Vehicle Details</span>
           <h4 className="title-md" style={{ color: 'var(--color-ink)', marginTop: '4px', marginBottom: '2px', fontWeight: 600 }}>
             {vehicle.make} {vehicle.model}
           </h4>
@@ -246,15 +246,15 @@ export default function SummaryPage() {
         {/* Simple counts overview */}
         <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
           <div style={{ textAlign: 'center', minWidth: '60px' }}>
-            <span className="caption-uppercase" style={{ color: 'var(--color-muted)', fontSize: '9px' }}>Checked</span>
+            <span className="caption-uppercase" style={{ color: 'var(--color-muted)' }}>Checked</span>
             <h3 className="title-md" style={{ color: 'var(--color-ink)', margin: '4px 0 0 0' }}>{passed + flagged} / {total}</h3>
           </div>
           <div style={{ textAlign: 'center', minWidth: '60px' }}>
-            <span className="caption-uppercase" style={{ color: 'var(--color-muted)', fontSize: '9px' }}>Passed</span>
+            <span className="caption-uppercase" style={{ color: 'var(--color-muted)' }}>Passed</span>
             <h3 className="title-md" style={{ color: 'var(--color-semantic-success)', margin: '4px 0 0 0' }}>{passed}</h3>
           </div>
           <div style={{ textAlign: 'center', minWidth: '60px' }}>
-            <span className="caption-uppercase" style={{ color: 'var(--color-muted)', fontSize: '9px' }}>Flagged</span>
+            <span className="caption-uppercase" style={{ color: 'var(--color-muted)' }}>Flagged</span>
             <h3 className="title-md" style={{ color: 'var(--color-semantic-error)', margin: '4px 0 0 0' }}>{flagged}</h3>
           </div>
         </div>
@@ -289,7 +289,7 @@ export default function SummaryPage() {
               >
                 <span 
                   style={{ 
-                    fontSize: '10px', 
+                    fontSize: '11px', 
                     color: 'var(--color-muted)', 
                     fontWeight: 600,
                     whiteSpace: 'nowrap',
@@ -316,7 +316,7 @@ export default function SummaryPage() {
                   {photoId ? (
                     <SummaryOverviewPhoto photoId={photoId} />
                   ) : (
-                    <span style={{ fontSize: '10px', color: 'var(--color-muted)' }}>Missing</span>
+                    <span style={{ fontSize: '11px', color: 'var(--color-muted)' }}>Missing</span>
                   )}
                 </div>
               </div>
@@ -474,7 +474,7 @@ export default function SummaryPage() {
                 placeholder="Enter current odometer reading"
               />
               {parseInt(metadata?.odometer || '0', 10) > 100 && (
-                <div style={{ display: 'flex', gap: '6px', color: 'var(--color-semantic-error)', fontSize: '12px', alignItems: 'center', marginTop: '4px', fontWeight: 500 }}>
+                <div style={{ display: 'flex', gap: '6px', color: 'var(--color-semantic-error)', fontSize: '13px', alignItems: 'center', marginTop: '4px', fontWeight: 500 }}>
                   <AlertTriangle size={14} />
                   <span>Odometer &gt; 100 km is a major Pre-Delivery red flag!</span>
                 </div>
@@ -526,7 +526,7 @@ export default function SummaryPage() {
           className="button-primary" 
           onClick={handleGeneratePDF}
           disabled={generating}
-          style={{ height: '52px', minHeight: '52px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', fontSize: '15px' }}
+          style={{ height: '52px', minHeight: '52px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', fontSize: '16px' }}
         >
           <FileDown size={20} />
           <span>{generating ? 'Assembling PDF...' : 'Download Official PDF Report'}</span>
@@ -589,7 +589,7 @@ export default function SummaryPage() {
                       </h5>
                       
                       {item.note && (
-                        <p className="body-sm" style={{ fontStyle: 'italic', color: 'var(--color-body)', backgroundColor: 'var(--color-canvas-soft)', padding: '10px 14px', borderRadius: 'var(--rounded-sm)', borderLeft: '3px solid var(--color-muted)', margin: '8px 0 0 0' }}>
+                        <p className="body-sm" style={{ fontStyle: 'italic', color: 'var(--color-body)', backgroundColor: 'var(--color-canvas-soft)', padding: '10px 14px', borderRadius: 'var(--rounded-sm)', border: '1px solid var(--color-hairline)', margin: '8px 0 0 0' }}>
                           "{item.note}"
                         </p>
                       )}

@@ -150,7 +150,7 @@ export default function SignaturePad({ label, value, onChange, onClear }: Signat
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', width: '100%' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <span className="caption-uppercase" style={{ color: 'var(--color-muted)', fontSize: '10px' }}>
+        <span className="caption-uppercase" style={{ color: 'var(--color-muted)' }}>
           {label}
         </span>
         {!isEmpty && (

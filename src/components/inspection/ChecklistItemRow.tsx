@@ -165,7 +165,7 @@ export default function ChecklistItemRow({ item, updateStatus, updateNote, updat
           <span 
             style={{ 
               color: isPassed ? 'var(--color-muted)' : 'var(--color-ink)', 
-              fontSize: '15px',
+              fontSize: '16px',
               lineHeight: 1.5,
               fontWeight: 500,
               textDecoration: isPassed ? 'line-through' : 'none',
@@ -182,7 +182,7 @@ export default function ChecklistItemRow({ item, updateStatus, updateNote, updat
           )}
           {template?.extendedDescription && !isPassed && (
             <details style={{ marginTop: '4px' }}>
-              <summary style={{ fontSize: '12px', color: 'var(--color-primary)', cursor: 'pointer', fontWeight: 500 }}>Read More & Examples</summary>
+              <summary style={{ fontSize: '13px', color: 'var(--color-primary)', cursor: 'pointer', fontWeight: 500 }}>Read More & Examples</summary>
               <div style={{ marginTop: '6px', fontSize: '12.5px', color: 'var(--color-body)', backgroundColor: 'var(--color-surface)', padding: '10px', borderRadius: 'var(--rounded-md)', border: '1px solid var(--color-hairline)', lineHeight: 1.5 }}>
                 {template.extendedDescription}
               </div>
@@ -221,7 +221,7 @@ export default function ChecklistItemRow({ item, updateStatus, updateNote, updat
 
       {(isFlagged || (isPassed && (showPassNote || item.note))) && (
         <div className="note-container checklist-note-container">
-          <label htmlFor={`note-${item.id}`} className="caption-uppercase" style={{ color: 'var(--color-muted)', fontSize: '10px' }}>
+          <label htmlFor={`note-${item.id}`} className="caption-uppercase" style={{ color: 'var(--color-muted)' }}>
             {isPassed ? 'Verification Notes / Comments' : 'Flagged Defect Note'}
           </label>
           <textarea
@@ -250,7 +250,7 @@ export default function ChecklistItemRow({ item, updateStatus, updateNote, updat
                   }
                 }
               }}
-              style={{ alignSelf: 'flex-start', height: '36px', minHeight: '36px', padding: '0 12px', fontSize: '12.5px', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}
+              style={{ alignSelf: 'flex-start', height: '36px', minHeight: '36px', padding: '0 12px', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}
             >
               <span>🔍 Autofill from decoded VIN</span>
             </button>
@@ -268,7 +268,7 @@ export default function ChecklistItemRow({ item, updateStatus, updateNote, updat
 
           {suggestions.length > 0 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <span className="caption-uppercase" style={{ color: 'var(--color-muted)', fontSize: '10px' }}>
+              <span className="caption-uppercase" style={{ color: 'var(--color-muted)' }}>
                 Quick Suggestions
               </span>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
@@ -328,7 +328,7 @@ export default function ChecklistItemRow({ item, updateStatus, updateNote, updat
           )}
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
-            <span className="caption-uppercase" style={{ color: 'var(--color-muted)', fontSize: '10px' }}>
+            <span className="caption-uppercase" style={{ color: 'var(--color-muted)' }}>
               {isPassed ? 'Verification Photo' : 'Evidence Photo'}
             </span>
             

@@ -131,7 +131,7 @@ export default function TyreDOTDecoder({ initialNote, onApply }: TyreDOTDecoderP
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(70px, 1fr))', gap: '8px' }}>
         {(['FL', 'FR', 'RL', 'RR', 'SP'] as const).map((key) => (
           <div key={key} style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-            <label htmlFor={`pdi-tyre-${key}`} style={{ fontSize: '10px', fontWeight: 600, color: 'var(--color-ink)' }}>
+            <label htmlFor={`pdi-tyre-${key}`} className="caption-uppercase" style={{ color: 'var(--color-ink)' }}>
               {key} {key === 'SP' ? '(Spare)' : ''}
             </label>
             <input
@@ -166,7 +166,7 @@ export default function TyreDOTDecoder({ initialNote, onApply }: TyreDOTDecoderP
             }
 
             return (
-              <div key={key} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '12px' }}>
+              <div key={key} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '13px' }}>
                 <span><strong>{key}:</strong> Week {decoded.week}, {decoded.year}</span>
                 <span style={{ color, fontWeight: 700, backgroundColor: badgeColor, padding: '1px 6px', borderRadius: 'var(--rounded-pill)' }}>{decoded.ageMonths}m old ({decoded.status.toUpperCase()})</span>
               </div>

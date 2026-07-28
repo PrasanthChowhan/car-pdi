@@ -24,7 +24,7 @@ export default function VINDecoder({ vehicle, setVehicle, onApply }: VINDecoderP
       </div>
       
       <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-        <label htmlFor="pdi-vin" style={{ fontSize: '10px', color: 'var(--color-muted)', fontWeight: 600 }} className="caption-uppercase">VIN / Chassis Number</label>
+        <label htmlFor="pdi-vin" style={{ color: 'var(--color-muted)' }} className="caption-uppercase">VIN / Chassis Number</label>
         <input
           type="text"
           id="pdi-vin"
@@ -38,7 +38,7 @@ export default function VINDecoder({ vehicle, setVehicle, onApply }: VINDecoderP
 
       {decoded?.isValid && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '4px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', fontSize: '12px', backgroundColor: 'var(--color-canvas)', padding: '8px', borderRadius: 'var(--rounded-md)', border: '1px solid var(--color-hairline)' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', fontSize: '13px', backgroundColor: 'var(--color-canvas)', padding: '8px', borderRadius: 'var(--rounded-md)', border: '1px solid var(--color-hairline)' }}>
             <div><strong>Brand:</strong> {decoded.manufacturer} ({decoded.country})</div>
             {decoded.year && <div><strong>Model Year:</strong> {decoded.year}</div>}
           </div>

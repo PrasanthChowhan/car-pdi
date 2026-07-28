@@ -152,7 +152,7 @@ export default function WelcomeSheet() {
                 style={{
                   width: activeSlide === idx ? '20px' : '6px',
                   height: '6px',
-                  borderRadius: '3px',
+                  borderRadius: 'var(--rounded-pill)',
                   backgroundColor: activeSlide === idx ? 'var(--color-primary)' : 'var(--color-hairline-strong)',
                   transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
                 }}

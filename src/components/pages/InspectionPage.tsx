@@ -170,10 +170,10 @@ export default function InspectionPage() {
       <div className="metrics-dashboard-solid">
         <div className="metrics-row">
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-            <span className="caption-uppercase" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '10px' }}>Total Progress</span>
+            <span className="caption-uppercase" style={{ color: 'rgba(255,255,255,0.6)' }}>Total Progress</span>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px', marginTop: '4px' }}>
-              <span style={{ fontSize: '32px', fontWeight: 'bold', color: '#ffffff', lineHeight: 1 }}>{progressPercent}%</span>
-              <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)' }}>({completedItems} / {totalItems} items)</span>
+              <span style={{ fontSize: '36px', fontWeight: 'bold', color: '#ffffff', lineHeight: 1 }}>{progressPercent}%</span>
+              <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)' }}>({completedItems} / {totalItems} items)</span>
             </div>
           </div>
           
@@ -195,7 +195,14 @@ export default function InspectionPage() {
 
         {/* Progress Line */}
         <div style={{ height: '4px', backgroundColor: 'rgba(255,255,255,0.15)', borderRadius: 'var(--rounded-pill)', overflow: 'hidden', marginTop: '16px' }}>
-          <div style={{ height: '100%', width: `${progressPercent}%`, backgroundColor: 'var(--color-primary)', transition: 'width 0.3s ease' }}></div>
+          <div style={{ 
+            height: '100%', 
+            width: '100%', 
+            backgroundColor: 'var(--color-primary)', 
+            transform: `scaleX(${progressPercent / 100})`, 
+            transformOrigin: 'left', 
+            transition: 'transform 0.3s ease' 
+          }}></div>
         </div>
       </div>
 
@@ -262,7 +269,7 @@ export default function InspectionPage() {
                   ) : (
                     <span 
                       style={{ 
-                        fontSize: '10px', 
+                        fontSize: '11px', 
                         backgroundColor: isActive ? 'var(--color-primary)' : 'var(--color-hairline-soft)', 
                         color: isActive ? '#ffffff' : 'var(--color-muted)',
                         borderRadius: 'var(--rounded-pill)',
@@ -277,7 +284,7 @@ export default function InspectionPage() {
                   <>
                     {catFlagged > 0 && (
                       <span style={{ 
-                        fontSize: '10px', 
+                        fontSize: '11px', 
                         backgroundColor: 'var(--color-semantic-error)', 
                         color: '#ffffff',
                         borderRadius: 'var(--rounded-pill)',
@@ -290,7 +297,7 @@ export default function InspectionPage() {
                     {catPending > 0 ? (
                       <span 
                         style={{ 
-                          fontSize: '10px', 
+                          fontSize: '11px', 
                           backgroundColor: isActive ? 'var(--color-primary)' : 'var(--color-hairline-soft)', 
                           color: isActive ? '#ffffff' : 'var(--color-muted)',
                           borderRadius: '50%',
@@ -338,7 +345,6 @@ export default function InspectionPage() {
                   height: '36px', 
                   minHeight: '36px', 
                   padding: '0 12px', 
-                  fontSize: '12px', 
                   color: 'var(--color-semantic-success)',
                   borderColor: 'var(--color-semantic-success)',
                   backgroundColor: 'rgba(31, 138, 101, 0.02)',
@@ -359,7 +365,6 @@ export default function InspectionPage() {
                 height: '36px', 
                 minHeight: '36px', 
                 padding: '0 12px', 
-                fontSize: '12px', 
                 color: 'var(--color-muted)',
                 display: 'flex',
                 alignItems: 'center',

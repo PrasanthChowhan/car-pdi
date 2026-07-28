@@ -54,12 +54,11 @@ export class ErrorBoundary extends Component<Props, State> {
             width: '100%',
             textAlign: 'center',
             padding: 'var(--spacing-lg)',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
-            border: '1px solid var(--color-hairline)',
+            border: '1px solid var(--color-hairline-strong)',
           }}>
             <div style={{
               color: 'var(--color-semantic-error)',
-              fontSize: '48px',
+              fontSize: '36px',
               marginBottom: 'var(--spacing-sm)'
             }}>
               ⚠️
@@ -87,7 +86,7 @@ export class ErrorBoundary extends Component<Props, State> {
                 overflowX: 'auto',
                 border: '1px solid var(--color-hairline-soft)',
                 color: 'var(--color-semantic-error)',
-                fontSize: '12px',
+                fontSize: '13px',
                 marginBottom: 'var(--spacing-lg)',
                 maxHeight: '150px',
               }}>

@@ -1,8 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useInspectionStore } from '../../store/useInspectionStore';
+import { Menu, X } from 'lucide-react';
 
 const Header: React.FC = () => {
   const [isToolsOpen, setIsToolsOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const toolsRef = useRef<HTMLDivElement>(null);
   
   const syncStatus = useInspectionStore((state) => state.syncStatus);
@@ -25,19 +27,21 @@ const Header: React.FC = () => {
       display: 'flex', 
       justifyContent: 'space-between', 
       alignItems: 'center', 
-      padding: 'var(--spacing-base) var(--spacing-lg)', 
+      padding: '0 var(--spacing-lg)', 
       borderBottom: '1px solid var(--color-hairline)', 
       backgroundColor: 'var(--color-canvas)',
       position: 'sticky',
       top: 0,
-      zIndex: 1000
+      zIndex: 1000,
+      height: '64px',
+      boxSizing: 'border-box'
     }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-sm)' }}>
         <a href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 'var(--spacing-xs)' }}>
           <img alt="Logo" style={{ height: '32px', width: '32px' }} src="/car.svg" />
           <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1 }}>
             <span className="display-sm" style={{ fontWeight: 700, color: 'var(--color-ink)', textTransform: 'uppercase', letterSpacing: '-0.5px' }}>PDI Assistant</span>
-            <span style={{ fontSize: '10px', color: 'var(--color-muted)', fontWeight: 600, letterSpacing: '0.8px', textTransform: 'uppercase' }}>Car PDI Online</span>
+            <span className="caption-uppercase" style={{ color: 'var(--color-muted)', letterSpacing: '0.8px' }}>Car PDI Online</span>
           </div>
         </a>
 
@@ -60,7 +64,7 @@ const Header: React.FC = () => {
             width: '6px',
             height: '6px',
             borderRadius: '50%',
-            backgroundColor: syncStatus === 'saved' ? '#1f8a65' : syncStatus === 'saving' ? '#f54e00' : '#cf2d56',
+            backgroundColor: syncStatus === 'saved' ? 'var(--color-semantic-success)' : syncStatus === 'saving' ? 'var(--color-primary)' : 'var(--color-semantic-error)',
             animation: syncStatus === 'saving' ? 'pulse 1s infinite' : 'none'
           }} />
           <style>{`
@@ -81,6 +85,7 @@ const Header: React.FC = () => {
         <style>{`
           @media (min-width: 768px) { 
             .desktop-nav { display: flex !important; } 
+            .mobile-nav-toggle { display: none !important; }
           }
           .nav-link {
             font-size: 14px;
@@ -110,14 +115,15 @@ const Header: React.FC = () => {
                 fontWeight: 600, 
                 background: 'none', 
                 border: 'none', 
-                padding: 0, 
+                padding: '8px 12px', 
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '4px',
                 fontFamily: 'inherit',
                 fontSize: '14px',
-                transition: 'color 0.2s ease'
+                transition: 'color 0.2s ease',
+                borderRadius: 'var(--rounded-sm)'
               }}
             >
               <span>Tools</span>
@@ -147,9 +153,8 @@ const Header: React.FC = () => {
                   top: '100%',
                   left: 0,
                   backgroundColor: 'var(--color-surface-card)',
-                  border: '1px solid var(--color-hairline)',
+                  border: '1px solid var(--color-hairline-strong)',
                   borderRadius: 'var(--rounded-md)',
-                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
                   padding: '6px 0',
                   minWidth: '150px',
                   zIndex: 1001,
@@ -181,6 +186,89 @@ const Header: React.FC = () => {
         </div>
       </div>
 
+      {/* Mobile Nav Toggle */}
+      <button 
+        className="mobile-nav-toggle"
+        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        aria-label="Toggle menu"
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '44px',
+          height: '44px',
+          background: 'none',
+          border: 'none',
+          cursor: 'pointer',
+          padding: 0,
+          color: 'var(--color-ink)',
+          borderRadius: 'var(--rounded-sm)'
+        }}
+      >
+        {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+      </button>
+
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <div style={{
+          position: 'fixed',
+          top: '64px', 
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'var(--color-canvas)',
+          borderTop: '1px solid var(--color-hairline)',
+          zIndex: 999,
+          display: 'flex',
+          flexDirection: 'column',
+          padding: 'var(--spacing-lg)',
+          gap: 'var(--spacing-md)',
+          animation: 'fadeIn 0.2s ease'
+        }}>
+          <a 
+            href="/deal-sheet-analyzer" 
+            onClick={() => setIsMobileMenuOpen(false)}
+            style={{
+              fontSize: '16px',
+              fontWeight: 600,
+              color: 'var(--color-ink)',
+              textDecoration: 'none',
+              padding: '16px 0',
+              borderBottom: '1px solid var(--color-hairline-soft)'
+            }}
+          >
+            Deal Sheet Analyzer
+          </a>
+          <a 
+            href="/tyre-decoder" 
+            onClick={() => setIsMobileMenuOpen(false)}
+            style={{
+              fontSize: '16px',
+              fontWeight: 600,
+              color: 'var(--color-ink)',
+              textDecoration: 'none',
+              padding: '16px 0',
+              borderBottom: '1px solid var(--color-hairline-soft)'
+            }}
+          >
+            Tyre DOT Decoder
+          </a>
+          <a 
+            href="/stories" 
+            onClick={() => setIsMobileMenuOpen(false)}
+            style={{
+              fontSize: '16px',
+              fontWeight: 600,
+              color: 'var(--color-ink)',
+              textDecoration: 'none',
+              padding: '16px 0',
+              borderBottom: '1px solid var(--color-hairline-soft)'
+            }}
+          >
+            Buyer Stories
+          </a>
+        </div>
+      )}
     </nav>
   );
 };
