@@ -11,6 +11,8 @@ export default function Footer() {
         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 'var(--spacing-lg)' }}>
           <a href="/about-us" className="body-sm" style={{ color: 'var(--color-muted)', textDecoration: 'none' }}>About</a>
           <a href="/contact-us" className="body-sm" style={{ color: 'var(--color-muted)', textDecoration: 'none' }}>Contact</a>
+          <a href="/deal-breakers" className="body-sm" style={{ color: 'var(--color-muted)', textDecoration: 'none' }}>Deal-Breakers</a>
+          <a href="/what-to-bring" className="body-sm" style={{ color: 'var(--color-muted)', textDecoration: 'none' }}>What to Bring</a>
           <a href="/privacy-policy" className="body-sm" style={{ color: 'var(--color-muted)', textDecoration: 'none' }}>Privacy Policy</a>
           <a href="/terms-conditions" className="body-sm" style={{ color: 'var(--color-muted)', textDecoration: 'none' }}>Terms & Conditions</a>
         </div>

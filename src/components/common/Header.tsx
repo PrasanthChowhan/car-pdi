@@ -126,7 +126,7 @@ const Header: React.FC = () => {
                 borderRadius: 'var(--rounded-sm)'
               }}
             >
-              <span>Tools</span>
+              <span>Tools & Guides</span>
               <svg 
                 xmlns="http://www.w3.org/2000/svg" 
                 width="14" 
@@ -156,7 +156,7 @@ const Header: React.FC = () => {
                   border: '1px solid var(--color-hairline-strong)',
                   borderRadius: 'var(--rounded-md)',
                   padding: '6px 0',
-                  minWidth: '150px',
+                  minWidth: '160px',
                   zIndex: 1001,
                   marginTop: '8px',
                   display: 'flex',
@@ -176,7 +176,39 @@ const Header: React.FC = () => {
                     transition: 'background-color 0.15s, color 0.15s'
                   }}
                 >
-                  Tyre Decoder
+                  Tyre DOT Decoder
+                </a>
+                <a 
+                  href="/deal-breakers" 
+                  className="dropdown-item" 
+                  onClick={() => setIsToolsOpen(false)}
+                  style={{
+                    padding: '8px 16px',
+                    fontSize: '13.5px',
+                    color: 'var(--color-ink)',
+                    textDecoration: 'none',
+                    fontWeight: 500,
+                    transition: 'background-color 0.15s, color 0.15s',
+                    borderTop: '1px solid var(--color-hairline-soft)'
+                  }}
+                >
+                  Deal-Breakers
+                </a>
+                <a 
+                  href="/what-to-bring" 
+                  className="dropdown-item" 
+                  onClick={() => setIsToolsOpen(false)}
+                  style={{
+                    padding: '8px 16px',
+                    fontSize: '13.5px',
+                    color: 'var(--color-ink)',
+                    textDecoration: 'none',
+                    fontWeight: 500,
+                    transition: 'background-color 0.15s, color 0.15s',
+                    borderTop: '1px solid var(--color-hairline-soft)'
+                  }}
+                >
+                  What to Bring
                 </a>
               </div>
             )}
@@ -252,6 +284,34 @@ const Header: React.FC = () => {
             }}
           >
             Tyre DOT Decoder
+          </a>
+          <a 
+            href="/deal-breakers" 
+            onClick={() => setIsMobileMenuOpen(false)}
+            style={{
+              fontSize: '16px',
+              fontWeight: 600,
+              color: 'var(--color-ink)',
+              textDecoration: 'none',
+              padding: '16px 0',
+              borderBottom: '1px solid var(--color-hairline-soft)'
+            }}
+          >
+            Deal-Breakers
+          </a>
+          <a 
+            href="/what-to-bring" 
+            onClick={() => setIsMobileMenuOpen(false)}
+            style={{
+              fontSize: '16px',
+              fontWeight: 600,
+              color: 'var(--color-ink)',
+              textDecoration: 'none',
+              padding: '16px 0',
+              borderBottom: '1px solid var(--color-hairline-soft)'
+            }}
+          >
+            What to Bring
           </a>
           <a 
             href="/stories" 
