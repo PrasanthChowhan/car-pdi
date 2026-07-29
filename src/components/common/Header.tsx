@@ -23,7 +23,7 @@ const Header: React.FC = () => {
   }, []);
 
   return (
-    <nav style={{
+    <nav className="header-nav" style={{
       display: 'flex', 
       justifyContent: 'space-between', 
       alignItems: 'center', 
@@ -41,7 +41,7 @@ const Header: React.FC = () => {
           <img alt="Logo" style={{ height: '32px', width: '32px' }} src="/car.svg" />
           <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1 }}>
             <span className="display-sm" style={{ fontWeight: 700, color: 'var(--color-ink)', textTransform: 'uppercase', letterSpacing: '-0.5px' }}>PDI Assistant</span>
-            <span className="caption-uppercase" style={{ color: 'var(--color-muted)', letterSpacing: '0.8px' }}>Car PDI Online</span>
+            <span className="caption-uppercase brand-subhead" style={{ color: 'var(--color-muted)', letterSpacing: '0.8px' }}>Car PDI Online</span>
           </div>
         </a>
 
@@ -74,7 +74,7 @@ const Header: React.FC = () => {
               100% { opacity: 0.4; }
             }
           `}</style>
-          <span style={{ fontSize: '10.5px', textTransform: 'uppercase', letterSpacing: '0.4px', fontWeight: 600, color: 'var(--color-muted)' }}>
+          <span className="sync-status-text" style={{ fontSize: '10.5px', textTransform: 'uppercase', letterSpacing: '0.4px', fontWeight: 600, color: 'var(--color-muted)' }}>
             {syncStatus === 'saved' ? 'Saved' : syncStatus === 'saving' ? 'Saving...' : 'Error'}
           </span>
         </div>
@@ -86,6 +86,17 @@ const Header: React.FC = () => {
           @media (min-width: 768px) { 
             .desktop-nav { display: flex !important; } 
             .mobile-nav-toggle { display: none !important; }
+          }
+          @media (max-width: 480px) {
+            .header-nav {
+              padding: 0 var(--spacing-sm) !important;
+            }
+            .sync-status-text {
+              display: none !important;
+            }
+            .brand-subhead {
+              display: none !important;
+            }
           }
           .nav-link {
             font-size: 14px;
