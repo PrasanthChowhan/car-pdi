@@ -589,15 +589,27 @@ export default function SummaryPage() {
                   {category.label}
                 </span>
                 
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px', marginTop: '8px' }}>
                   {catItems.map(item => (
-                    <div key={item.id} style={{ padding: '14px 0', borderBottom: '1px solid var(--color-hairline-soft)' }}>
-                      <h5 className="title-sm" style={{ color: 'var(--color-ink)', marginBottom: '6px', fontWeight: 500 }}>
+                    <div 
+                      key={item.id} 
+                      className="card"
+                      style={{ 
+                        padding: '16px', 
+                        display: 'flex', 
+                        flexDirection: 'column', 
+                        gap: '12px',
+                        boxShadow: 'var(--shadow-sm)',
+                        border: '1px solid var(--color-hairline-soft)',
+                        textAlign: 'left'
+                      }}
+                    >
+                      <h5 className="title-sm" style={{ color: 'var(--color-ink)', margin: 0, fontWeight: 600, fontFamily: 'var(--font-display)' }}>
                         {item.label}
                       </h5>
                       
                       {item.note && (
-                        <p className="body-sm" style={{ fontStyle: 'italic', color: 'var(--color-body)', backgroundColor: 'var(--color-canvas-soft)', padding: '10px 14px', borderRadius: 'var(--rounded-sm)', border: '1px solid var(--color-hairline)', margin: '8px 0 0 0' }}>
+                        <p className="body-sm" style={{ fontStyle: 'italic', color: 'var(--color-body)', backgroundColor: 'var(--color-canvas-soft)', padding: '10px 14px', borderRadius: 'var(--rounded-sm)', border: '1px solid var(--color-hairline-soft)', margin: 0 }}>
                           "{item.note}"
                         </p>
                       )}

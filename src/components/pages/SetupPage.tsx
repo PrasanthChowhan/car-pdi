@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useInspectionStore } from '../../store/useInspectionStore';
 import { CHECKLIST_TEMPLATES } from '../../lib/checklistData';
@@ -50,7 +50,7 @@ export default function SetupPage() {
     }
   };
 
-  const handleSetupSubmit = (data: { make: string; model: string; vin: string; isEV: boolean }) => {
+  const handleSetupSubmit = useCallback((data: { make: string; model: string; vin: string; isEV: boolean }) => {
     setIsSubmitting(true);
 
     // Filter templates based on type
@@ -81,7 +81,7 @@ export default function SetupPage() {
     setItems(initialItems);
     setIsSubmitting(false);
     navigate('/inspection');
-  };
+  }, [navigate, setVehicle, setItems]);
 
   if (!isHydrated) {
     return <LoadingSpinner message="Loading application state..." />;
@@ -100,7 +100,7 @@ export default function SetupPage() {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)', width: '100%' }}>
       {storageWarning && (
         <div style={{
           backgroundColor: 'rgba(207, 45, 86, 0.05)',

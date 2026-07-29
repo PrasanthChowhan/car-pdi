@@ -55,7 +55,7 @@ export default function InspectionPage() {
     checkScroll();
     window.addEventListener('resize', checkScroll);
     return () => window.removeEventListener('resize', checkScroll);
-  }, []);
+  }, [isHydrated]);
 
   const scrollTabs = (direction: 'left' | 'right') => {
     if (tabsListRef.current) {
@@ -264,22 +264,23 @@ export default function InspectionPage() {
                   display: 'flex',
                   alignItems: 'center',
                   gap: '6px',
-                  backgroundColor: isActive ? 'var(--color-ink)' : 'var(--color-surface-card)',
-                  color: isActive ? 'var(--color-canvas)' : 'var(--color-body)',
-                  borderColor: isActive ? 'var(--color-ink)' : 'var(--color-hairline-strong)',
+                  backgroundColor: isActive ? 'var(--color-primary)' : 'var(--color-surface-card)',
+                  color: isActive ? '#ffffff' : 'var(--color-body)',
+                  borderColor: isActive ? 'var(--color-primary)' : 'var(--color-hairline-strong)',
                   boxShadow: isActive ? 'none' : undefined,
+                  transition: 'all 0.2s ease',
                 }}
               >
                 <span>{cat.label}</span>
                 {isOverview ? (
                   capturedCount === 9 ? (
-                    <CheckCircle2 size={14} style={{ color: 'var(--color-semantic-success)' }} />
+                    <CheckCircle2 size={14} style={{ color: isActive ? '#ffffff' : 'var(--color-semantic-success)' }} />
                   ) : (
                     <span 
                       style={{ 
                         fontSize: '11px', 
-                        backgroundColor: isActive ? 'var(--color-primary)' : 'var(--color-hairline-soft)', 
-                        color: isActive ? '#ffffff' : 'var(--color-muted)',
+                        backgroundColor: isActive ? '#ffffff' : 'var(--color-hairline-soft)', 
+                        color: isActive ? 'var(--color-primary)' : 'var(--color-muted)',
                         borderRadius: 'var(--rounded-pill)',
                         padding: '1px 6px',
                         fontWeight: 'bold'
@@ -297,7 +298,8 @@ export default function InspectionPage() {
                         color: '#ffffff',
                         borderRadius: 'var(--rounded-pill)',
                         padding: '1px 5px',
-                        fontWeight: 'bold'
+                        fontWeight: 'bold',
+                        border: isActive ? '1px solid rgba(255, 255, 255, 0.4)' : 'none'
                       }}>
                         {catFlagged}🚨
                       </span>
@@ -306,8 +308,8 @@ export default function InspectionPage() {
                       <span 
                         style={{ 
                           fontSize: '11px', 
-                          backgroundColor: isActive ? 'var(--color-primary)' : 'var(--color-hairline-soft)', 
-                          color: isActive ? '#ffffff' : 'var(--color-muted)',
+                          backgroundColor: isActive ? '#ffffff' : 'var(--color-hairline-soft)', 
+                          color: isActive ? 'var(--color-primary)' : 'var(--color-muted)',
                           borderRadius: '50%',
                           width: '18px',
                           height: '18px',
@@ -320,7 +322,7 @@ export default function InspectionPage() {
                         {catPending}
                       </span>
                     ) : (
-                      <CheckCircle2 size={14} style={{ color: 'var(--color-semantic-success)' }} />
+                      <CheckCircle2 size={14} style={{ color: isActive ? '#ffffff' : 'var(--color-semantic-success)' }} />
                     )}
                   </>
                 )}

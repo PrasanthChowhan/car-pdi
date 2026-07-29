@@ -5,9 +5,21 @@ import { Menu, X } from 'lucide-react';
 const Header: React.FC = () => {
   const [isToolsOpen, setIsToolsOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const toolsRef = useRef<HTMLDivElement>(null);
   
   const syncStatus = useInspectionStore((state) => state.syncStatus);
+
+  // Scroll listener to toggle navbar states
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   // Close dropdown if clicking outside
   useEffect(() => {
@@ -24,19 +36,23 @@ const Header: React.FC = () => {
 
   return (
     <nav className="header-nav" style={{
-      display: 'flex', 
-      justifyContent: 'space-between', 
-      alignItems: 'center', 
-      padding: '0 var(--spacing-lg)', 
-      borderBottom: '1px solid var(--color-hairline)', 
-      backgroundColor: 'var(--color-canvas)',
+      borderBottom: isScrolled ? '1px solid var(--color-hairline-soft)' : 'none', 
+      backgroundColor: isScrolled ? 'rgba(255, 255, 255, 0.85)' : 'var(--color-canvas)',
+      backdropFilter: isScrolled ? 'blur(12px)' : 'none',
+      WebkitBackdropFilter: isScrolled ? 'blur(12px)' : 'none',
+      boxShadow: isScrolled ? '0 4px 30px rgba(0, 0, 0, 0.03)' : 'none',
       position: 'sticky',
       top: 0,
       zIndex: 1000,
       height: '64px',
-      boxSizing: 'border-box'
+      boxSizing: 'border-box',
+      display: 'flex',
+      alignItems: 'center',
+      width: '100%',
+      transition: 'background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease'
     }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-sm)' }}>
+      <div className="header-container">
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-sm)' }}>
         <a href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 'var(--spacing-xs)' }}>
           <img alt="Logo" style={{ height: '32px', width: '32px' }} src="/car.svg" />
           <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1 }}>
@@ -83,14 +99,27 @@ const Header: React.FC = () => {
       {/* Desktop Nav */}
       <div className="desktop-nav" style={{ display: 'none', alignItems: 'center', gap: 'var(--spacing-lg)' }}>
         <style>{`
+          .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-base);
+            box-sizing: border-box;
+            height: 100%;
+          }
           @media (min-width: 768px) { 
             .desktop-nav { display: flex !important; } 
             .mobile-nav-toggle { display: none !important; }
           }
-          @media (max-width: 480px) {
-            .header-nav {
-              padding: 0 var(--spacing-sm) !important;
+          @media (max-width: 600px) {
+            .header-container {
+              padding: 0 var(--spacing-sm);
             }
+          }
+          @media (max-width: 480px) {
             .sync-status-text {
               display: none !important;
             }
@@ -250,6 +279,7 @@ const Header: React.FC = () => {
       >
         {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
+      </div>
 
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
@@ -259,8 +289,8 @@ const Header: React.FC = () => {
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundColor: 'var(--color-canvas)',
-          borderTop: '1px solid var(--color-hairline)',
+          backgroundColor: 'var(--color-surface-card)',
+          borderTop: '1px solid var(--color-hairline-soft)',
           zIndex: 999,
           display: 'flex',
           flexDirection: 'column',

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Shield, Sparkles, AlertTriangle, ArrowRight } from 'lucide-react';
 
 interface SetupFormProps {
@@ -12,6 +12,11 @@ export default function SetupForm({ onSubmit, isSubmitting, onTryDemo }: SetupFo
   const [model, setModel] = useState('');
   const [isEV, setIsEV] = useState(false);
   const [showPrep, setShowPrep] = useState(true);
+
+  const onSubmitRef = useRef(onSubmit);
+  useEffect(() => {
+    onSubmitRef.current = onSubmit;
+  }, [onSubmit]);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -30,16 +35,14 @@ export default function SetupForm({ onSubmit, isSubmitting, onTryDemo }: SetupFo
 
     // Auto-submit if coming from homepage with all required fields
     if (urlMake && urlModel) {
-      onSubmit({
+      onSubmitRef.current({
         make: urlMake.trim(),
         model: urlModel.trim(),
         vin: '',
         isEV: evFlag,
       });
-      // Clear URL to prevent re-submission if user hits back
-      window.history.replaceState({}, '', '/setup');
     }
-  }, [onSubmit]);
+  }, []); // Run only once on mount
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -103,70 +106,70 @@ export default function SetupForm({ onSubmit, isSubmitting, onTryDemo }: SetupFo
         )}
       </div>
 
-      {/* Form */}
-      <form id="setup-form" onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-lg)', textAlign: 'left' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
-            <label htmlFor="make" className="title-sm" style={{ color: 'var(--color-ink)' }}>Brand / Make</label>
-            <input
-              type="text"
-              id="make"
-              required
-              maxLength={50}
-              value={make}
-              onChange={(e) => setMake(e.target.value)}
-              placeholder="e.g. Tesla, Honda, Porsche"
-            />
+      {/* Form Wrapped in a Floating Card Console */}
+      <div className="card card-premium">
+        <form id="setup-form" onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-lg)', textAlign: 'left' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
+              <label htmlFor="make" className="title-sm" style={{ color: 'var(--color-ink)', fontFamily: 'var(--font-display)', fontWeight: 600 }}>Brand / Make</label>
+              <input
+                type="text"
+                id="make"
+                required
+                maxLength={50}
+                value={make}
+                onChange={(e) => setMake(e.target.value)}
+                placeholder="e.g. Tesla, Honda, Porsche"
+              />
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
+              <label htmlFor="model" className="title-sm" style={{ color: 'var(--color-ink)', fontFamily: 'var(--font-display)', fontWeight: 600 }}>Model Name</label>
+              <input
+                type="text"
+                id="model"
+                required
+                maxLength={50}
+                value={model}
+                onChange={(e) => setModel(e.target.value)}
+                placeholder="e.g. Model Y, Accord, Macan"
+              />
+            </div>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
-            <label htmlFor="model" className="title-sm" style={{ color: 'var(--color-ink)' }}>Model Name</label>
-            <input
-              type="text"
-              id="model"
-              required
-              maxLength={50}
-              value={model}
-              onChange={(e) => setModel(e.target.value)}
-              placeholder="e.g. Model Y, Accord, Macan"
-            />
+            <span className="title-sm" style={{ color: 'var(--color-ink)', fontFamily: 'var(--font-display)', fontWeight: 600 }}>Power Unit Architecture</span>
+            <div className="segmented-control">
+              <button
+                type="button"
+                onClick={() => setIsEV(false)}
+                className={!isEV ? 'active' : ''}
+              >
+                Gasoline / Hybrid / ICE
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsEV(true)}
+                className={isEV ? 'active' : ''}
+              >
+                ⚡ Electric Vehicle (EV)
+              </button>
+            </div>
           </div>
-        </div>
 
-
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
-          <span className="title-sm" style={{ color: 'var(--color-ink)' }}>Power Unit Architecture</span>
-          <div className="segmented-control">
+          <div style={{ display: 'flex', marginTop: 'var(--spacing-base)' }}>
             <button
-              type="button"
-              onClick={() => setIsEV(false)}
-              className={!isEV ? 'active' : ''}
+              type="submit"
+              className="button-primary"
+              disabled={isSubmitting}
+              style={{ width: '100%', display: 'flex', gap: '10px', justifyContent: 'center', height: '52px' }}
             >
-              Gasoline / Hybrid / ICE
-            </button>
-            <button
-              type="button"
-              onClick={() => setIsEV(true)}
-              className={isEV ? 'active' : ''}
-            >
-              ⚡ Electric Vehicle (EV)
+              <span>Start Inspection</span>
+              <ArrowRight size={18} />
             </button>
           </div>
-        </div>
-
-        <div style={{ display: 'flex', marginTop: 'var(--spacing-base)' }}>
-          <button
-            type="submit"
-            className="button-primary"
-            disabled={isSubmitting}
-            style={{ width: '100%', display: 'flex', gap: '10px', justifyContent: 'center', height: '52px' }}
-          >
-            <span>Start Inspection</span>
-            <ArrowRight size={18} />
-          </button>
-        </div>
-      </form>
+        </form>
+      </div>
 
     </div>
   );

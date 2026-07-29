@@ -307,6 +307,7 @@ export const useInspectionStore = create<InspectionStore>((set, get) => ({
   },
 
   hydrateStore: async () => {
+    if (get().isHydrated) return;
     try {
       const cachedState = await loadAppState();
       if (cachedState) {

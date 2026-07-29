@@ -2,6 +2,29 @@
 import '../index.css';
 import Header from '../components/common/Header.tsx';
 import Footer from '../components/common/Footer.tsx';
+import fs from 'fs';
+import path from 'path';
+
+// Auto-copy the generated orange SUV image from the brain artifacts directory
+try {
+  const srcPath = 'C:/Users/prash/.gemini/antigravity-ide/brain/8ac275e9-fcd4-4c81-8dd1-bd342f3ead3c/orange_suv_safeguards_1785352634779.png';
+  const destPath = path.join(process.cwd(), 'public/orange_suv_safeguards.png');
+  if (fs.existsSync(srcPath) && !fs.existsSync(destPath)) {
+    fs.copyFileSync(srcPath, destPath);
+  }
+} catch (e) {
+  // Silent fail if directory path is inaccessible in a specific build context
+}
+
+// Auto-delete unused assets from public folder
+try {
+  const fileToDelete = path.join(process.cwd(), 'public/car_hero.jpg');
+  if (fs.existsSync(fileToDelete)) {
+    fs.unlinkSync(fileToDelete);
+  }
+} catch (e) {
+  // Silent fail
+}
 
 // Normalize canonical URL: strip trailing slash except for the root path
 let cleanedPath = Astro.url.pathname;
@@ -55,50 +78,116 @@ const canonicalUrl = new URL(cleanedPath, 'https://carpdi.online').toString();
       font-size: 10px;
     }
 
-    /* How it works steps */
-    .steps-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: var(--spacing-lg);
-      margin-top: var(--spacing-xl);
-    }
-    @media (min-width: 768px) {
-      .steps-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-    @media (min-width: 1024px) {
-      .steps-grid {
-        grid-template-columns: repeat(4, 1fr);
-      }
-    }
-    
-    .step-card {
-      background: var(--color-surface-card);
-      border: 1px solid var(--color-hairline);
-      border-radius: var(--rounded-lg);
-      padding: var(--spacing-lg);
+    /* How It Works process grid and SVG curves */
+    .how-it-works-container {
+      position: relative;
       display: flex;
       flex-direction: column;
-      gap: var(--spacing-sm);
-      text-align: left;
+      align-items: center;
+      width: 100%;
+    }
+
+    .how-it-works-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--spacing-xxl);
+      width: 100%;
+      margin-top: var(--spacing-xl);
       position: relative;
-      transition: all 0.25s ease;
+      z-index: 1;
     }
-    .step-card:hover {
-      border-color: var(--color-primary);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.03);
+
+    @media (min-width: 768px) {
+      .how-it-works-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--spacing-lg);
+      }
     }
-    .step-number {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--color-primary);
-      background: rgba(245, 78, 0, 0.08);
-      padding: 3px 8px;
-      border-radius: var(--rounded-pill);
-      align-self: flex-start;
+
+    .flow-connector-svg {
+      position: absolute;
+      top: 36px;
+      left: 0;
+      width: 100%;
+      height: 80px;
+      pointer-events: none;
+      z-index: 0;
+      display: none;
+    }
+
+    @media (min-width: 768px) {
+      .flow-connector-svg {
+        display: block;
+      }
+    }
+
+    .flow-path {
+      fill: none;
+      stroke: #ffc2b3; /* Soft Orange/Coral Connector */
+      stroke-width: 2px;
+      stroke-dasharray: 6 6;
+    }
+
+    .how-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: var(--spacing-sm);
+      z-index: 1;
+      padding: 0 var(--spacing-sm);
+    }
+
+    .step-icon-tile {
+      width: 72px;
+      height: 72px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.06);
+      border: 1px solid var(--color-hairline-soft);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      box-sizing: border-box;
+    }
+
+    /* Default Icon State (Inactive) */
+    .step-icon-tile.inactive {
+      background-color: #ffffff;
+      color: #ff4d30; /* Coral Red Accent */
+    }
+
+    .step-icon-tile.inactive:hover {
+      transform: translateY(-4px);
+      box-shadow: 0px 14px 30px rgba(0, 0, 0, 0.1);
+      border-color: #ff4d30;
+    }
+
+    /* Active / Focus Icon State (Step 2) */
+    .step-icon-tile.active {
+      background: linear-gradient(135deg, #ff7a3d 0%, #ff3b1d 100%);
+      color: #ffffff;
+      box-shadow: 0px 12px 28px rgba(255, 77, 48, 0.35);
+      border: none;
+    }
+
+    .step-icon-tile.active:hover {
+      transform: translateY(-4px);
+      box-shadow: 0px 16px 36px rgba(255, 77, 48, 0.45);
+    }
+
+    .step-badge {
+      font-size: 12px;
+      font-weight: 600;
+      color: #7d7d7d;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-top: var(--spacing-xs);
+    }
+
+    .step-badge.active-badge {
+      color: #ff7a3d;
     }
 
     /* Features Grid */
@@ -154,22 +243,19 @@ const canonicalUrl = new URL(cleanedPath, 'https://carpdi.online').toString();
       transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    /* Hero Banner: Clean Split Narrative Redesign */
+    /* Hero Banner: Clean Split Redesign with Premium Aesthetic */
     .hero-banner {
       display: grid;
       grid-template-columns: 1.15fr 0.85fr;
       width: 100%;
-      border: 1px solid var(--color-hairline-strong);
-      border-radius: var(--rounded-lg);
-      overflow: hidden;
-      background: var(--color-surface-card); /* Clean white panel background */
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.02);
+      overflow: visible;
       min-height: 560px;
       box-sizing: border-box;
+      gap: var(--spacing-xl);
     }
     
     .hero-text-panel {
-      padding: var(--spacing-xl) var(--spacing-xxl);
+      padding: var(--spacing-md) 0;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -182,40 +268,331 @@ const canonicalUrl = new URL(cleanedPath, 'https://carpdi.online').toString();
       position: relative;
       width: 100%;
       height: 100%;
-      overflow: hidden;
+      min-height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       z-index: 1;
+      overflow: visible; /* Ensure the car and ground shadow are never clipped */
+    }
+
+    .hero-image-backdrop {
+      position: absolute;
+      width: 120%;
+      height: 100%; /* Increased height to cover more of the lower area */
+      background: linear-gradient(135deg, #ffa77c 0%, #f35f20 100%);
+      border-radius: 30px 80px 30px 30px;
+      right: -80;
+      top: 3%; /* Shifted higher up to expand coverage down */
+      z-index: -1;
+      box-shadow: 0 20px 40px rgba(243, 95, 32, 0.15);
+      overflow: hidden; /* Clip SVG patterns to rounded box boundaries */
+    }
+
+    .backdrop-pattern {
+      position: absolute;
+      pointer-events: none;
+    }
+
+    .pattern-top-left {
+      top: 15px;
+      left: 20px;
+      width: 100px;
+      height: 100px;
+    }
+
+    .pattern-bottom-right {
+      bottom: 15px;
+      right: 20px;
+      width: 100px;
+      height: 100px;
     }
     
     .hero-bg-picture {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 125%; /* Extra height to allow scrolling space for parallax */
+      width: 145%;
+      max-width: none;
+      height: auto;
+      display: block;
+      pointer-events: auto;
+      left: -22%;
+      bottom: -6%;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 2;
+    }
+    
+    .hero-car-shadow {
+      position: absolute;
+      bottom: 33px;
+      left: -15%;
+      width: 130%;
+      height: 51px;
+      background: radial-gradient(ellipse at center, rgba(10, 12, 22, 0.68) 0%, rgba(10, 12, 22, 0) 80%);
+      z-index: 1;
       pointer-events: none;
+      transform: rotate(-4deg);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      filter: blur(2px);
     }
     
     .hero-bg-image {
       width: 100%;
+      height: auto;
+      object-fit: contain;
+    }
+
+    /* Delivery Day Risks Redesign - 3 Columns with Vertical Inset Images */
+    .delivery-risks-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: var(--spacing-lg);
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .risk-card {
+      background: var(--color-canvas);
+      border: 1px solid var(--color-hairline);
+      border-radius: var(--rounded-lg);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      padding: var(--spacing-md);
+      gap: var(--spacing-md);
+    }
+    .risk-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+      border-color: var(--color-hairline-strong);
+    }
+    /* Remove semantic top/left callout borders completely */
+    .risk-card.panel-repaints, 
+    .risk-card.old-stock, 
+    .risk-card.odometer-abuse {
+      border: 1px solid var(--color-hairline);
+    }
+    .risk-card-image-wrapper {
+      width: 100%;
+      aspect-ratio: 4 / 5; /* Vertical ratio */
+      overflow: hidden;
+      position: relative;
+      border-radius: var(--rounded-md); /* Rounded corners inside padding */
+      border: 1px solid var(--color-hairline-soft);
+    }
+    .risk-card-image-wrapper::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(180deg, rgba(243, 95, 32, 0.04) 0%, rgba(10, 12, 22, 0.3) 100%);
+      mix-blend-mode: multiply;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .risk-card:hover .risk-card-image-wrapper::after {
+      opacity: 0.8;
+    }
+    .risk-card-img {
+      width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: center;
+      display: block;
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .risk-card:hover .risk-card-img {
+      transform: scale(1.04);
+    }
+    .risk-card-body {
+      padding: 0; /* Padding is handled by parent card container */
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .risk-card-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .risk-icon {
+      font-size: 20px;
+      font-weight: bold;
+      color: var(--color-primary); /* Uniform brand-primary color for all icons */
+    }
+    .risk-card-body h4 {
+      margin: 0;
+      color: var(--color-ink);
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .risk-card-body p {
+      margin: 0;
+      color: var(--color-body);
+      font-size: 13.5px;
+      line-height: 1.5;
+    }
+
+    /* Founder Story Section Redesign */
+    .founder-story-container {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: var(--spacing-xl);
+      max-width: 1100px;
+      margin: 0 auto;
+      align-items: center;
+    }
+    
+    .founder-content-panel {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+    }
+    
+    .founder-text-content {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-md);
+      color: var(--color-body);
+      font-size: 14.5px;
+      line-height: 1.7;
+    }
+    
+    .founder-emphasis {
+      margin: 0;
+      font-weight: 600;
+      color: var(--color-ink);
+      border-left: 3px solid var(--color-primary);
+      padding-left: var(--spacing-sm);
+    }
+    
+    .founder-footer {
+      margin-top: var(--spacing-lg);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--color-hairline-strong);
+      padding-top: var(--spacing-md);
+      flex-wrap: wrap;
+      gap: var(--spacing-md);
+      width: 100%;
+    }
+    
+    .founder-profile {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+      text-align: left;
+    }
+    
+    .founder-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--rounded-full);
+      background: var(--color-primary-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: var(--color-primary);
+      border: 1.5px solid rgba(243, 95, 32, 0.25);
+      font-family: var(--font-display);
+    }
+    
+    .founder-name {
+      font-weight: 700;
+      color: var(--color-ink);
+      font-size: 14.5px;
+      font-family: var(--font-display);
+    }
+    
+    .founder-role {
+      color: var(--color-muted);
+      font-size: 12.5px;
+      margin-top: 1px;
+    }
+    
+    .founder-image-panel {
+      position: relative;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .founder-image-wrapper {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      overflow: hidden;
+      position: relative;
+      border-radius: var(--rounded-lg);
+      border: 1px solid var(--color-hairline-soft);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .founder-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    .founder-image-panel:hover .founder-img {
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 900px) {
+      .delivery-risks-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-lg);
+      }
+      .founder-story-container {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-xl);
+      }
+      .founder-image-panel {
+        min-height: auto;
+        order: -1;
+      }
     }
 
     @media (max-width: 900px) {
       .hero-banner {
         grid-template-columns: 1fr;
         min-height: auto;
+        gap: var(--spacing-lg);
       }
       .hero-image-panel {
-        height: 280px;
+        height: 320px;
+        min-height: 320px;
         order: -1; /* Place image at the top on mobile so flow starts with the car */
       }
+      .hero-image-backdrop {
+        height: 96%; /* Increased height on mobile to cover below */
+        top: 2%; /* Positioned closer to top to extend bottom coverage */
+        border-radius: 24px 60px 24px 24px;
+      }
       .hero-text-panel {
-        padding: var(--spacing-md);
+        padding: var(--spacing-sm) 0;
       }
       .hero-bg-picture {
-        height: 100%; /* No parallax height on mobile */
+        position: absolute;
+        width: 130%;
+        max-width: none;
+        left: -8%;
+        bottom: -30px;
+        transform: none;
+      }
+
+      .hero-car-shadow {
+        position: absolute;
+        bottom: 8px; /* Positioned precisely under the absolute mobile wheels */
+        left: -5%;
+        width: 110%;
+        height: 35px;
+        transform: rotate(-4deg);
+        filter: blur(4px);
       }
     }
 
@@ -276,8 +653,8 @@ const canonicalUrl = new URL(cleanedPath, 'https://carpdi.online').toString();
       .hero-banner {
         view-timeline: --hero-timeline;
       }
-      .hero-bg-picture {
-        animation: hero-bg-scroll linear both;
+      .hero-image-backdrop {
+        animation: hero-backdrop-scroll linear both;
         animation-timeline: --hero-timeline;
         animation-range: exit 0% exit 100%;
       }
@@ -292,12 +669,12 @@ const canonicalUrl = new URL(cleanedPath, 'https://carpdi.online').toString();
       }
     }
 
-    @keyframes hero-bg-scroll {
+    @keyframes hero-backdrop-scroll {
       from {
         transform: translateY(0);
       }
       to {
-        transform: translateY(120px);
+        transform: translateY(60px);
       }
     }
 
@@ -320,45 +697,209 @@ const canonicalUrl = new URL(cleanedPath, 'https://carpdi.online').toString();
       }
     }
 
-    /* Mockup device utility helpers to align with design tokens */
-    .mock-tagline {
-      font-size: 10px;
-      font-weight: 700;
-      color: var(--color-primary);
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
+    /* Form Inputs Customization */
+    .console-input {
+      width: 100%;
+      height: 50px !important;
+      padding: 0 16px !important;
+      border-radius: 10px !important;
+      border: 1px solid #eef0f5 !important;
+      background-color: #f8f9fa !important;
+      font-size: 14.5px !important;
+      color: var(--color-ink) !important;
+      transition: all 0.2s ease !important;
+      outline: none !important;
+      box-sizing: border-box !important;
     }
-    .mock-text-xs {
-      font-size: 10px;
+    .console-input:focus {
+      border-color: var(--color-primary) !important;
+      background-color: #ffffff !important;
+      box-shadow: 0 0 0 3px rgba(245, 78, 0, 0.1) !important;
     }
-    .mock-text-sm {
-      font-size: 11px;
+
+    /* Safeguards Accordion Customization */
+    .safeguards-accordion {
+      border: none !important;
+      border-radius: 12px !important;
+      background-color: #FFF0ED !important;
+      overflow: hidden !important;
+      transition: all 0.25s ease !important;
     }
-    .mock-text-md {
-      font-size: 12.5px;
+    .safeguards-accordion summary {
+      color: var(--color-primary) !important;
     }
-    .mock-icon-sm {
-      font-size: 20px !important;
+
+    /* Segmented Control Customization */
+    .segmented-control-container {
+      display: flex;
+      width: 100%;
+      background-color: #F3F4F6 !important;
+      border: none !important;
+      border-radius: 30px !important; /* pill-shaped */
+      padding: 4px !important;
+      box-sizing: border-box;
     }
-    .mock-icon-md {
-      font-size: 24px !important;
+    .segmented-control-container button {
+      flex: 1;
+      padding: 10px 16px !important;
+      border: none !important;
+      font-size: 13px !important;
+      font-weight: 600 !important;
+      cursor: pointer !important;
+      background: transparent !important;
+      color: #666666 !important;
+      border-radius: 26px !important; /* pill-shaped button */
+      transition: all 0.2s ease !important;
     }
-    .mock-icon-lg {
-      font-size: 38px !important;
+    .segmented-control-container button.active {
+      background-color: #ffffff !important;
+      color: var(--color-primary) !important;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.08) !important;
+    }
+
+    @media (max-width: 520px) {
+      .segmented-control-container {
+        flex-direction: column !important;
+        border-radius: 20px !important;
+        padding: 6px !important;
+        gap: 6px !important;
+      }
+      .segmented-control-container button {
+        height: auto !important;
+        min-height: 44px !important;
+        padding: 8px 16px !important;
+        font-size: 13.5px !important;
+        border-radius: 14px !important;
+      }
+    }
+
+    /* Start Inspection Button Customization */
+    .start-inspection-btn {
+      width: 100%;
+      height: 52px !important;
+      background: linear-gradient(135deg, #FF7A3D 0%, #FF3B1D 100%) !important;
+      color: #ffffff !important;
+      font-size: 15px !important;
+      font-weight: 700 !important;
+      border-radius: 12px !important;
+      border: none !important;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer !important;
+      box-shadow: 0px 10px 25px rgba(255, 77, 48, 0.35) !important;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+    .start-inspection-btn:hover {
+      transform: translateY(-2px) !important;
+      box-shadow: 0px 12px 28px rgba(255, 77, 48, 0.45) !important;
+    }
+    .start-inspection-btn:active {
+      transform: translateY(0.5px) !important;
+      box-shadow: 0px 6px 15px rgba(255, 77, 48, 0.25) !important;
+    }
+
+    /* Safeguards Split Layout */
+    .safeguards-split-layout {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      align-items: center;
+      gap: var(--spacing-xxl);
+      width: 100%;
     }
     
-    /* Touch target expansion for mobile checkmarks */
-    .preview-check-btn {
+    .safeguards-image-panel {
+      display: flex;
+      justify-content: center;
+      align-items: center;
       position: relative;
     }
-    .preview-check-btn::after {
-      content: '';
-      position: absolute;
-      top: -12px;
-      left: -12px;
-      right: -12px;
-      bottom: -12px;
+    
+    .safeguards-car-img {
+      width: 100%;
+      height: auto;
+      max-width: 520px;
+      object-fit: contain;
+      filter: drop-shadow(0 20px 30px rgba(17, 20, 36, 0.08));
     }
+    
+    .safeguards-content-panel {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+    }
+    
+    .safeguards-accent-line {
+      width: 44px;
+      height: 3px;
+      background-color: var(--color-primary);
+      border-radius: var(--rounded-xs);
+      margin: var(--spacing-sm) 0 var(--spacing-lg) 0;
+    }
+    
+    .safeguards-list-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--spacing-lg) var(--spacing-md);
+    }
+    
+    .safeguards-item {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--spacing-sm);
+    }
+    
+    .safeguards-icon-box {
+      width: 44px;
+      height: 44px;
+      min-width: 44px;
+      min-height: 44px;
+      border-radius: var(--rounded-md);
+      background-color: var(--color-primary-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-sm);
+      color: var(--color-primary);
+    }
+    
+    .safeguards-text-box {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    
+    .safeguards-item-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--color-ink);
+      margin: 0;
+      font-family: var(--font-display);
+    }
+    
+    .safeguards-item-desc {
+      font-size: 13px;
+      color: var(--color-body);
+      line-height: 1.45;
+      margin: 0;
+      font-family: var(--font-sans);
+    }
+    
+    @media (max-width: 900px) {
+      .safeguards-split-layout {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-xl);
+      }
+      .safeguards-car-img {
+        max-width: 380px;
+      }
+      .safeguards-list-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -366,12 +907,15 @@ const canonicalUrl = new URL(cleanedPath, 'https://carpdi.online').toString();
 
   <main>
     <!-- Hero Section -->
-    <section class="page-container" style="padding-top: var(--spacing-section); padding-bottom: var(--spacing-xl);">
+    <section class="page-container" style="margin-top: var(--spacing-md); padding-top: 0; padding-bottom: var(--spacing-xl);">
       <div class="hero-banner">
         <!-- Left Column: Clean Typography Panel -->
         <div class="hero-text-panel">
 
-          <h1 class="display-mega" style="margin: 0; color: var(--color-ink); font-weight: 700;">Don't Let the Dealership Hand You a Damaged Car.</h1>
+          <h1 class="display-mega" style="margin: 0; color: var(--color-ink); font-weight: 800; font-family: var(--font-display); position: relative; padding-bottom: var(--spacing-xxs);">
+            Don't Let the Dealership Hand You a Damaged Car.
+            <span style="display: block; width: 60px; height: 5px; background-color: #ffb300; border-radius: var(--rounded-pill); margin-top: var(--spacing-sm);"></span>
+          </h1>
           <p class="body-md" style="color: var(--color-body); margin: 0; line-height: 1.6;">Inspect your new vehicle before signing. Catch transport damage, demo mileage, repainted panels, and missing accessories while the dealer is still responsible.</p>
           
           <div style="display: flex; flex-wrap: wrap; gap: var(--spacing-md); margin-top: var(--spacing-xs); align-items: center;">
@@ -400,267 +944,295 @@ const canonicalUrl = new URL(cleanedPath, 'https://carpdi.online').toString();
 
         <!-- Right Column: Unobscured Image Panel -->
         <div class="hero-image-panel">
+          <div class="hero-image-backdrop">
+            <!-- Grid pattern / dashed lines overlay in top left -->
+            <svg class="backdrop-pattern pattern-top-left" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <line x1="0" y1="15" x2="85" y2="15" stroke="rgba(255, 255, 255, 0.35)" stroke-width="2.5" stroke-dasharray="6 5" />
+              <line x1="0" y1="35" x2="65" y2="35" stroke="rgba(255, 255, 255, 0.35)" stroke-width="2.5" stroke-dasharray="6 5" />
+              <line x1="0" y1="55" x2="45" y2="55" stroke="rgba(255, 255, 255, 0.35)" stroke-width="2.5" stroke-dasharray="6 5" />
+            </svg>
+            <!-- Slanted grid overlay in bottom right -->
+            <svg class="backdrop-pattern pattern-bottom-right" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <line x1="100" y1="75" x2="65" y2="75" stroke="rgba(255, 255, 255, 0.25)" stroke-width="2" stroke-dasharray="4 4" />
+              <line x1="100" y1="55" x2="80" y2="55" stroke="rgba(255, 255, 255, 0.25)" stroke-width="2" stroke-dasharray="4 4" />
+              <circle cx="85" cy="85" r="4" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2" />
+            </svg>
+          </div>
           <picture class="hero-bg-picture">
-            <source srcset="/modern_dealership_delivery.avif" type="image/avif" />
-            <source srcset="/modern_dealership_delivery.webp" type="image/webp" />
-            <img src="/modern_dealership_delivery.jpg" alt="Modern car dealership showroom ready for delivery" class="hero-bg-image" />
+            <img src="/hero_inspection_car.png" alt="Pristine modern vehicle ready for pre-delivery inspection" class="hero-bg-image" />
           </picture>
+          <div class="hero-car-shadow"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How PDI Works Section -->
+    <section class="page-container" style="padding-top: var(--spacing-section); padding-bottom: 0;">
+      <div style="text-align: center; max-width: 700px; margin: 0 auto; margin-bottom: var(--spacing-lg);">
+        <h2 class="display-lg" style="margin-bottom: var(--spacing-xs); color: #111111; font-weight: 700;">How It Works</h2>
+        <p class="body-md" style="color: #666666; max-width: 600px; margin: 0 auto;">Three simple steps to inspect your vehicle like a professional.</p>
+      </div>
+
+      <div class="how-it-works-container">
+        <!-- Connecting curvy dashed line -->
+        <svg class="flow-connector-svg" viewBox="0 0 1000 80" preserveAspectRatio="none">
+          <path class="flow-path" d="M 166.6 30 C 300 -10, 370 -10, 500 30 C 630 70, 700 70, 833.3 30" />
+        </svg>
+
+        <div class="how-it-works-grid">
+          <!-- Step 1 -->
+          <div class="how-step">
+            <div class="step-icon-tile inactive">
+              <span class="material-symbols-outlined" style="font-size: 32px; font-weight: bold;">settings</span>
+            </div>
+            <span class="step-badge">Step 1</span>
+            <h4 class="title-sm" style="color: #111111; margin: 0; font-weight: 600; font-size: 18px;">Configure Car Profile</h4>
+            <p class="body-sm" style="color: #666666; margin: 0; line-height: 1.45; font-size: 13.5px; max-width: 280px;">
+              Select fuel type (ICE/EV) and decode the 17-digit VIN to instantly verify factory specs.
+            </p>
+          </div>
+
+          <!-- Step 2 (Active/Highlighted) -->
+          <div class="how-step">
+            <div class="step-icon-tile active">
+              <span class="material-symbols-outlined" style="font-size: 32px; font-weight: bold;">fact_check</span>
+            </div>
+            <span class="step-badge active-badge">Step 2</span>
+            <h4 class="title-sm" style="color: #111111; margin: 0; font-weight: 700; font-size: 18px;">Inspect Guided Checkpoints</h4>
+            <p class="body-sm" style="color: #666666; margin: 0; line-height: 1.45; font-size: 13.5px; max-width: 280px;">
+              Perform 50+ forensic walkaround checks covering paint, panel gaps, battery, and tires.
+            </p>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="how-step">
+            <div class="step-icon-tile inactive">
+              <span class="material-symbols-outlined" style="font-size: 32px; font-weight: bold;">picture_as_pdf</span>
+            </div>
+            <span class="step-badge">Step 3</span>
+            <h4 class="title-sm" style="color: #111111; margin: 0; font-weight: 600; font-size: 18px;">Export PDF & ZIP Report</h4>
+            <p class="body-sm" style="color: #666666; margin: 0; line-height: 1.45; font-size: 13.5px; max-width: 280px;">
+              Generate a professional defect report to secure official dealer repair commitments.
+            </p>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- Delivery Day Risks Section -->
-    <section class="page-container" style="padding-bottom: var(--spacing-section);">
-      <div style="max-width: 800px; margin: 0 auto; text-align: center; margin-bottom: var(--spacing-xl);">
+    <section class="page-container" style="padding-top: var(--spacing-section); padding-bottom: 0;">
+      <div style="text-align: center; margin-bottom: var(--spacing-xl);">
         <span class="caption-uppercase" style="color: var(--color-primary); display: block; margin-bottom: var(--spacing-xs);">The Delivery Day Trap</span>
-        <h2 class="display-lg" style="margin-bottom: var(--spacing-xs); color: var(--color-ink);">Why You Cannot Just Trust the Dealership</h2>
-        <p class="body-md" style="color: var(--color-body); max-width: 600px; margin: 0 auto;">Once a vehicle is registered in your name with the government RTO, it is legally yours. Rejecting a defective car post-registration is nearly impossible. Here are the hidden risks you face at the stockyard:</p>
+        <h2 class="display-lg" style="margin-bottom: var(--spacing-xs); color: var(--color-ink); font-weight: 700;">Why You Can't Trust the Dealership</h2>
+        <p class="body-md" style="color: var(--color-body); max-width: 600px; margin: 0 auto;">Once registered, a vehicle is legally yours. Post-registration rejection is nearly impossible.</p>
       </div>
 
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--spacing-lg); max-width: 1000px; margin: 0 auto;">
-        <div class="card" style="display: flex; flex-direction: column; gap: var(--spacing-sm); border-top: 3px solid var(--color-semantic-error); padding: var(--spacing-lg);">
-          <div class="display-sm" style="color: var(--color-semantic-error); font-weight: 600; display: flex; align-items: center; gap: 8px;">
-            <span class="material-symbols-outlined mock-icon-md">format_paint</span> Panel Repaints
+      <div class="delivery-risks-grid">
+        <!-- Card 1: Transit Scratches & Resprays -->
+        <div class="risk-card panel-repaints">
+          <div class="risk-card-image-wrapper">
+            <img src="/scratch_repaint.jpg" alt="Spray painting a scratched car panel" class="risk-card-img" />
           </div>
-          <h4 class="title-sm" style="margin: 0; color: var(--color-ink);">Transit Scratches & Resprays</h4>
-          <p class="body-sm" style="color: var(--color-body); margin: 0; line-height: 1.6;">Cars suffer scratches during long shipping transit. Dealers routinely respray body panels in-house before delivery without registering it on records or informing you.</p>
+          <div class="risk-card-body">
+            <div class="risk-card-header">
+              <span class="material-symbols-outlined risk-icon">format_paint</span>
+              <h4>Transit Scratches & Resprays</h4>
+            </div>
+            <p>Dealers routinely respray scratched body panels in-house before delivery without informing you.</p>
+          </div>
         </div>
 
-        <div class="card" style="display: flex; flex-direction: column; gap: var(--spacing-sm); border-top: 3px solid var(--color-primary); padding: var(--spacing-lg);">
-          <div class="display-sm" style="color: var(--color-primary); font-weight: 600; display: flex; align-items: center; gap: 8px;">
-            <span class="material-symbols-outlined mock-icon-md">tire_repair</span> Old Stock & Rot
+        <!-- Card 2: Old Stock & Rot -->
+        <div class="risk-card old-stock">
+          <div class="risk-card-image-wrapper">
+            <img src="/dusty_stockyard.jpg" alt="Dusty cars in open stockyard" class="risk-card-img" />
           </div>
-          <h4 class="title-sm" style="margin: 0; color: var(--color-ink);">Months sitting in Stockyards</h4>
-          <p class="body-sm" style="color: var(--color-body); margin: 0; line-height: 1.6;">Vehicles sit in dusty, open yards for up to 9 months. This leads to early battery drainage, rust underneath the frame, and rubber dry-rot on tyres that are sold to you as fresh.</p>
+          <div class="risk-card-body">
+            <div class="risk-card-header">
+              <span class="material-symbols-outlined risk-icon">tire_repair</span>
+              <h4>Months Sitting in Stockyards</h4>
+            </div>
+            <p>Cars sitting in dusty, open yards face early battery drainage, underframe rust, and rubber dry-rot.</p>
+          </div>
         </div>
 
-        <div class="card" style="display: flex; flex-direction: column; gap: var(--spacing-sm); border-top: 3px solid var(--color-muted); padding: var(--spacing-lg);">
-          <div class="display-sm" style="color: var(--color-muted); font-weight: 600; display: flex; align-items: center; gap: 8px;">
-            <span class="material-symbols-outlined mock-icon-md">speed</span> Odometer Rollbacks
+        <!-- Card 3: Demo & Test Drive Abuse -->
+        <div class="risk-card odometer-abuse">
+          <div class="risk-card-image-wrapper">
+            <img src="/odometer_abuse.jpg" alt="Car dashboard odometer screen" class="risk-card-img" />
           </div>
-          <h4 class="title-sm" style="margin: 0; color: var(--color-ink);">Demo & Test Drive Abuse</h4>
-          <p class="body-sm" style="color: var(--color-body); margin: 0; line-height: 1.6;">Dealers sometimes disconnect odometer fuses to use new stock as client test-drive cars. You might receive a heavily abused vehicle polished to look like it has only run 15 km.</p>
+          <div class="risk-card-body">
+            <div class="risk-card-header">
+              <span class="material-symbols-outlined risk-icon">speed</span>
+              <h4>Odometer Rollbacks & Abuse</h4>
+            </div>
+            <p>Odometer fuses are sometimes pulled to use new inventory as customer test-drive cars.</p>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- Founder Story Section -->
-    <section id="founder-warning-section" class="page-container" style="border-top: 1px solid var(--color-hairline); padding-top: var(--spacing-section); padding-bottom: var(--spacing-section); background: var(--color-canvas-soft);">
-      <div style="max-width: 800px; margin: 0 auto; display: grid; grid-template-columns: 1fr; gap: var(--spacing-xl); align-items: center;">
-        <div class="card" style="border: 1px solid var(--color-primary); background: #ffffff; padding: var(--spacing-xl); border-radius: var(--rounded-lg); position: relative;">
-          <div style="position: absolute; top: -14px; left: 24px; background: var(--color-primary); color: #fff; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; padding: 3px 10px; border-radius: var(--rounded-pill);">
-            Real Experience Warning
-          </div>
-          
-          <h3 class="display-sm" style="color: var(--color-ink); margin-bottom: var(--spacing-sm); font-weight: 600;">"They Tried to Sell Me a 167 km Demo Car."</h3>
-          
-          <div style="display: flex; flex-direction: column; gap: var(--spacing-md); color: var(--color-body); line-height: 1.65;">
+    <section id="founder-warning-section" class="page-container" style="padding-top: var(--spacing-section); padding-bottom: 0;">
+      <!-- Centered Header Area -->
+      <div style="max-width: 800px; margin: 0 auto; text-align: center; margin-bottom: var(--spacing-xl);">
+        <span class="caption-uppercase" style="color: var(--color-primary); display: block; margin-bottom: var(--spacing-xs);">Real Life Experience</span>
+        <h2 class="display-lg" style="margin-bottom: var(--spacing-xs); color: var(--color-ink); font-weight: 700; font-family: var(--font-display);">"They Tried to Sell Me a 167 km Demo Car."</h2>
+      </div>
+
+      <div class="founder-story-container">
+        <!-- Left: Text content (No card wrapping) -->
+        <div class="founder-content-panel">
+          <div class="founder-text-content">
             <p style="margin: 0;">
               When I went to take delivery of my new car, I brought a strict inspection checklist. Under showroom lights, everything looked perfect. But when we went to inspect the car in the open stockyard, the reality became clear: <strong>the car was already driven for 167 km, had been sitting for 6 months, and the tyres were 10 months old.</strong>
             </p>
             <p style="margin: 0;">
               Because we performed a complete physical PDI <em>before</em> signing the RTO registration, we successfully rejected the car and forced the dealer to swap it for a fresh 21 km car directly from the factory.
             </p>
-            <p style="margin: 0; font-weight: 600; color: var(--color-ink);">
+            <p class="founder-emphasis">
               I built PDI Assistant to give every car buyer the exact checklists, tools, and decoders needed to find these problems and stand up to dealerships.
             </p>
           </div>
 
-          <div style="margin-top: var(--spacing-md); display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--color-hairline-soft); padding-top: var(--spacing-md); flex-wrap: wrap; gap: var(--spacing-sm);">
-            <div style="display: flex; align-items: center; gap: var(--spacing-xs);">
-              <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--color-surface-strong); display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--color-primary);">PC</div>
+          <div class="founder-footer">
+            <div class="founder-profile">
+              <div class="founder-avatar">PC</div>
               <div>
-                <div style="font-weight: 600; color: var(--color-ink); font-size: 14px;">Prasanth Chowhan</div>
-                <div class="caption" style="color: var(--color-muted);">Creator of PDI Assistant</div>
+                <div class="founder-name">Prasanth Chowhan</div>
+                <div class="founder-role">Creator of PDI Assistant</div>
               </div>
             </div>
-            <a href="/stories/my-story" class="cta-button-secondary" style="padding: 8px 16px; font-size: 13px; font-weight: 600; border-radius: var(--rounded-md); text-decoration: none;">
+            <a href="/stories/my-story" class="cta-button-secondary" style="padding: 12px 24px; font-size: 14px; font-weight: 600; border-radius: var(--rounded-md); text-decoration: none;">
               <span>Read the Full Account</span>
-              <span class="material-symbols-outlined" style="font-size: 16px;">arrow_forward</span>
+              <span class="material-symbols-outlined" style="font-size: 18px;">arrow_forward</span>
             </a>
+          </div>
+        </div>
+
+        <!-- Right: Overlapping Image panel -->
+        <div class="founder-image-panel">
+          <div class="founder-image-wrapper">
+            <img src="/stockyard_inspection.jpg" alt="Car inspection under open sky in stockyard" class="founder-img" />
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Interactive Product Preview Section -->
-    <section class="page-container" style="border-top: 1px solid var(--color-hairline); padding-top: var(--spacing-section); padding-bottom: var(--spacing-section);">
-      <div style="max-width: 800px; margin: 0 auto; text-align: center; margin-bottom: var(--spacing-xl);">
-        <span class="caption-uppercase" style="color: var(--color-primary); display: block; margin-bottom: var(--spacing-xs);">Product Walkthrough</span>
-        <h2 class="display-lg" style="margin-bottom: var(--spacing-xs); color: var(--color-ink);">Test Drive PDI Assistant Right Now</h2>
-        <p class="body-md" style="color: var(--color-body); max-width: 600px; margin: 0 auto;">Click on the checkpoints inside our interactive mock device below to see how easy it is to inspect your car, flag flaws, and log notes offline.</p>
-      </div>
-
-      <div class="split-grid" style="max-width: 960px; margin: 0 auto; gap: var(--spacing-xl);">
-        <!-- Interactive Device Frame -->
-        <div style="display: flex; justify-content: center; align-items: center;">
-          <div class="card" style="width: 100%; max-width: 380px; height: 500px; border: 10px solid var(--color-ink); border-radius: 40px; padding: 20px 16px; display: flex; flex-direction: column; gap: 12px; background: var(--color-canvas); box-shadow: 0 30px 60px rgba(38,37,30,0.12); position: relative; overflow: hidden; box-sizing: border-box;">
-            <!-- Speaker Grill -->
-            <div style="position: absolute; top: 6px; left: 50%; transform: translateX(-50%); width: 60px; height: 8px; background: var(--color-ink); border-radius: 4px; z-index: 10;"></div>
-            
-            <!-- App Header -->
-            <div style="border-bottom: 1px solid var(--color-hairline-strong); padding-bottom: 8px; margin-top: 4px; display: flex; justify-content: space-between; align-items: center;">
-              <div>
-                <span class="mock-tagline">PDI Companion</span>
-                <h4 style="font-size: 14px; font-weight: 600; margin: 0; color: var(--color-ink);">Tesla Model Y PDI</h4>
-              </div>
-              <div class="mock-text-xs" style="background: rgba(31, 138, 101, 0.1); color: var(--color-semantic-success); font-weight: bold; padding: 2px 6px; border-radius: 4px;">
-                100% Offline
-              </div>
-            </div>
-
-            <!-- Scrollable Checklist Frame -->
-            <div style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding-right: 4px; box-sizing: border-box;" class="no-scrollbar">
-              
-              <!-- Checklist Item 1 -->
-              <div class="card interactive-preview-item" id="preview-item-1" style="padding: 12px; border-radius: var(--rounded-md); display: flex; flex-direction: column; gap: 6px; cursor: pointer; transition: all 0.2s; background: var(--color-surface-card); border: 1px solid var(--color-hairline); box-sizing: border-box;">
-                <div style="display: flex; align-items: flex-start; gap: 10px;">
-                  <button class="preview-check-btn mock-text-sm" aria-label="Mark checkpoint as passed" style="width: 20px; height: 20px; min-width: 20px; min-height: 20px; border-radius: 50%; border: 2px solid var(--color-hairline-strong); display: flex; align-items: center; justify-content: center; color: transparent; background: var(--color-surface-card); cursor: pointer; padding: 0;">✔</button>
-                  <div style="flex: 1;">
-                    <div class="mock-text-md" style="font-weight: 600; color: var(--color-ink);">Check Mileage Meter (Odometer)</div>
-                    <div class="mock-text-sm" style="color: var(--color-body); margin-top: 2px;">Must be under 50 km, definitely under 100 km.</div>
-                  </div>
-                </div>
-                <div class="preview-details" style="display: none; border-top: 1px dashed var(--color-hairline-strong); padding-top: 8px; margin-top: 4px;">
-                  <div class="mock-text-sm" style="color: var(--color-semantic-error); font-weight: 600; margin-bottom: 4px;">❌ Odo reads 167 km! (Test-drive candidate)</div>
-                  <textarea placeholder="Write defect details here..." class="mock-text-sm" style="min-height: 40px; padding: 4px 8px; margin-bottom: 6px; border-radius: 4px; border: 1px solid var(--color-hairline-strong); background: var(--color-canvas-soft); width: 100%; box-sizing: border-box;" readonly>Found odo reads 167 km and tyre build date is old.</textarea>
-                  <div style="display: flex; gap: 6px; align-items: center;">
-                    <div class="mock-text-xs" style="width: 24px; height: 24px; border-radius: 4px; background: var(--color-surface-strong); display: flex; align-items: center; justify-content: center;">📷</div>
-                    <span class="mock-text-xs" style="color: var(--color-muted);">odo_167km_photo.jpg attached</span>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Checklist Item 2 -->
-              <div class="card interactive-preview-item" id="preview-item-2" style="padding: 12px; border-radius: var(--rounded-md); display: flex; flex-direction: column; gap: 6px; cursor: pointer; transition: all 0.2s; background: var(--color-surface-card); border: 1px solid var(--color-hairline); box-sizing: border-box;">
-                <div style="display: flex; align-items: flex-start; gap: 10px;">
-                  <button class="preview-check-btn mock-text-sm" aria-label="Mark checkpoint as passed" style="width: 20px; height: 20px; min-width: 20px; min-height: 20px; border-radius: 50%; border: 2px solid var(--color-hairline-strong); display: flex; align-items: center; justify-content: center; color: transparent; background: var(--color-surface-card); cursor: pointer; padding: 0;">✔</button>
-                  <div style="flex: 1;">
-                    <div class="mock-text-md" style="font-weight: 600; color: var(--color-ink);">Check Panel Paint & Alignment</div>
-                    <div class="mock-text-sm" style="color: var(--color-body); margin-top: 2px;">Inspect under broad daylight for repainted spots.</div>
-                  </div>
-                </div>
-                <div class="preview-details" style="display: none; border-top: 1px dashed var(--color-hairline-strong); padding-top: 8px; margin-top: 4px;">
-                  <div class="mock-text-sm" style="color: var(--color-semantic-success); font-weight: 600;">✔ Panel alignment and paint matching perfect.</div>
-                </div>
-              </div>
-
-              <!-- Checklist Item 3 -->
-              <div class="card interactive-preview-item" id="preview-item-3" style="padding: 12px; border-radius: var(--rounded-md); display: flex; flex-direction: column; gap: 6px; cursor: pointer; transition: all 0.2s; background: var(--color-surface-card); border: 1px solid var(--color-hairline); box-sizing: border-box;">
-                <div style="display: flex; align-items: flex-start; gap: 10px;">
-                  <button class="preview-check-btn mock-text-sm" aria-label="Mark checkpoint as passed" style="width: 20px; height: 20px; min-width: 20px; min-height: 20px; border-radius: 50%; border: 2px solid var(--color-hairline-strong); display: flex; align-items: center; justify-content: center; color: transparent; background: var(--color-surface-card); cursor: pointer; padding: 0;">✔</button>
-                  <div style="flex: 1;">
-                    <div class="mock-text-md" style="font-weight: 600; color: var(--color-ink);">Decode VIN Date Code</div>
-                    <div class="mock-text-sm" style="color: var(--color-body); margin-top: 2px;">Ensure build date is within 3 months of delivery.</div>
-                  </div>
-                </div>
-                <div class="preview-details" style="display: none; border-top: 1px dashed var(--color-hairline-strong); padding-top: 8px; margin-top: 4px;">
-                  <div class="mock-text-sm" style="color: var(--color-ink); font-weight: 600; background: var(--color-canvas); padding: 6px; border-radius: 4px; border: 1px solid var(--color-hairline-soft); line-height: 1.4;">VIN: 5YJ3E1EBXLFXXXXXX<br/>Build Month: February 2026</div>
-                </div>
-              </div>
-
-            </div>
-
-            <!-- Interactive Report Export -->
-            <div style="border-top: 1px solid var(--color-hairline-strong); padding-top: 8px; display: flex; align-items: center; justify-content: space-between;">
-              <span class="mock-text-sm" style="color: var(--color-muted);" id="preview-flagged-count">1 Defect Flagged</span>
-              <button id="preview-export-btn" class="mock-text-sm" style="background: var(--color-primary); color: #fff; font-weight: bold; padding: 6px 12px; border-radius: 4px; cursor: pointer; border: none;">Export PDF</button>
-            </div>
-            
-            <!-- Confetti/Success Toast -->
-            <div id="preview-success-toast" class="mock-text-sm" style="position: absolute; bottom: -60px; left: 16px; right: 16px; background: var(--color-ink); color: var(--color-canvas); padding: 10px 14px; border-radius: var(--rounded-md); text-align: center; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 10px 20px rgba(38,37,30,0.15); z-index: 20; box-sizing: border-box;">
-              <span style="color: #1f8a65; font-weight: bold;">✔</span> Professional PDF Report Exported!
-            </div>
-          </div>
+    <!-- Buyer Safeguards Section in Premium Split-Layout Style -->
+    <section class="page-container" style="padding-top: var(--spacing-section); padding-bottom: 0;">
+      <div class="safeguards-split-layout">
+        <!-- Left: Image Panel -->
+        <div class="safeguards-image-panel">
+          <img src="/orange_suv_safeguards.png" alt="Orange SUV ready for inspection" class="safeguards-car-img" />
         </div>
-
-        <!-- Description Column -->
-        <div style="display: flex; flex-direction: column; justify-content: center; gap: var(--spacing-md); text-align: left;">
-          <h3 class="display-sm" style="color: var(--color-ink); font-weight: 600;">Equipped with Advanced Inspection Tools</h3>
-          <p class="body-md" style="color: var(--color-body); margin: 0; line-height: 1.6;">
-            PDI Assistant is engineered to go beyond basic checklists. When you use the tool, you gain access to forensic-grade testing modules optimized for offline-only stockyard environments:
-          </p>
+        
+        <!-- Right: Content Panel -->
+        <div class="safeguards-content-panel">
+          <span class="caption-uppercase" style="color: var(--color-primary); display: block; margin-bottom: var(--spacing-xs);">Critical Buyer Safeguards</span>
+          <h2 class="display-lg" style="color: var(--color-ink); margin: 0;">Protect Yourself Before Registration</h2>
+          <div class="safeguards-accent-line"></div>
           
-          <ul style="padding: 0; margin: 0; list-style: none; display: flex; flex-direction: column; gap: var(--spacing-sm);">
-            <li style="display: flex; gap: var(--spacing-xs); align-items: flex-start;">
-              <span class="material-symbols-outlined mock-icon-sm" style="color: var(--color-primary); font-weight: bold;">checklist</span>
-              <div class="body-sm" style="color: var(--color-body);">
-                <strong style="color: var(--color-ink);">50+ Deep Checkpoints:</strong> Covering 11 structured categories from document pricing overcharging to EV battery health and mechanical checks.
+          <div class="safeguards-list-grid">
+            <!-- Item 1 -->
+            <div class="safeguards-item">
+              <div class="safeguards-icon-box">
+                <span class="material-symbols-outlined" style="font-size: 20px; font-weight: bold;">verified_user</span>
               </div>
-            </li>
-            <li style="display: flex; gap: var(--spacing-xs); align-items: flex-start;">
-              <span class="material-symbols-outlined mock-icon-sm" style="color: var(--color-primary); font-weight: bold;">camera_enhance</span>
-              <div class="body-sm" style="color: var(--color-body);">
-                <strong style="color: var(--color-ink);">Photo Log & Defect Pinning:</strong> Snap photos directly inside your browser database offline, link them to checkpoint failures, and add notes.
+              <div class="safeguards-text-box">
+                <h4 class="safeguards-item-title">Inspect Prior to Registration</h4>
+                <p class="safeguards-item-desc">Confirm your right to perform a physical PDI. Walk away if the dealer refuses yard access or demands a signature first.</p>
               </div>
-            </li>
-            <li style="display: flex; gap: var(--spacing-xs); align-items: flex-start;">
-              <span class="material-symbols-outlined mock-icon-sm" style="color: var(--color-primary); font-weight: bold;">picture_as_pdf</span>
-              <div class="body-sm" style="color: var(--color-body);">
-                <strong style="color: var(--color-ink);">One-Click PDF Reports:</strong> Instantly generate and download standard, beautifully typeset PDF reports containing all notes and photos to force dealership resolutions.
+            </div>
+            
+            <!-- Item 2 -->
+            <div class="safeguards-item">
+              <div class="safeguards-icon-box">
+                <span class="material-symbols-outlined" style="font-size: 20px; font-weight: bold;">payments</span>
               </div>
-            </li>
-          </ul>
+              <div class="safeguards-text-box">
+                <h4 class="safeguards-item-title">Hold Final Payment</h4>
+                <p class="safeguards-item-desc">Only release the initial booking deposit. Do not pay in full or permit registration until you satisfy this checklist.</p>
+              </div>
+            </div>
+            
+            <!-- Item 3 -->
+            <div class="safeguards-item">
+              <div class="safeguards-icon-box">
+                <span class="material-symbols-outlined" style="font-size: 20px; font-weight: bold;">light_mode</span>
+              </div>
+              <div class="safeguards-text-box">
+                <h4 class="safeguards-item-title">Examine Under Daylight</h4>
+                <p class="safeguards-item-desc">Showroom lighting is positioned to conceal body scuffs. Always inspect outdoors in natural daylight.</p>
+              </div>
+            </div>
 
-          <div style="margin-top: var(--spacing-xs);">
-            <button id="scroll-to-setup-btn" class="cta-button-primary" style="cursor: pointer; border: none; font-family: inherit;">
-              <span>Configure Vehicle Checklists</span>
-              <span class="material-symbols-outlined" style="font-size: 18px;">arrow_downward</span>
-            </button>
+            <!-- Item 4 -->
+            <div class="safeguards-item">
+              <div class="safeguards-icon-box">
+                <span class="material-symbols-outlined" style="font-size: 20px; font-weight: bold;">settings_suggest</span>
+              </div>
+              <div class="safeguards-text-box">
+                <h4 class="safeguards-item-title">Verify Operational Features</h4>
+                <p class="safeguards-item-desc">Turn on screens, sunroofs, and driver assists. Evasiveness or locked screens usually hide underlying defects.</p>
+              </div>
+            </div>
+
+            <!-- Item 5 -->
+            <div class="safeguards-item">
+              <div class="safeguards-icon-box">
+                <span class="material-symbols-outlined" style="font-size: 20px; font-weight: bold;">badge</span>
+              </div>
+              <div class="safeguards-text-box">
+                <h4 class="safeguards-item-title">Validate Identity & Usage</h4>
+                <p class="safeguards-item-desc">Crosscheck the physical chassis VIN tag on the vehicle with your invoice. Verify the odometer reads under 50-100 km.</p>
+              </div>
+            </div>
+
+            <!-- Item 6 -->
+            <div class="safeguards-item">
+              <div class="safeguards-icon-box">
+                <span class="material-symbols-outlined" style="font-size: 20px; font-weight: bold;">construction</span>
+              </div>
+              <div class="safeguards-text-box">
+                <h4 class="safeguards-item-title">Pack Your Inspection Kit</h4>
+                <p class="safeguards-item-desc">Bring a bright LED flashlight, a tyre pressure gauge, your phone camera, and a second set of eyes to spot flaws.</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
     <!-- Centered Configuration Console -->
-    <section id="setup-form-console" class="page-container" style="padding-bottom: var(--spacing-section); display: flex; justify-content: center;">
-      <div class="card" style="width: 100%; max-width: 600px; padding: var(--spacing-xl); display: flex; flex-direction: column; gap: var(--spacing-md);">
+    <section id="setup-form-console" class="page-container" style="padding-top: var(--spacing-section); padding-bottom: 0; display: flex; justify-content: center;">
+      <div class="card card-premium" style="width: 100%; max-width: 600px; display: flex; flex-direction: column; gap: var(--spacing-md);">
         <div style="border-bottom: 1px solid var(--color-hairline-soft); padding-bottom: var(--spacing-sm); margin-bottom: var(--spacing-xxs);">
-          <h2 class="title-md" style="color: var(--color-ink); margin: 0;">Configure Inspection Checklist</h2>
-          <p class="body-sm" style="color: var(--color-muted); margin: 4px 0 0 0;">Create your customized checklist below to start inspecting.</p>
+          <h2 class="title-md" style="color: #111111; margin: 0; font-family: 'Montserrat', var(--font-display), sans-serif; font-weight: 800; font-size: 24px; letter-spacing: -0.02em;">Configure PDI Checklist</h2>
+          <p class="body-sm" style="color: #666666; margin: 6px 0 0 0; font-size: 13.5px; line-height: 1.5;">Create your customized Pre-Delivery Inspection checklist below to start inspecting.</p>
         </div>
-
-        <!-- Safeguards Accordion -->
-        <details class="safeguards-accordion" style="border: 1px solid var(--color-primary); border-radius: var(--rounded-md); background: rgba(245, 78, 0, 0.02); overflow: hidden;">
-          <summary style="padding: 12px 16px; cursor: pointer; font-weight: 600; font-size: 13.5px; color: var(--color-primary); display: flex; align-items: center; justify-content: space-between; list-style: none;">
-            <span style="display: flex; align-items: center; gap: 8px;">
-              <span class="material-symbols-outlined" style="font-size: 18px; font-weight: bold;">shield</span>
-              Read Critical Buyer Safeguards
-            </span>
-            <span class="accordion-arrow">▼</span>
-          </summary>
-          <div style="padding: 0 16px 16px 16px; font-size: 13px; color: var(--color-body); display: flex; flex-direction: column; gap: 10px; line-height: 1.5; border-top: 1px solid rgba(245, 78, 0, 0.15); text-align: left;">
-            <p style="margin: 0; font-weight: 600; color: var(--color-ink); padding-top: 10px;">Before you register the car or pay the final balance, follow these rules:</p>
-            <div>🚫 <strong>Inspect Prior to Registration:</strong> Confirm your right to perform a complete physical PDI. Walk away if the dealer refuses yard access or demands a signature first.</div>
-            <div>💰 <strong>Hold Final Payment:</strong> Only release the initial booking deposit beforehand. Do not pay in full or permit registration until you satisfy this checklist.</div>
-            <div>☀️ <strong>Examine Under Daylight:</strong> Showroom lighting is positioned to conceal paint differences, scuffs, and panel repairs. Always inspect outdoors in natural light.</div>
-            <div>🔒 <strong>Verify Operational Features:</strong> Turn on screens, sunroofs, and driver assists. Evasiveness or locked screens usually hide underlying problems.</div>
-            <div>🆔 <strong>Validate Identity & Usage:</strong> Crosscheck the physical chassis tag (windshield or door pillar) with your invoice. Verify the odometer reads under 50-100 km.</div>
-            <div>🛠️ <strong>Pack Your Inspection Kit:</strong> Bring a bright LED flashlight, a tyre pressure gauge, your phone camera, and a second set of eyes.</div>
-          </div>
-        </details>
         
         <form id="setup-form" action="/setup" method="GET" style="display: flex; flex-direction: column; gap: var(--spacing-lg); text-align: left;">
           <div style="display: flex; flex-direction: column; gap: var(--spacing-md);">
             <div style="display: flex; flex-direction: column; gap: var(--spacing-xs);">
-              <label for="make" class="title-sm" style="color: var(--color-ink);">Brand / Make</label>
-              <input id="make" name="make" required placeholder="e.g. Tesla, Honda, Porsche" type="text" style="width: 100%; height: 44px; padding: 0 12px; border-radius: var(--rounded-md); border: 1px solid var(--color-hairline-strong); font-size: 14px;" />
+              <label for="make" style="color: #111111; font-size: 14px; font-weight: 600; font-family: var(--font-sans); margin-bottom: 2px;">Brand / Make</label>
+              <input id="make" class="console-input" name="make" required placeholder="e.g. Tesla, Honda, Porsche" type="text" />
             </div>
             <div style="display: flex; flex-direction: column; gap: var(--spacing-xs);">
-              <label for="model" class="title-sm" style="color: var(--color-ink);">Model Name</label>
-              <input id="model" name="model" required placeholder="e.g. Model Y, Accord, Macan" type="text" style="width: 100%; height: 44px; padding: 0 12px; border-radius: var(--rounded-md); border: 1px solid var(--color-hairline-strong); font-size: 14px;" />
+              <label for="model" style="color: #111111; font-size: 14px; font-weight: 600; font-family: var(--font-sans); margin-bottom: 2px;">Model Name</label>
+              <input id="model" class="console-input" name="model" required placeholder="e.g. Model Y, Accord, Macan" type="text" />
             </div>
           </div>
           <div style="display: flex; flex-direction: column; gap: var(--spacing-xs);">
-            <span class="title-sm" style="color: var(--color-ink);">Power Unit Architecture</span>
-            <div class="segmented-control" id="power-unit-control" style="display: flex; width: 100%; border: 1px solid var(--color-hairline); border-radius: var(--rounded-md); overflow: hidden; background: var(--color-canvas-soft);">
-              <button type="button" class="active" data-val="ice" style="flex: 1; padding: 10px; border: none; font-size: 13px; font-weight: 600; cursor: pointer; background: transparent; transition: all 0.2s;">Gasoline / Hybrid / ICE</button>
-              <button type="button" class="" data-val="ev" style="flex: 1; padding: 10px; border: none; font-size: 13px; font-weight: 600; cursor: pointer; background: transparent; transition: all 0.2s;">⚡ Electric Vehicle (EV)</button>
+            <span style="color: #111111; font-size: 14px; font-weight: 600; font-family: var(--font-sans); margin-bottom: 2px;">Power Unit Architecture</span>
+            <div class="segmented-control-container" id="power-unit-control">
+              <button type="button" class="active" data-val="ice">Gasoline / Hybrid / ICE</button>
+              <button type="button" class="" data-val="ev">⚡ Electric Vehicle (EV)</button>
               <input type="hidden" name="power_unit" id="power_unit" value="ice" />
             </div>
           </div>
           <div style="display: flex; margin-top: var(--spacing-base);">
-            <button type="submit" class="button-primary" style="width: 100%; display: flex; gap: 10px; justify-content: center; align-items: center; height: 52px; font-weight: 600; cursor: pointer;">
+            <button type="submit" class="start-inspection-btn">
               <span>Start Inspection</span>
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
             </button>
@@ -684,42 +1256,10 @@ const canonicalUrl = new URL(cleanedPath, 'https://carpdi.online').toString();
       </div>
     </section>
 
-    <!-- How PDI Works Section -->
-    <section class="page-container" style="border-top: 1px solid var(--color-hairline); padding-top: var(--spacing-section); padding-bottom: var(--spacing-section);">
-      <div style="text-align: center; max-width: 700px; margin: 0 auto;">
-        <h2 class="display-lg" style="margin-bottom: var(--spacing-xs);">How the PDI Assistant Guides You</h2>
-        <p class="body-md" style="color: var(--color-body);">Follow these 4 simple steps directly in the showroom or stockyard to inspect like a professional inspector.</p>
-      </div>
-
-      <div class="steps-grid">
-        <div class="step-card">
-          <span class="step-number">STEP 1</span>
-          <h4 class="title-sm" style="margin-top: var(--spacing-xxs);">Configure Car Profile</h4>
-          <p class="body-sm" style="color: var(--color-body); margin: 0;">Select your engine type (ICE or EV). Decode your 17-character chassis VIN to instantly check production year, manufacturing country, and details.</p>
-        </div>
-
-        <div class="step-card">
-          <span class="step-number">STEP 2</span>
-          <h4 class="title-sm" style="margin-top: var(--spacing-xxs);">Inspect Guided Checkpoints</h4>
-          <p class="body-sm" style="color: var(--color-body); margin: 0;">Step through 50+ forensic checklist cards. Perform checks on panel gaps, paint thickness, tyre age, electric battery health, fluid levels, and lighting.</p>
-        </div>
-
-        <div class="step-card">
-          <span class="step-number">STEP 3</span>
-          <h4 class="title-sm" style="margin-top: var(--spacing-xxs);">Document Defect Proof</h4>
-          <p class="body-sm" style="color: var(--color-body); margin: 0;">Spotted a scratch or misaligned bumper? Tap 'Fail' on the item, snap a high-resolution photo, and add details. All media is stored 100% offline in your browser.</p>
-        </div>
-
-        <div class="step-card">
-          <span class="step-number">STEP 4</span>
-          <h4 class="title-sm" style="margin-top: var(--spacing-xxs);">Export Professional Report</h4>
-          <p class="body-sm" style="color: var(--color-body); margin: 0;">Instantly generate a structured A4 PDF report documenting all defects and photos. Share it with the showroom manager to get them resolved before signing.</p>
-        </div>
-      </div>
-    </section>
+    <!-- How PDI Works Section (Replaced & Moved to top) -->
 
     <!-- Product Demo Video Section -->
-    <section class="page-container" style="border-top: 1px solid var(--color-hairline); padding-top: var(--spacing-section); padding-bottom: var(--spacing-section);">
+    <section class="page-container" style="padding-top: var(--spacing-section); padding-bottom: 0;">
       <div style="max-width: 800px; margin: 0 auto; text-align: center; margin-bottom: var(--spacing-xl);">
         <h2 class="display-lg" style="margin-bottom: var(--spacing-xs);">Watch the PDI Assistant in Action</h2>
         <p class="body-md" style="color: var(--color-body); max-width: 600px; margin: 0 auto;">See how quickly you can inspect a vehicle, record defects offline in the stockyard, and generate a print-ready A4 PDF report for the dealer.</p>
@@ -774,7 +1314,7 @@ const canonicalUrl = new URL(cleanedPath, 'https://carpdi.online').toString();
               e.preventDefault();
               const target = document.getElementById('setup-form-console');
               if (target) {
-                target.scrollIntoView({ behavior: 'smooth' });
+                target.scrollIntoView({ behavior: 'smooth', block: 'center' });
               }
               if (typeof window.gtag === 'function') {
                 window.gtag('event', 'hero_start_click', {
@@ -787,7 +1327,6 @@ const canonicalUrl = new URL(cleanedPath, 'https://carpdi.online').toString();
 
           const warningBtn = document.getElementById('hero-warning-btn');
           const scrollToSetupBtn = document.getElementById('scroll-to-setup-btn');
-          const finalCtaScrollBtn = document.getElementById('final-cta-scroll-btn');
           const setupForm = document.getElementById('setup-form');
 
           if (warningBtn) {
@@ -795,7 +1334,7 @@ const canonicalUrl = new URL(cleanedPath, 'https://carpdi.online').toString();
               e.preventDefault();
               const target = document.getElementById('founder-warning-section');
               if (target) {
-                target.scrollIntoView({ behavior: 'smooth' });
+                target.scrollIntoView({ behavior: 'smooth', block: 'center' });
               }
               if (typeof window.gtag === 'function') {
                 window.gtag('event', 'hero_warning_click', {
@@ -811,23 +1350,7 @@ const canonicalUrl = new URL(cleanedPath, 'https://carpdi.online').toString();
               e.preventDefault();
               const target = document.getElementById('setup-form-console');
               if (target) {
-                target.scrollIntoView({ behavior: 'smooth' });
-              }
-            });
-          }
-
-          if (finalCtaScrollBtn) {
-            finalCtaScrollBtn.addEventListener('click', (e) => {
-              e.preventDefault();
-              const target = document.getElementById('setup-form-console');
-              if (target) {
-                target.scrollIntoView({ behavior: 'smooth' });
-              }
-              if (typeof window.gtag === 'function') {
-                window.gtag('event', 'final_cta_click', {
-                  'event_category': 'Engagement',
-                  'event_label': 'Bottom Form Scroll'
-                });
+                target.scrollIntoView({ behavior: 'smooth', block: 'center' });
               }
             });
           }
@@ -843,78 +1366,11 @@ const canonicalUrl = new URL(cleanedPath, 'https://carpdi.online').toString();
             });
           }
 
-          // Interactive mock device functionality
-          const previewItems = document.querySelectorAll('.interactive-preview-item');
-          previewItems.forEach(item => {
-            const checkBtn = item.querySelector('.preview-check-btn');
-            const details = item.querySelector('.preview-details');
 
-            if (checkBtn) {
-              checkBtn.addEventListener('click', (e) => {
-                e.stopPropagation(); // Avoid triggering card details click
-                checkBtn.classList.toggle('passed');
-                if (checkBtn.classList.contains('passed')) {
-                  checkBtn.style.background = 'var(--color-semantic-success)';
-                  checkBtn.style.color = '#fff';
-                  checkBtn.style.borderColor = 'var(--color-semantic-success)';
-                  if (details) details.style.display = 'none';
-                  updateFlaggedCount();
-                } else {
-                  checkBtn.style.background = '#fff';
-                  checkBtn.style.color = 'transparent';
-                  checkBtn.style.borderColor = 'var(--color-hairline-strong)';
-                  updateFlaggedCount();
-                }
-              });
-            }
-
-            item.addEventListener('click', () => {
-              if (details) {
-                const isHidden = details.style.display === 'none' || details.style.display === '';
-                details.style.display = isHidden ? 'block' : 'none';
-                item.style.borderColor = isHidden ? 'var(--color-primary)' : 'var(--color-hairline)';
-                updateFlaggedCount();
-              }
-            });
-          });
-
-          function updateFlaggedCount() {
-            const items = document.querySelectorAll('.interactive-preview-item');
-            let flagged = 0;
-            items.forEach(item => {
-              const checkBtn = item.querySelector('.preview-check-btn');
-              const details = item.querySelector('.preview-details');
-              // If details are visible and checkBtn is not green (passed), count as flagged
-              if (details && details.style.display === 'block' && checkBtn && !checkBtn.classList.contains('passed')) {
-                flagged++;
-              }
-            });
-            const flaggedLabel = document.getElementById('preview-flagged-count');
-            if (flaggedLabel) {
-              flaggedLabel.textContent = `${flagged} Defect${flagged !== 1 ? 's' : ''} Flagged`;
-            }
-          }
-
-          const previewExportBtn = document.getElementById('preview-export-btn');
-          const previewToast = document.getElementById('preview-success-toast');
-          if (previewExportBtn && previewToast) {
-            previewExportBtn.addEventListener('click', () => {
-              previewToast.style.bottom = '16px';
-              if (typeof window.gtag === 'function') {
-                window.gtag('event', 'preview_pdf_export', {
-                  'event_category': 'Engagement',
-                  'event_label': 'Mock Device Export'
-                });
-              }
-              setTimeout(() => {
-                previewToast.style.bottom = '-60px';
-              }, 3000);
-            });
-          }
 
           // Parallax Scroll Fallback for browsers without scroll-driven animations support
           if (!CSS.supports('(animation-timeline: view()) and (animation-range: entry)')) {
-            const heroBg = document.querySelector('.hero-bg-picture');
+            const heroBg = document.querySelector('.hero-image-backdrop');
             const checklistCard = document.querySelector('#setup-form-console .card');
             const heroSection = document.querySelector('.hero-banner');
             const checklistSection = document.querySelector('#setup-form-console');
@@ -944,7 +1400,7 @@ const canonicalUrl = new URL(cleanedPath, 'https://carpdi.online').toString();
                 const top = rect.top + scrollY;
                 const height = rect.height;
                 const scrollPercent = Math.max(0, Math.min(1, (scrollY - (top - windowHeight)) / (height + windowHeight)));
-                heroBg.style.transform = `translateY(${scrollPercent * 120}px)`;
+                (heroBg as HTMLElement).style.transform = `translateY(${scrollPercent * 60}px)`;
               }
 
               // Checklist card parallax
@@ -983,7 +1439,7 @@ const canonicalUrl = new URL(cleanedPath, 'https://carpdi.online').toString();
     </section>
 
     {/* Key Stockyard Features Section */}
-    <section class="page-container" style="border-top: 1px solid var(--color-hairline); padding-top: var(--spacing-section); padding-bottom: var(--spacing-section);">
+    <section class="page-container" style="padding-top: var(--spacing-section); padding-bottom: 0;">
       <div style="text-align: center; max-width: 700px; margin: 0 auto; margin-bottom: var(--spacing-lg);">
         <h2 class="display-lg" style="margin-bottom: var(--spacing-xs);">Engineered For The Stockyard</h2>
         <p class="body-md" style="color: var(--color-body);">Stockyards are often remote concrete basements or steel warehouses with no cell service. Here is why Car PDI works perfectly anywhere.</p>
@@ -1033,7 +1489,7 @@ const canonicalUrl = new URL(cleanedPath, 'https://carpdi.online').toString();
     </section>
 
     <!-- FAQ Section -->
-    <section class="page-container" style="border-top: 1px solid var(--color-hairline); padding-top: var(--spacing-section); padding-bottom: var(--spacing-section);">
+    <section class="page-container" style="padding-top: var(--spacing-section); padding-bottom: var(--spacing-section);">
       <div style="max-width: 800px; margin: 0 auto; text-align: center; margin-bottom: var(--spacing-xl);">
         <span class="caption-uppercase" style="color: var(--color-primary); display: block; margin-bottom: var(--spacing-xs);">Got Questions?</span>
         <h2 class="display-lg" style="margin-bottom: var(--spacing-xs); color: var(--color-ink);">Pre-Delivery Inspection FAQs</h2>
@@ -1073,24 +1529,7 @@ const canonicalUrl = new URL(cleanedPath, 'https://carpdi.online').toString();
       </div>
     </section>
 
-    <!-- Final CTA Section -->
-    <section class="page-container" style="padding-bottom: var(--spacing-section);">
-      <div class="card" style="background: var(--color-ink); color: var(--color-canvas); text-align: center; padding: var(--spacing-xxl) var(--spacing-xl); border: none; display: flex; flex-direction: column; align-items: center; gap: var(--spacing-md); position: relative; overflow: hidden; border-radius: var(--rounded-lg);">
-        <!-- Absolute subtle ambient highlight in background -->
-        <div style="position: absolute; inset: 0; background: radial-gradient(circle at 50% 50%, rgba(245, 78, 0, 0.1) 0%, transparent 60%); pointer-events: none;"></div>
-        
-        <span class="caption-uppercase" style="color: var(--color-primary); z-index: 1;">Take Control of Delivery Day</span>
-        <h2 class="display-lg" style="color: #ffffff; margin: 0; z-index: 1; max-width: 600px; line-height: 1.2;">Don't leave your new car delivery up to luck.</h2>
-        <p class="body-md" style="color: var(--color-muted-soft); margin: 0; max-width: 500px; z-index: 1; line-height: 1.5;">Configure your vehicle checklists below in seconds, load the app, and walk into the stockyard completely protected.</p>
-        
-        <div style="z-index: 1; margin-top: var(--spacing-xs);">
-          <button id="final-cta-scroll-btn" class="cta-button-primary" style="cursor: pointer; border: none; font-family: inherit;">
-            <span>Configure Vehicle Profile</span>
-            <span class="material-symbols-outlined" style="font-size: 18px;">arrow_downward</span>
-          </button>
-        </div>
-      </div>
-    </section>
+
 
   </main>
   <Footer />
