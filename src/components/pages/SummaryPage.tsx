@@ -68,6 +68,14 @@ export default function SummaryPage() {
     hydrateStore();
   }, [hydrateStore]);
 
+  useEffect(() => {
+    if (vehicle) {
+      document.title = `Report Summary: ${vehicle.make} ${vehicle.model} — Car PDI Checklist`;
+    } else {
+      document.title = "Report Summary — Car PDI Checklist";
+    }
+  }, [vehicle]);
+
   if (!isHydrated) {
     return <LoadingSpinner message="Loading..." />;
   }

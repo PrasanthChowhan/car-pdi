@@ -16,6 +16,7 @@ export default function SetupPage() {
 
   useEffect(() => {
     hydrateStore();
+    document.title = "Start Inspection — Car PDI Checklist";
   }, [hydrateStore]);
 
   useEffect(() => {

@@ -68,6 +68,14 @@ export default function InspectionPage() {
     hydrateStore();
   }, [hydrateStore]);
 
+  useEffect(() => {
+    if (vehicle) {
+      document.title = `Inspection: ${vehicle.make} ${vehicle.model} — Car PDI Checklist`;
+    } else {
+      document.title = "Inspection Checklist — Car PDI Checklist";
+    }
+  }, [vehicle]);
+
   // Scroll active tab into view horizontally
   useEffect(() => {
     const activeTab = tabsListRef.current?.querySelector('.active-tab');
