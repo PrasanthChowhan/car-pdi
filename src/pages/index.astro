@@ -2,30 +2,6 @@
 import '../index.css';
 import Header from '../components/common/Header.tsx';
 import Footer from '../components/common/Footer.tsx';
-import fs from 'fs';
-import path from 'path';
-
-// Auto-copy the generated orange SUV image from the brain artifacts directory
-try {
-  const srcPath = 'C:/Users/prash/.gemini/antigravity-ide/brain/8ac275e9-fcd4-4c81-8dd1-bd342f3ead3c/orange_suv_safeguards_1785352634779.png';
-  const destPath = path.join(process.cwd(), 'public/orange_suv_safeguards.png');
-  if (fs.existsSync(srcPath) && !fs.existsSync(destPath)) {
-    fs.copyFileSync(srcPath, destPath);
-  }
-} catch (e) {
-  // Silent fail if directory path is inaccessible in a specific build context
-}
-
-// Auto-delete unused assets from public folder
-try {
-  const fileToDelete = path.join(process.cwd(), 'public/car_hero.jpg');
-  if (fs.existsSync(fileToDelete)) {
-    fs.unlinkSync(fileToDelete);
-  }
-} catch (e) {
-  // Silent fail
-}
-
 // Normalize canonical URL: strip trailing slash except for the root path
 let cleanedPath = Astro.url.pathname;
 if (cleanedPath.length > 1 && cleanedPath.endsWith('/')) {
@@ -959,7 +935,7 @@ const canonicalUrl = new URL(cleanedPath, 'https://carpdi.online').toString();
             </svg>
           </div>
           <picture class="hero-bg-picture">
-            <img src="/hero_inspection_car.png" alt="Pristine modern vehicle ready for pre-delivery inspection" class="hero-bg-image" />
+            <img src="/hero_inspection_car.webp" alt="Pristine modern vehicle ready for pre-delivery inspection" class="hero-bg-image" />
           </picture>
           <div class="hero-car-shadow"></div>
         </div>
@@ -1031,7 +1007,7 @@ const canonicalUrl = new URL(cleanedPath, 'https://carpdi.online').toString();
         <!-- Card 1: Transit Scratches & Resprays -->
         <div class="risk-card panel-repaints">
           <div class="risk-card-image-wrapper">
-            <img src="/scratch_repaint.jpg" alt="Spray painting a scratched car panel" class="risk-card-img" />
+            <img src="/scratch_repaint.webp" alt="Spray painting a scratched car panel" class="risk-card-img" />
           </div>
           <div class="risk-card-body">
             <div class="risk-card-header">
@@ -1045,7 +1021,7 @@ const canonicalUrl = new URL(cleanedPath, 'https://carpdi.online').toString();
         <!-- Card 2: Old Stock & Rot -->
         <div class="risk-card old-stock">
           <div class="risk-card-image-wrapper">
-            <img src="/dusty_stockyard.jpg" alt="Dusty cars in open stockyard" class="risk-card-img" />
+            <img src="/dusty_stockyard.webp" alt="Dusty cars in open stockyard" class="risk-card-img" />
           </div>
           <div class="risk-card-body">
             <div class="risk-card-header">
@@ -1059,7 +1035,7 @@ const canonicalUrl = new URL(cleanedPath, 'https://carpdi.online').toString();
         <!-- Card 3: Demo & Test Drive Abuse -->
         <div class="risk-card odometer-abuse">
           <div class="risk-card-image-wrapper">
-            <img src="/odometer_abuse.jpg" alt="Car dashboard odometer screen" class="risk-card-img" />
+            <img src="/odometer_abuse.webp" alt="Car dashboard odometer screen" class="risk-card-img" />
           </div>
           <div class="risk-card-body">
             <div class="risk-card-header">
@@ -1113,7 +1089,7 @@ const canonicalUrl = new URL(cleanedPath, 'https://carpdi.online').toString();
         <!-- Right: Overlapping Image panel -->
         <div class="founder-image-panel">
           <div class="founder-image-wrapper">
-            <img src="/stockyard_inspection.jpg" alt="Car inspection under open sky in stockyard" class="founder-img" />
+            <img src="/stockyard_inspection.webp" alt="Car inspection under open sky in stockyard" class="founder-img" />
           </div>
         </div>
       </div>
@@ -1124,7 +1100,7 @@ const canonicalUrl = new URL(cleanedPath, 'https://carpdi.online').toString();
       <div class="safeguards-split-layout">
         <!-- Left: Image Panel -->
         <div class="safeguards-image-panel">
-          <img src="/orange_suv_safeguards.png" alt="Orange SUV ready for inspection" class="safeguards-car-img" />
+          <img src="/orange_suv_safeguards.webp" alt="Orange SUV ready for inspection" class="safeguards-car-img" />
         </div>
         
         <!-- Right: Content Panel -->
